@@ -25,3 +25,9 @@ the syllabus.
 ### Homework
 
 - `homework` directory includes the five homework templates of the course.
+
+
+### Source
+
+- `src` directory includes the R files used to generate the data sets that where
+generated specfically for the class.
