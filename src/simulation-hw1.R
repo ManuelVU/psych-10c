@@ -20,9 +20,9 @@ group_2 <- round(x = rnorm(n = size_1, mean = mu[2], sd = sigma[2]),
                  digits = 0)
 
 # write as a dataframe
-smarties <- data.frame("iq" = c(group_1,group_2),
-                       "group" = c(rep("no_smarties",size_1),
-                                   rep("smarties", size_1)))
+coffee <- data.frame("iq" = c(group_1,group_2),
+                       "group" = c(rep("no_coffee",size_1),
+                                   rep("coffee", size_1)))
 
 # save as csv file
 write_csv(x = smarties, file = "data/week-1/hw-problem-1.csv")
