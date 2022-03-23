@@ -30,4 +30,8 @@ the syllabus.
 ### Source
 
 - `src` directory includes the R files used to generate the data sets that where
-generated specfically for the class.
+generated specifically for the class.
+
+### Templates 
+- `templates` directory includes the homework templates for students as .rmd
+files.
