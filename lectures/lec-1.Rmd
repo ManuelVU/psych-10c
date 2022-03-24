@@ -1,0 +1,185 @@
+---
+title: "Lecture 1"
+subtitle: "Syllabus, Review R"
+author: "Psych 10 C"
+institute: "University of California, Irvine"
+date: "03/28/2022"
+output:
+  xaringan::moon_reader:
+    self_contained: true
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+```
+
+```{r xaringan-extra, echo = FALSE}
+xaringanExtra::use_xaringan_extra(c("title_view", "fit_screen"))
+
+xaringanExtra::use_extra_styles(
+  hover_code_line = TRUE,         #<<
+  mute_unhighlighted_code = TRUE  #<<
+)
+
+htmltools::tagList(
+  xaringanExtra::use_clipboard(
+    button_text = "<i class=\"fa fa-clipboard\"></i>",
+    success_text = "<i class=\"fa fa-check\" style=\"color: #90BE6D\"></i>",
+    error_text = "<i class=\"fa fa-times-circle\" style=\"color: #F94144\"></i>"
+  ),
+  rmarkdown::html_dependency_font_awesome()
+)
+```
+
+
+class: middle, center
+
+# Welcome to Psych 10 C
+
+---
+
+## Psych 10 C
+
+--
+
+- This is the third course in the series.
+
+--
+
+- Instructor: Manuel Villarreal <p style="color:purple;">jesusmv1@uci.edu</p> 
+
+--
+
+- TA's: 
+  - Adriana <p style="color:purple;">achavezd@uci.edu</p>
+  - Jeff <p style="color:purple;">jcoon1@uci.edu</p>
+
+---
+
+## Structure of the course
+
+- Goal: learn how and when to use linear models to answer questions about data.
+
+--
+
+- Evaluation:
+  - 5 homework assignments
+  - 1 final project
+  
+--
+
+- Both require the use of R code, however, this is not a coding class so you 
+will be able to find what you need on the slides.
+
+--
+
+- We will provide homework templates that you will need to fill in (except for
+the final which will be an empty template).
+
+---
+
+## Grading:
+
+- Each homework will be worth 10 points while the final project is worth 50, for
+a total of 100 points.
+
+--
+
+- Grades will be assigned as follows:
+
+| Grade| Interval     | Grade | Interval     | Grade | Interval   |
+|------|--------------|-------|--------------|-------|------------|
+| A+   |  100 to 96.5 | A     | 96.4 to 93.5 | A-    | 93.4 to 90 |
+| B+   | 89.9 to 86.5 | B     | 86.4 to 83.5 | B-    | 83.4 to 80 |
+| C+   | 79.9 to 76.5 | C     | 76.4 to 73.5 | C-    | 73.4 to 70 |
+| D+   | 69.9 to 66.5 | D     | 66.4 to 63.5 | D-    | 63.4 to 60 |
+| F    | 59.9 to 0    |       |              |       |            |
+
+---
+
+## Discussion sections
+
+- Try to go only to the discussion section that you are registered in, 
+otherwise there might not be enough space. 
+
+--
+
+- If at any point you can't make it to your discussion section and would like
+to go to another consult it with the Ta assigned to your section and the section
+that you plan to attend via email.
+
+--
+
+- All sections are in ALP 3600
+
+---
+
+## How to Contact us
+
+- The best way to contact us is via email, we will try to respond within the 
+following 24 hrs. 
+
+--
+
+- Try to look at the homework and see if you have any questions. We can't 
+promise that we will be able to respond in time if the deadline is close.
+
+--
+
+- The syllabus is on Canvas, make sure to read it.
+
+---
+
+class: inverse, middle, center
+
+# Review R
+
+---
+
+## RStudio and RStudio cloud
+
+- There are two ways in which you can get R and RStudio for this class. 
+
+--
+
+1. Install [R](https://cran.microsoft.com/) and [Rstudio](https://www.rstudio.com/products/rstudio/download/#download) on your 
+desktop/laptop.
+  - First download and install R and then RStudio.
+
+1. Start an account in [RStudio Cloud](https://rstudio.cloud/).
+
+--
+
+- Both methods are free!
+
+---
+
+## RStudio
+
+- RStudio is a graphical interface for R. 
+
+- The window is divided in four parts.
+
+--
+
+## Set up
+
+- If you have installed R and RStudio in your personal computer then you will 
+need a version of LaTex in order to generate the `.pdf` file that you have
+to submit for your homework.
+
+--
+
+- Copy, paste and then run the following two lines in your RStudio console
+
+```{r install-tiny, echo = TRUE, eval = FALSE}
+install.packages('tinytex')
+tinytex::install_tinytex()
+```
+
+- You only need to do this once!

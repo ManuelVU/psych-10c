@@ -1,0 +1,323 @@
+---
+title: "Scalable Bayesian Inference for Coupled Hiddien Markov and Semi-Markov Models"
+subtitle: "Panayiota Touloupou, B&auml;rbel Finkenst&auml;dt and <br> Simon E. F. Spence"
+author: "Manuel Villarreal, Xuyang Zhao"
+institute: ""
+date: ""
+output:
+  xaringan::moon_reader:
+    self_contained: true
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+```
+class: center, middle, inverse
+
+## Outline
+
+---
+
+### Outline
+
+- Problem description
+
+--
+
+- Coupled Hidden Markov Models
+
+--
+
+- Existing methods
+
+--
+
+- Proposed algorithms
+
+--
+
+- Numerical experiment.
+
+---
+class: center, middle, inverse
+
+## Problem description
+
+---
+
+### Motivation:
+
+- MCMC becomes inefficient and computationally intractable due to high 
+dimensionality or complexity.
+
+--
+
+- For coupled HMM's, the existing methods are either computationally demanding 
+or they mix slowly.
+
+--
+
+### Objective:
+
+- Propose an extension of a previously described algorithm known as Forward 
+Filter Backward Sample (FFBS) to balance computational cost and improve mixing.
+
+--
+
+1. Gibbs Sampler.
+
+--
+
+1. Metropolis-Hastings sampler.
+
+---
+class: center, middle, inverse
+
+## Coupled Hidden Markov Models
+
+---
+
+### Coupled HMM's
+
+**Def.** A CHMM is a collection of many HMM's which are coupled through some temporal 
+dependency structure.
+
+--
+
+### Conditional independence assumptions
+
+1. Each observation is independent of all other states and observations given the 
+value of the hidden state.
+
+1. One hidden state is not only dependent on its own previous state but also on
+the previous state of all other chains.
+
+.pull-left[
+$$X_t^c \sim P(X_t^c | X_{t-1}^c, \boldsymbol{X}_{t-1}^{-c})$$
+$$Y_t^c \sim P(Y_t^c | X_{t}^c)$$
+]
+
+.pull-right[
+]
+
+---
+class: center, middle, inverse
+
+## Previous methods
+
+---
+
+### Full forward filtering and backward sampling (Full FFBS)
+
+- Previous methods include Bayesian analysis using MCMC.
+
+.pull-left[
+Forward filtering: Kalman filter $$\boldsymbol{X}^{1:C}_t \sim P(\boldsymbol{X}^{1:C}_t|\boldsymbol{Y}_{1:t}^{1:C},\boldsymbol{X}^{1:C}_{t+1},\boldsymbol{\theta})$$
+
+Simulate $X_T$ from the filtered probabilities $$\boldsymbol{X}^{1:C}_T \sim P(\boldsymbol{X}^{1:C}_T|\boldsymbol{Y}_{1:T}^{1:C},\boldsymbol{\theta})$$
+
+Backward sample for $t = T-1, \cdots, 1$  $$\boldsymbol{X}^{1:C}_t \sim P(\boldsymbol{X}^{1:C}_t|\boldsymbol{Y}_{1:t}^{1:C},\boldsymbol{X}^{1:C}_{t+1},\boldsymbol{\theta})$$
+
+Use MCMC to update $\boldsymbol{\theta}$: $$\boldsymbol{\theta} \sim P(\boldsymbol{\theta}|\boldsymbol{Y}_{1:T}^{1:C}, \boldsymbol{X}^{1:C}_{1:T})$$
+
+Complexity of $O(TN^{2c})$.
+]
+
+.pull-right[
+]
+
+---
+
+### Existing methods 
+
+1. **Single site updates:** Draw each one of the C x T state variables from its full conditional distribution.
+  - **Complexity:** $O(TNC)$ 
+  - **Downside:** High temporal dependence leads to slow mixing of the chains.
+
+--
+
+1. **Blocks:** Propose three possible changes to blocks of state components within a single chain, based on their current values.
+  - **Downside:** Most of the hidden states are not updated and slow chain mixing. 
+
+--
+
+1. **Constructing transition matrices:** Impose a structure in each chain;s transition matrix with transition probabilities depending on covariates through logistic regression.
+  - **Advantage:** Reduce the iterations needed in comparison to full-FFBS.
+  - **Downside:** Requires the structure of transition matrices to be estimated or known in advance.
+  
+---
+class: center, middle, inverse
+
+## Proposed Methods.
+
+--
+
+### Individual FFBS GIBBS and Metropolis Hastings Samplers 
+
+---
+
+### Individual FFBS GIBBS and Metropolis Hastings Samplers
+
+- The main idea of these (and other) methods is that the hidden states $\boldsymbol{X}^{1:C}_{1:T}$ can be treated as random variables.
+
+--
+
+- Using either a Gibbs or Metropolis-Hastings algorithm we want to approximate the full joint posterior distribution conditional on the observations $\boldsymbol{Y}^{1:C}_{1:T}$. $$\pi(\boldsymbol{\theta},\boldsymbol{X}^{1:C}_{1:T}|\boldsymbol{Y}^{1:C}_{1:T}) \propto p(\boldsymbol{\theta})P(\boldsymbol{X}^{1:C}_1|\boldsymbol{\theta})\times\left[\prod_{t=2}^T \prod_{c=1}^CP(X_t^c|X_{t-1}^c,\boldsymbol{X}_{t-1}^{-c},\boldsymbol{\theta})\right]\\ \times\left[\prod_{t=1}^T \prod_{c=1}^CP(Y_t^c|X_t^c,\boldsymbol{\theta})\right]$$
+
+---
+
+### Individual FFBS
+
+
+- In comparison to the full-FFBS approach, we now want to sample each chain 
+independently. 
+
+--
+
+For chain c:
+
+Compute one-step ahead modified conditional predictive probabilities: $$P(X^c_t = x_t^c|\boldsymbol{X}^{-c}_{1:t},\boldsymbol{Y}^c_{1:t-1},\boldsymbol{\theta})=\sum_{i\in\Omega}P(X^c_t = x_t^c|X^{c}_{t-1} = i,\boldsymbol{X}^{-c}_{t-1},\boldsymbol{\theta})\times\\ P(X^c_{t-1} = i|\boldsymbol{X}^{-c}_{1:t},\boldsymbol{Y}^c_{1:t-1},\boldsymbol{\theta})$$
+
+--
+
+Then we compute the modified conditional filtered probabilities: $$P(X^c_t = x_t^c|\boldsymbol{X}^{-c}_{1:t+1} = \boldsymbol{x}^{-c}_{1:t+1},\boldsymbol{Y}^c_{1:t},\boldsymbol{\theta})\propto\\ P(X^c_t = x_t^c|\boldsymbol{X}^{-c}_{1:t},\boldsymbol{Y}^c_{1:t-1},\boldsymbol{\theta})f_{x_t^c}(y_t^c|\boldsymbol{\theta})\times\\ \prod_{c'\neq c}P(X^{c'}_{t+1} = x^{c'}_{t+1}|X^{c'}_{t} = x^{c'}_{t},\boldsymbol{X}^{-c'}_{1:t} = \boldsymbol{x}^{-c'}_{1:t},\boldsymbol{\theta})$$
+
+---
+
+### Backward sampling
+
+- With the one-step ahead and modified conditional filtered probabilities we can now 
+take samples starting at time $T$ from the distribution: $$P(X^c_T = x_T^c|\boldsymbol{X}^{-c}_{1:T},\boldsymbol{Y}^c_{1:T},\boldsymbol{\theta}) = \frac{P(X^c_T = x_T^c|\boldsymbol{X}^{-c}_{1:T},\boldsymbol{Y}^c_{1:T-1},\boldsymbol{\theta})f_{x_T^c}(y_T^c|\boldsymbol{\theta})}{\sum_{i\in\Omega}P(X^c_T = i|\boldsymbol{X}^{-c}_{1:T},\boldsymbol{Y}^c_{1:T-1},\boldsymbol{\theta})f_{i}(y_T^c|\boldsymbol{\theta})}$$
+
+--
+
+Then, from $T-1$ to $1$ we sample from the following distribution: $$P(X^c_t = x_t^c|X_{t+1}^c = x_{t+1}^c\boldsymbol{X}^{-c}_{1:t+1},\boldsymbol{Y}^c_{1:t},\boldsymbol{\theta}) =\\ \frac{P(X^c_{t+1} = x_{t+1}^c|X_{t}^c=x_{t}^c,\boldsymbol{X}^{-c}_{t},\boldsymbol{\theta})P(X^c_t = x_t^c|\boldsymbol{X}^{-c}_{1:t+1},\boldsymbol{Y}^c_{1:t},\boldsymbol{\theta})}{\sum_{i\in\Omega}P(X^c_{t+1}=x_{t+1}^c|X_{t}^c=i,\boldsymbol{X}^{-c}_{t},\boldsymbol{\theta})P(X^c_t = i|\boldsymbol{X}^{-c}_{1:t+1},\boldsymbol{Y}^c_{1:t},\boldsymbol{\theta})}$$
+
+--
+
+These equations will give us a sample of all hidden states of chain c $\boldsymbol{X}^c_{1:T}$.
+
+---
+class: class: center, middle, inverse
+
+## Individual-FFBS Gibbs Sampler
+
+---
+
+### iFFBS Gibbs Sampler
+
+1. Start: draw $\boldsymbol{\theta} \sim \pi(\boldsymbol{\theta})$, and generate $$\boldsymbol{X}^{1:c}_{1:T} \sim P(\boldsymbol{X}^{1:c}_{1:T}|\boldsymbol{\theta})$$
+
+1. **`for`** $j=1,\dots,J$ do
+
+1. **`for`** $c = 1, \dots, C$ do
+
+1. Draw $\boldsymbol{X}^{c}_{1:T} \sim P(\boldsymbol{X}^{c}_{1:T}|\boldsymbol{Y}^c_{1:T},\boldsymbol{X}^{-c}_{1:T}\boldsymbol{\theta})$ using iFFBS
+
+1. **`end`**
+
+1. Update sample of $\boldsymbol{\theta}$ $$\boldsymbol{\theta}\sim P(\boldsymbol{\theta}|\boldsymbol{X}^{1:c}_{1:T},\boldsymbol{Y}^{1:c}_{1:T})$$
+
+1. **`end`**
+
+---
+class: center, middle, inverse
+
+## Individual-FFBS Metropolis-Hastings Sampler
+
+---
+
+### iFFBS Metropolis-Hastings sampler
+
+- Notice that the product $$\prod_{c'\neq c}P(X^{c'}_{t+1} = x^{c'}_{t+1}|X^{c'}_{t} = x^{c'}_{t},\boldsymbol{X}^{-c'}_{1:t} = \boldsymbol{x}^{-c'}_{1:t},\boldsymbol{\theta})$$ can be difficult to compute.
+
+---
+
+### iFFBS Metropolis-Hastings sampler
+
+- The main idea of the MH sampler is that we can avoid that complication by implementing a MH step using the full joint conditional distribution.
+
+- We replace the modified conditional filtered probabilities $$P(X^c_t = x_t^c|\boldsymbol{X}^{-c}_{1:t+1} = \boldsymbol{x}^{-c}_{1:t+1},\boldsymbol{Y}^c_{1:t},\boldsymbol{\theta})\propto\\ P(X^c_t = x_t^c|\boldsymbol{X}^{-c}_{1:t},\boldsymbol{Y}^c_{1:t-1},\boldsymbol{\theta})f_{x_t^c}(y_t^c|\boldsymbol{\theta})\times\\ \prod_{c'\neq c}P(X^{c'}_{t+1} = x^{c'}_{t+1}|X^{c'}_{t} = x^{c'}_{t},\boldsymbol{X}^{-c'}_{1:t} = \boldsymbol{x}^{-c'}_{1:t},\boldsymbol{\theta})$$
+ 
+- with the proposal distribution: 
+
+$$Q(X^c_t = x_t^c|\boldsymbol{X}^{-c}_{1:t+1},\boldsymbol{Y}^c_{1:t},\boldsymbol{\theta}) = \frac{P(X^c_t = x_t^c|\boldsymbol{X}^{-c}_{1:t},\boldsymbol{Y}^c_{1:t-1},\boldsymbol{\theta})f_{x_t^c}(y_t^c|\boldsymbol{\theta})}{\sum_{i\in\Omega} P(X^c_t = i|\boldsymbol{X}^{-c}_{1:t},\boldsymbol{Y}^c_{1:t-1},\boldsymbol{\theta})f_{i}(y_t^c|\boldsymbol{\theta})}$$
+
+--
+
+- Then proceeding with the backward sampling step.
+
+---
+
+### MH-iFFBS algorithm
+
+1. Start: draw $\boldsymbol{\theta} \sim \pi(\boldsymbol{\theta})$, and generate $$\boldsymbol{X}^{1:c}_{1:T} \sim P(\boldsymbol{X}^{1:c}_{1:T}|\boldsymbol{\theta})$$
+
+1. **`for`** $j=1,\dots,J$ do
+1. **`for`** $c = 1, \dots, C$ do
+
+1. Propose $\boldsymbol{X}^{c*}_{1:T} \sim Q(\circ|\boldsymbol{X}^{-c}_{1:t+1},\boldsymbol{Y}^c_{1:t},\boldsymbol{\theta})$
+
+1. Compute MH ratio $a=\min\left\{1, \frac{Q(\boldsymbol{X}^{c}_{1:T}|\boldsymbol{X}^{-c}_{1:t+1},\boldsymbol{Y}^c_{1:t},\boldsymbol{\theta})}{Q(\boldsymbol{X}^{c*}_{1:T}|\boldsymbol{X}^{-c}_{1:t+1},\boldsymbol{Y}^c_{1:t},\boldsymbol{\theta})}\times \frac{\pi(\boldsymbol{\theta},\boldsymbol{X}^{c*}_{1:T},\boldsymbol{X}^{-c}_{1:T}|\boldsymbol{Y}^{1:C}_{1:T})}{\pi(\boldsymbol{\theta},\boldsymbol{X}^{c}_{1:T},\boldsymbol{X}^{-c}_{1:T}|\boldsymbol{Y}^{1:C}_{1:T})}\right\}$
+
+1. Accept $\boldsymbol{X}^{c*}_{1:T}$ with probability $a$.
+
+1. **`end`**
+
+1. Update sample of $\boldsymbol{\theta}$ $$\boldsymbol{\theta}\sim P(\boldsymbol{\theta}|\boldsymbol{X}^{1:c}_{1:T},\boldsymbol{Y}^{1:c}_{1:T})$$
+
+1. **`end`**
+
+---
+class: center, middle, inverse
+
+## Numerical experimentation
+
+---
+
+### Numerical Experimentation
+
+- We will apply the MHiFFBS algorithm to simulated data based on an observational study with *Escherichia coli* (E. coli) in cattle.
+
+--
+
+- Cattle are partitioned into groups (pens) which are considered independent and each cow in the group represents a chain.
+
+--
+
+- Subjects where followed during for $T = 99$ days.
+
+--
+
+- Two types of diagnostic tests where taken approximately twice a week. Let $Y_t^{c,p}=(R^{c,p}_t,F^{c,p}_t)$ be the results of the tests at time $t$.
+
+--
+
+- We are interested in the sensitivity of the tests $\theta_R$ and $\theta_F$, the initial probability of infection $P(\boldsymbol{X}^{1:C,p}_1|\boldsymbol{\theta}) = \nu$, external and within-pen infection rate $\alpha$ and $\beta$ respectively, as well as the mean infectious period m.
+
+--
+
+- The authors assume that the specificity of the tests is 100% which fixes the emission probabilities for $X^{c,p}_t = 0$.
+
+---
+
+### Numerical Experimentation
+
+- Finally, the transition probabilities are defined as:
+
+
+--
+
+- We will evaluate the algorithm by looking at the posterior distributions of the parameters $\boldsymbol{\theta}=(\alpha, \beta, m, \nu, \theta_R, \theta_F)^t$ and the 95% credible intervals for the total number of infected cows at each time interval $f(\boldsymbol{X}^{1:C,1:P}_t)$.
+
+---
+class: center, middle, inverse
+
+## Thank you
+
+
