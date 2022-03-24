@@ -35,3 +35,7 @@ generated specifically for the class.
 ### Templates 
 - `templates` directory includes the homework templates for students as .rmd
 files.
+
+### Lectures
+
+- `lectures` directory contains the class lectures in `.rmd` and `html` formats.
