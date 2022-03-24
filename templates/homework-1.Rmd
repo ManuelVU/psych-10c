@@ -5,6 +5,14 @@ date: ""
 output: pdf_document
 ---
 
+```{r prep_tinytex, include=FALSE}
+# Run this code chunk to install the package you'll need to output this homework as a PDF
+# (which you can then submit)
+
+install.packages('tinytex')
+tinytex::install_tinytex()
+```
+
 ## Section 1
 
 **Background:** This first data set is from an experiment designed to see if 
@@ -16,7 +24,7 @@ minutes before taking the IQ test (**group 1**). The other group drank coffee
 ```{r load_data, echo = TRUE}
 # In this section you should write the code needed to load the data for
 # section 2. The other calculations can be done in the following
-# code chunks. Remember to delete the comments inside the code chuncks BEFORE 
+# code chunks. Remember to delete the comments inside the code chunks BEFORE 
 # submitting your homework.
 ```
 
@@ -26,27 +34,27 @@ to reflect on its outcome.
 1. What is the average score on the *IQ* test for participants who did not drink
 coffee?
 
-```{r mean_group1, ehco = TRUE}
-# In this code chunck you can write the function (or functions) that you need to 
+```{r mean_group1, echo = TRUE}
+# In this code chunk you can write the function (or functions) that you need to 
 # use in order to calculate the mean of the FIRST group, remember to save the 
 # result in a new variable so that you can easily it in text. Remember to delete 
-# the comments inside the code chuncks BEFORE submitting your homework.
+# the comments inside the code chunks BEFORE submitting your homework.
 ```
 
 **ANS:** 
 
-1. What is the average score on the *IQ* test for participants who drinl coffee?
+1. What is the average score on the *IQ* test for participants who drink coffee?
 
-```{r mean_group2, ehco = TRUE}
-# In this code chunck you can write the function (or functions) that you need to 
+```{r mean_group2, echo = TRUE}
+# In this code chunk you can write the function (or functions) that you need to 
 # use in order to calculate the mean of the SECOND group, remember to save the 
 # result in a new variable so that you can easily it in text. Remember to delete 
-# the comments inside the code chuncks BEFORE submitting your homework.
+# the comments inside the code chunks BEFORE submitting your homework.
 ```
 
 **ANS:** 
 
-1. Which group had more variatiopn in their test scores on the *IQ* test, those 
+1. Which group had more variation in their test scores on the *IQ* test, those 
 who drink coffee or those who didn't? How do you know?
 
 ```{r variantion_group, echo = TRUE}
@@ -94,7 +102,7 @@ completed the maze, in seconds.
 ```{r load_data2, echo = TRUE}
 # In this section you should write the code needed to load the data for
 # section 2. The other calculations can be done in the following
-# code chunks. Remember to delete the comments inside the code chuncks BEFORE 
+# code chunks. Remember to delete the comments inside the code chunks BEFORE 
 # submitting your homework.
 ```
 
