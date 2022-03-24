@@ -196,7 +196,8 @@ that are in a separate package that can be downloaded.
 
 --
 
-- To download and install the `tidyverse` package you can use the following line
+- To download and install the [tidyverse](https://www.tidyverse.org/packages/)
+package you can copy and paste the following line of code into RStudio
 
 ```{r install-tidy, echo = TRUE, eval = FALSE}
 # install tidyverse core packages
@@ -207,13 +208,13 @@ install.packages("tidyverse")
 
 --
 
-- packages in R are code that other people have written that is used for 
-specific tasks and can be downloaded and used by anyone. 
+- packages in R are code that other people have written and made available. This
+code takes the form of functions that we can use after downloading the package. 
 
 --
 
 - Many people use `tidyverse` so if you ever have a question and you can't 
 reach us, you can Google it! 
 
-- I promise someone else has asked that question and there
-will be a good answer.
+- I promise someone else has asked that question and there will be a good 
+answer.
