@@ -258,12 +258,12 @@ of code:
 - link for homework problem 1:
 ```{r link-1, echo = TRUE, eval = FALSE}
 # link for data problem 1
-link_1 <- "https://github.com/ManuelVU/psych-10c-data/blob/main/hw-problem-1.csv"
+link_1 <- "https://raw.githubusercontent.com/ManuelVU/psych-10c-data/main/hw-problem-1.csv"
 ```
 
 - link for homework problem 2:
 ```{r link-2, echo = TRUE, eval = FALSE}
 # link for data problem 2
-link_2 <- "https://github.com/ManuelVU/psych-10c-data/blob/main/hw-problem-2.csv"
+link_2 <- "https://raw.githubusercontent.com/ManuelVU/psych-10c-data/main/hw-problem-2.csv"
 ```
 
