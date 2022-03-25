@@ -36,7 +36,6 @@ htmltools::tagList(
 )
 ```
 
-
 class: middle, center
 
 # Welcome to Psych 10 C
@@ -56,8 +55,12 @@ class: middle, center
 --
 
 - TA's: 
-  - Adriana <p style="color:purple;">achavezd@uci.edu</p>
-  - Jeff <p style="color:purple;">jcoon1@uci.edu</p>
+  - Adriana Chavez <p style="color:purple;">achavezd@uci.edu</p>
+  - Arsenii Moskvichev <p style="color:purple;">amoskvic@uci.edu</p>
+  - Jeff Coon <p style="color:purple;">jcoon1@uci.edu</p>
+  - Jing Zhang <p style="color:purple;">jingz18@uci.edu</p>
+  
+  
 
 ---
 
@@ -104,18 +107,18 @@ a total of 100 points.
 
 ## Discussion sections
 
-- Try to go only to the discussion section that you are registered in, 
+- Try to go only to the discussion section that you are registered for, 
 otherwise there might not be enough space. 
 
 --
 
-- If at any point you can't make it to your discussion section and would like
-to go to another consult it with the Ta assigned to your section and the section
-that you plan to attend via email.
+- If you can't make it to your discussion section and would like to go to 
+another, consult it with the Ta assigned to your section and the section 
+that you plan to attend.
 
 --
 
-- All sections are in ALP 3600
+- All discussion sections are in ALP 3600
 
 ---
 
@@ -175,7 +178,7 @@ to submit for your homework.
 
 --
 
-- Copy, paste and then run the following two lines in your RStudio console
+- Copy, paste, and then run the following two lines in your RStudio console
 
 ```{r install-tiny, echo = TRUE, eval = FALSE}
 # install tinytex package
@@ -192,7 +195,7 @@ tinytex::install_tinytex()
 ## Tidyverse
 
 - For this class we will use many functions that are not part of base R but
-that are in a separate package that can be downloaded. 
+that are in a separate package called `tidyverse`. 
 
 --
 
@@ -208,7 +211,7 @@ install.packages("tidyverse")
 
 --
 
-- packages in R are code that other people have written and made available. This
+- Packages in R are code that other people have written and made available. This
 code takes the form of functions that we can use after downloading the package. 
 
 --
@@ -216,5 +219,51 @@ code takes the form of functions that we can use after downloading the package.
 - Many people use `tidyverse` so if you ever have a question and you can't 
 reach us, you can Google it! 
 
+--
+
 - I promise someone else has asked that question and there will be a good 
 answer.
+
+---
+
+class: inverse, center, middle
+
+# Loading data into R
+
+---
+
+## Loading data
+
+- When each homework is released we will have a link to the data at the end of 
+that days lecture.
+
+--
+
+- You can use that link to load the data file(s) that you need into your R 
+environment.
+
+--
+
+## Let's start with an example
+
+- We have a data file online which we can load into R using the following lines
+of code:
+
+
+
+---
+
+## homework data links:
+
+- link for homework problem 1:
+```{r link-1, echo = TRUE, eval = FALSE}
+# link for data problem 1
+link_1 <- "https://drive.google.com/file/d/19iftrb9FS1CuyPhCecCjxaU8blJOlfEi/view?usp=sharing"
+```
+
+- link for homework problem 2:
+```{r link-2, echo = TRUE, eval = FALSE}
+# link for data problem 2
+link_2 <- "https://drive.google.com/file/d/1SkM7w-aFgiJCuC73fzekj7Vqx-yYdanx/view?usp=sharing"
+```
+

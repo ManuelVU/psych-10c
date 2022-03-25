@@ -25,7 +25,7 @@ coffee <- data.frame("iq" = c(group_1,group_2),
                                    rep("coffee", size_1)))
 
 # save as csv file
-write_csv(x = smarties, file = "data/week-1/hw-problem-1.csv")
+write_csv(x = coffee, file = "data/week-1/hw-problem-1.csv")
 
 # Part 2 ------------------------------------------------------------------
 
