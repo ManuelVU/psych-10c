@@ -19,7 +19,9 @@ options(htmltools.dir.version = FALSE)
 ```
 
 ```{r xaringan-extra, echo = FALSE}
-xaringanExtra::use_xaringan_extra(c("title_view", "fit_screen"))
+xaringanExtra::use_tile_view()
+
+xaringanExtra::use_fit_screen()
 
 xaringanExtra::use_extra_styles(
   hover_code_line = TRUE,         #<<
@@ -246,14 +248,60 @@ environment.
 
 ## Let's start with an example
 
+- First we need to load the `tidyverse` package into R using:
+
+```{r load-tidy, message = FALSE, warning = FALSE}
+library(tidyverse)
+```
+
+---
+
+## Loading data into RStudio
+
 - We have a data file online which we can load into R using the following lines
 of code:
 
+```{r read-ex-csv, echo = TRUE, message = FALSE, warning = FALSE}
+# we are creating a variable called link to store the address 
+# of the file as a character string with the url
+# of the file
+link <- "https://raw.githubusercontent.com/ManuelVU/psych-10c-data/main/example.csv"
+  
+# the read_csv() function is part of the core packages in tidyverse, 
+# we will load the file and save it with the name 'memory'
+memory <- read_csv(file = link)
+```
+
+- Note that the direction we give to R needs to be surrounded by quotation marks.
+
+---
+
+## Explore data file
+
+```{r data-example, echo = FALSE}
+DT::datatable(
+  head(x = memory, n = 150),
+  fillContainer = FALSE, options = list(pageLength = 8)
+)
+```
+
+---
+
+## Explore data file
+
+- We can look at the first rows of our data by doing the following:
+
+```{r first-rows, echo = TRUE}
+# this will show us the first 6 rows of the file on 
+# the console or in the scrip if we are using Rmarkdown 
+# (as you will be for homework)
+head(x = memory, n = 6)
+```
 
 
 ---
 
-## homework data links:
+## Homework data links:
 
 - link for homework problem 1:
 ```{r link-1, echo = TRUE, eval = FALSE}
