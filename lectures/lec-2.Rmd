@@ -1,0 +1,158 @@
+---
+title: "Lecture 2"
+subtitle: "New variales and Plots"
+author: "Psych 10 C"
+institute: "University of California, Irvine"
+date: "05/28/2022"
+output:
+  xaringan::moon_reader:
+    self_contained: true
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+```
+
+```{r xaringan-extra, echo = FALSE}
+xaringanExtra::use_tile_view()
+
+xaringanExtra::use_fit_screen()
+
+xaringanExtra::use_extra_styles(
+  hover_code_line = TRUE,         #<<
+  mute_unhighlighted_code = TRUE  #<<
+)
+
+htmltools::tagList(
+  xaringanExtra::use_clipboard(
+    button_text = "<i class=\"fa fa-clipboard\"></i>",
+    success_text = "<i class=\"fa fa-check\" style=\"color: #90BE6D\"></i>",
+    error_text = "<i class=\"fa fa-times-circle\" style=\"color: #F94144\"></i>"
+  ),
+  rmarkdown::html_dependency_font_awesome()
+)
+```
+
+```{r load-tidy, echo = FALSE, message = FALSE, warning = FALSE}
+library(tidyverse)
+library(flipbookr)
+knitr::opts_chunk$set(fig.width = 6, message = FALSE, 
+                      warning = FALSE, comment = "", 
+                      cache = F)
+link <- "https://raw.githubusercontent.com/ManuelVU/psych-10c-data/main/example.csv"
+memory <- read_csv(file = link)
+```
+
+## Load data into R
+
+- We will keep working with the memory data from last class
+
+```{r data-example, echo = FALSE}
+DT::datatable(
+  head(x = memory, n = 8),
+  fillContainer = FALSE, options = list(pageLength = 8)
+)
+```
+
+---
+
+## Creating new variables
+
+- Sometimes we will like to work with some transformation of the variables
+that we have on a data file. 
+
+--
+
+- For example we could want to have a variable that tells us if the number 
+of correctly recalled words was from the first or second test.
+
+--
+
+This can make some plots easier to make!
+
+---
+
+## Creating a new variable
+
+- We will create a new variable that takes the value "test-1" if the test was 
+perforned after 300 seconds of study and takes the value "test-2" if it was 
+3600 seconds after:
+
+```{r id-test, echo = TRUE}
+memory <- memory %>% 
+  mutate("test_id" = ifelse(test = time_test == 300, 
+                            yes = "test_1", no = "test_2"))
+head(x = memory, n = 4)
+```
+
+---
+
+## Creating a new variable
+
+- Using the **`mutate`** function we can create new variables using other functions 
+in R (**`ifelse`** is a function in R)
+
+--
+
+- We will use our new variable to create plots of the variables that we are 
+interested in.
+
+---
+
+class: inverse, center, middle
+
+# Plots
+
+## Histograms
+
+---
+
+## Histograms
+
+- One of the ways in which we can visualize data is using histograms.
+
+--
+
+- A histogram represents a count of the number of times that a variable has 
+appeared in our data.
+
+---
+
+```{r hist-code, include = FALSE}
+ggplot(data = memory) + #BREAK
+  aes(x = correct) + #BREAK
+  aes(fill = test_id, color = test_id) + #BREAK
+  geom_histogram(position="identity", 
+                 binwidth = 1,  
+                 alpha = 0.4) + #BREAK
+  theme_classic() + #BREAK
+  xlab("Number of correct recalls") + #BREAK
+  ylab("Frequency") + #BREAK
+  guides(fill = guide_legend("Test order"), color = "none") + #BREAK
+  theme(axis.title.x = element_text(size = 20),
+        axis.title.y = element_text(size = 20))
+```
+
+`r chunk_reveal(chunk_name = "hist-code", title = "### Histogram of correct recalls")`
+
+---
+
+## Histograms
+
+- One of the main problems with histograms is that their shape depends on our
+choice of the withd of the bars!
+
+--
+
+- A change on the shape can change our interpretation of the results so we need 
+to be careful when making our choice.
+
+--
+
+- In general we can use histograms when we have a numeric variable that we want 
+to visualize.
