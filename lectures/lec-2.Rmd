@@ -106,7 +106,7 @@ interested in.
 
 class: inverse, center, middle
 
-# Plots
+# Ploting
 
 ## Histograms
 
@@ -145,7 +145,7 @@ ggplot(data = memory) + #BREAK
 ## Histograms
 
 - One of the main problems with histograms is that their shape depends on our
-choice of the withd of the bars!
+choice of the width of the bars!
 
 --
 
@@ -156,3 +156,118 @@ to be careful when making our choice.
 
 - In general we can use histograms when we have a numeric variable that we want 
 to visualize.
+
+---
+class: inverse, center, middle
+
+# Ploting
+
+## Box-plots
+
+---
+
+## Box-plots
+
+- Box plots are another common way to visualize numeric data.
+
+--
+
+1. Box: has 3 marks, the limits which represent the first and third quantile and 
+the median or second quantile.
+
+--
+
+1. Whiskers: represent the maximum (minimum) of our observations that are lower
+(greater) than 1.5 times the distance between the first and third quantile.
+
+--
+
+1. Everything outside of those marks is considered as an outlier by the plot.
+
+--
+
+- We can use the same data as before for an example
+
+---
+
+```{r bp-code, include = FALSE}
+ggplot(data = memory) + #BREAK
+  aes(y = correct) + #BREAK
+  aes(x = test_id) + #BREAK
+  aes(color = test_id) + #BREAK
+  scale_color_brewer(palette="Dark2") +#BREAK
+  geom_boxplot(fill = "white") + #BREAK
+  xlab("Test order") + #BREAK
+  ylab("Number of correct recalls") + #BREAK
+  guides(fill = "none", color = "none") + #BREAK
+  theme(axis.title.x = element_text(size = 20),
+        axis.title.y = element_text(size = 20))
+```
+
+`r chunk_reveal(chunk_name = "bp-code", title = "### Box plot correct responses")`
+
+---
+
+## Box plots
+
+- Box plots show us how our data is dispersed, for example correct responses are 
+closer together in the first test in comparison to the second.
+
+--
+
+- We can also see that the median number of correct responses was higher on test 
+one.
+
+--
+
+- This can also show us if our data are dispersed symmetrically around the 
+median value. For example is the rectangles and the whiskers before and after
+the median have the same size that means that they are symmetric
+
+--
+
+- There are some variables that we would not expect to be symmetric, think about
+reaction times in a game.
+
+
+---
+class: inverse, center, middle
+
+# Ploting
+
+## Scatter plots
+
+---
+
+## Scatter plots
+
+- Histograms are useful when we have a single numeric variable and a categorical 
+variable with a few categories.
+
+--
+
+- Box plots can show us how the data behaves and will allow us to compare 
+the distributions easily.
+
+--
+
+- Scatter plots are useful when we wnat to see how two numerical variables 
+"change" together.
+
+---
+
+```{r scatter-code, include = FALSE}
+ggplot(data = memory) + #BREAK
+  aes(y = correct) + #BREAK
+  aes(x = age) + #BREAK
+  aes(color = test_id) + #BREAK
+  geom_point(fill = "white") + #BREAK
+  xlab("Age") + #BREAK
+  ylab("Number of correct recalls") + #BREAK
+  guides(fill = "none", color = guide_legend("Test order")) + #BREAK
+  theme(axis.title.x = element_text(size = 20),
+        axis.title.y = element_text(size = 20)) +
+  geom_smooth(method = lm)
+```
+
+`r chunk_reveal(chunk_name = "scatter-code", title = "### Scater plot correct responses vs age")`
