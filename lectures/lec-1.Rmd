@@ -68,7 +68,7 @@ class: middle, center
 
 ## Structure of the course
 
-- Goal: learn how and when to use linear models to answer questions about data.
+- Goal: to learn how and when to use linear models to answer questions about data.
 
 --
 
@@ -84,7 +84,7 @@ will be able to find what you need on the slides.
 --
 
 - We will provide homework templates that you will need to fill in (except for
-the final which will be an empty template).
+the final).
 
 ---
 
@@ -115,19 +115,19 @@ otherwise there might not be enough space.
 --
 
 - If you can't make it to your discussion section and would like to go to 
-another, consult it with the Ta assigned to your section and the section 
+another, consult it with the TAs assigned to your section and the section 
 that you plan to attend.
 
 --
 
-- All discussion sections are in ALP 3600
+- All discussion sections will take place in ALP 3600
 
 ---
 
 ## How to Contact us
 
 - The best way to contact us is via email, we will try to respond within the 
-following 24 hrs. 
+following 24 hrs and only during weekdays. 
 
 --
 
@@ -162,6 +162,10 @@ desktop/laptop.
 
 - Both methods are free!
 
+--
+
+- We have a small introduction to RStuido Cloud in Canvas.
+
 ---
 
 ## RStudio
@@ -174,8 +178,8 @@ desktop/laptop.
 
 ## Set up
 
-- If you have installed R and RStudio in your personal computer then you will 
-need a version of LaTex in order to generate the `.pdf` file that you have
+- We will be working with Rmarkdown, an extension of R, which requires you to 
+install the following package in order to generate the `.pdf` file that you have
 to submit for your homework.
 
 --
@@ -211,7 +215,9 @@ install.packages("tidyverse")
 
 - Again you only need to do this once!
 
---
+---
+
+## Tidyverse
 
 - Packages in R are code that other people have written and made available. This
 code takes the form of functions that we can use after downloading the package. 
@@ -236,32 +242,32 @@ class: inverse, center, middle
 
 ## Loading data
 
-- When each homework is released we will have a link to the data at the end of 
-that days lecture.
+- On days when each homework is scheduled to be released, we will provide a link 
+to the corresponding data by the end of the lecture time
 
 --
 
-- You can use that link to load the data file(s) that you need into your R 
-environment.
+- You can use that link to load the data file(s) into R.
 
 --
 
 ## Let's start with an example
 
-- First we need to load the `tidyverse` package into R using:
+- First we need to load the `tidyverse` package into R using
 
-```{r load-tidy, message = FALSE, warning = FALSE}
-library(tidyverse)
-```
+--
+
+- Then we can load the data using one of the functions included in the package 
+`read_csv()`
 
 ---
 
 ## Loading data into RStudio
 
-- We have a data file online which we can load into R using the following lines
-of code:
-
 ```{r read-ex-csv, echo = TRUE, message = FALSE, warning = FALSE}
+# Load the tydyverse library of functions
+library(tidyverse)
+
 # we are creating a variable called link to store the address 
 # of the file as a character string with the url
 # of the file
@@ -272,7 +278,7 @@ link <- "https://raw.githubusercontent.com/ManuelVU/psych-10c-data/main/example.
 memory <- read_csv(file = link)
 ```
 
-- Note that the direction we give to R needs to be surrounded by quotation marks.
+- Note that the URL we give to R needs to be surrounded by quotation marks.
 
 ---
 
@@ -297,7 +303,6 @@ DT::datatable(
 # (as you will be for homework)
 head(x = memory, n = 6)
 ```
-
 
 ---
 

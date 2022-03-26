@@ -3,7 +3,7 @@ title: "Lecture 2"
 subtitle: "New variales and Plots"
 author: "Psych 10 C"
 institute: "University of California, Irvine"
-date: "05/28/2022"
+date: "03/30/2022"
 output:
   xaringan::moon_reader:
     self_contained: true
@@ -68,8 +68,9 @@ that we have on a data file.
 
 --
 
-- For example we could want to have a variable that tells us if the number 
-of correctly recalled words was from the first or second test.
+- For example, if we're interested in knowing how many of the words that were 
+correctly recalled came from the first or second test, we could use the current 
+variables to add a new variable that contains this information
 
 --
 
@@ -79,14 +80,18 @@ This can make some plots easier to make!
 
 ## Creating a new variable
 
-- We will create a new variable that takes the value "test-1" if the test was 
-perforned after 300 seconds of study and takes the value "test-2" if it was 
-3600 seconds after:
+- We will create a new variable that generates a label "test-1" whenever the 
+test time (time_test) was 300 seconds after the study phase, and "test-2" when 
+the test time was 3600 seconds after:
 
 ```{r id-test, echo = TRUE}
+# create new variable using pipes! %>% this takes the output 
+# of the presceding line and uses it as input on the next one
 memory <- memory %>% 
   mutate("test_id" = ifelse(test = time_test == 300, 
                             yes = "test_1", no = "test_2"))
+
+# look at the first 4 rows of the data
 head(x = memory, n = 4)
 ```
 
@@ -94,19 +99,19 @@ head(x = memory, n = 4)
 
 ## Creating a new variable
 
-- Using the **`mutate`** function we can create new variables using other functions 
-in R (**`ifelse`** is a function in R)
+- The **`mutate()`** function allows us to create new variables from the ones 
+already available in the dataset. **`ifelse()`** is another function applied 
+here to impose a condition to be considered when creating this new variable.
 
 --
 
-- We will use our new variable to create plots of the variables that we are 
-interested in.
+- We will use our new variable to create plots our data.
 
 ---
 
 class: inverse, center, middle
 
-# Ploting
+# Plotting
 
 ## Histograms
 
@@ -114,12 +119,11 @@ class: inverse, center, middle
 
 ## Histograms
 
-- One of the ways in which we can visualize data is using histograms.
-
---
-
-- A histogram represents a count of the number of times that a variable has 
+- A histogram represents a count of the number of times that a value has 
 appeared in our data.
+
+- They are constructed by creating intervals and counting the number of 
+data points that fall on each.
 
 ---
 
@@ -154,13 +158,12 @@ to be careful when making our choice.
 
 --
 
-- In general we can use histograms when we have a numeric variable that we want 
-to visualize.
+- Histograms can be used for numeric variables.
 
 ---
 class: inverse, center, middle
 
-# Ploting
+# Plotting
 
 ## Box-plots
 
@@ -168,21 +171,28 @@ class: inverse, center, middle
 
 ## Box-plots
 
-- Box plots are another common way to visualize numeric data.
-
---
+.pull-left[
 
 1. Box: has 3 marks, the limits which represent the first and third quantile and 
 the median or second quantile.
 
---
-
 1. Whiskers: represent the maximum (minimum) of our observations that are lower
 (greater) than 1.5 times the distance between the first and third quantile.
 
---
+1. Everything outside of those marks is considered as an outlier.
+]
 
-1. Everything outside of those marks is considered as an outlier by the plot.
+.pull-right[
+```{r ex-bp, echo = FALSE, fig.align = 'center'}
+ggplot(data = memory) + 
+  aes(y = age) + 
+  geom_boxplot(fill = "white") + 
+  ylab("age") + #BREAK
+  guides(fill = "none", color = "none") + #BREAK
+  theme(axis.title.x = element_text(size = 20),
+        axis.title.y = element_text(size = 20))
+```
+]
 
 --
 
@@ -210,19 +220,19 @@ ggplot(data = memory) + #BREAK
 
 ## Box plots
 
-- Box plots show us how our data is dispersed, for example correct responses are 
-closer together in the first test in comparison to the second.
+- Box plots show us how our data is dispersed, for example the number of 
+correctly recalled words are closer together in the first test in comparison to 
+the second.
 
 --
 
-- We can also see that the median number of correct responses was higher on test 
-one.
+- We can also see that the median number of correctly recalled words was higher 
+on test one.
 
 --
 
-- This can also show us if our data are dispersed symmetrically around the 
-median value. For example is the rectangles and the whiskers before and after
-the median have the same size that means that they are symmetric
+- This plot also allows us to evaluate if our data is dispersed symmetrically 
+around the median value, or if there's some bias towards one of the ends.
 
 --
 
@@ -233,7 +243,7 @@ reaction times in a game.
 ---
 class: inverse, center, middle
 
-# Ploting
+# Plotting
 
 ## Scatter plots
 
@@ -241,17 +251,15 @@ class: inverse, center, middle
 
 ## Scatter plots
 
-- Histograms are useful when we have a single numeric variable and a categorical 
-variable with a few categories.
+- Histograms are useful when we have a single numeric variable.
 
 --
 
-- Box plots can show us how the data behaves and will allow us to compare 
-the distributions easily.
+- Box plots are very informative of the variability in our data.
 
 --
 
-- Scatter plots are useful when we wnat to see how two numerical variables 
+- Scatter plots are useful when we want to see how two numerical variables 
 "change" together.
 
 ---
