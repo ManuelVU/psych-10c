@@ -84,7 +84,7 @@ will be able to find what you need on the slides.
 --
 
 - We will provide homework templates that you will need to fill in (except for
-the final).
+the final project).
 
 ---
 
@@ -131,7 +131,7 @@ following 24 hrs and only during weekdays.
 
 --
 
-- Try to look at the homework and see if you have any questions. We can't 
+- Try to look at homeworks early in case you have questions. We can't 
 promise that we will be able to respond in time if the deadline is close.
 
 --
@@ -253,12 +253,12 @@ to the corresponding data by the end of the lecture time
 
 ## Let's start with an example
 
-- First we need to load the `tidyverse` package into R using
+- First we need to load the `tidyverse` package into R.
 
 --
 
-- Then we can load the data using one of the functions included in the package 
-`read_csv()`
+- Then we can load the data using one of the functions included in the 
+`tidyverse` package: `read_csv()`
 
 ---
 
@@ -308,13 +308,13 @@ head(x = memory, n = 6)
 
 ## Homework data links:
 
-- link for homework problem 1:
+- link for homework 1 problem 1:
 ```{r link-1, echo = TRUE, eval = FALSE}
 # link for data problem 1
 link_1 <- "https://raw.githubusercontent.com/ManuelVU/psych-10c-data/main/hw-problem-1.csv"
 ```
 
-- link for homework problem 2:
+- link for homework 1 problem 2:
 ```{r link-2, echo = TRUE, eval = FALSE}
 # link for data problem 2
 link_2 <- "https://raw.githubusercontent.com/ManuelVU/psych-10c-data/main/hw-problem-2.csv"

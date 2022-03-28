@@ -1,6 +1,6 @@
 ---
 title: "Lecture 2"
-subtitle: "New variales and Plots"
+subtitle: "New variables and Plots"
 author: "Psych 10 C"
 institute: "University of California, Irvine"
 date: "03/30/2022"
@@ -22,6 +22,8 @@ options(htmltools.dir.version = FALSE)
 xaringanExtra::use_tile_view()
 
 xaringanExtra::use_fit_screen()
+
+xaringanExtra::use_editable(expires = 1)
 
 xaringanExtra::use_extra_styles(
   hover_code_line = TRUE,         #<<
@@ -48,6 +50,42 @@ link <- "https://raw.githubusercontent.com/ManuelVU/psych-10c-data/main/example.
 memory <- read_csv(file = link)
 ```
 
+## Recognition Memory
+
+- The data that we will work on today comes from a recognition memory experiment
+
+--
+
+- In the experiment we asked participants to look at a list of 50 words that 
+would be used on a latter test.
+
+--
+
+- After 5 minutes have passed we showed each participant 100 words one at a time
+and asked them if the word on the screen was on the original list or not.
+
+--
+
+- Then, after one hour we did another test, again presenting participants one 
+word at a time and asking them if the word was on the original list.
+
+--
+
+- We assigned each participant an ID number for the experiment and recorded
+their age and the number of words that they correctly recognized as being part 
+of the original list of 50 words on each test.
+
+--
+
+- We organized all these data in R and save it as a `.csv` that we want to
+look at now.
+
+--
+
+- How should we start?
+
+---
+
 ## Load data into R
 
 - We will keep working with the memory data from last class
@@ -63,18 +101,18 @@ DT::datatable(
 
 ## Creating new variables
 
-- Sometimes we will like to work with some transformation of the variables
+- Sometimes we want to work with some transformation of the variables
 that we have on a data file. 
 
 --
 
 - For example, if we're interested in knowing how many of the words that were 
-correctly recalled came from the first or second test, we could use the current 
-variables to add a new variable that contains this information
+correctly recalled came from the first or second test. We can make a new 
+variable, based on the old ones, that contains this information.
 
 --
 
-This can make some plots easier to make!
+- This can make some plots easier to make!
 
 ---
 
@@ -84,9 +122,11 @@ This can make some plots easier to make!
 test time (time_test) was 300 seconds after the study phase, and "test-2" when 
 the test time was 3600 seconds after:
 
+--
+
 ```{r id-test, echo = TRUE}
 # create new variable using pipes! %>% this takes the output 
-# of the presceding line and uses it as input on the next one
+# of the preceding line and uses it as input on the next one
 memory <- memory %>% 
   mutate("test_id" = ifelse(test = time_test == 300, 
                             yes = "test_1", no = "test_2"))
@@ -105,7 +145,18 @@ here to impose a condition to be considered when creating this new variable.
 
 --
 
-- We will use our new variable to create plots our data.
+- How can we modify the code above to create a new variable that labels 
+participants as "young" if they are older than 35 and "elderly" otherwise?
+
+- You have 3 minutes.
+
+--
+
+- **ANS:**
+
+.can-edit.key-likes[
+- 
+]
 
 ---
 
@@ -122,8 +173,41 @@ class: inverse, center, middle
 - A histogram represents a count of the number of times that a value has 
 appeared in our data.
 
+--
+
 - They are constructed by creating intervals and counting the number of 
 data points that fall on each.
+
+--
+
+- We can look at an example using our **`age`** variable.
+
+--
+.pull-left[
+```{r hist-age, fig.align = 'center', echo = FALSE, fig.height = 5.6}
+ggplot(data = memory) +
+  aes(x = age) +
+  geom_histogram(position="identity", 
+                 binwidth = 1) +
+  xlab("Age") +
+  ylab("Frequency") + 
+  theme(axis.title.x = element_text(size = 20),
+        axis.title.y = element_text(size = 20))
+```
+]
+
+.pull-right[
+```{r hist-age2, fig.align = 'center', echo = FALSE, fig.height = 5.3}
+ggplot(data = memory) +
+  aes(x = age) +
+  geom_histogram(position="identity", 
+                 binwidth = 5) +
+  xlab("Age") +
+  ylab("Frequency") + 
+  theme(axis.title.x = element_text(size = 20),
+        axis.title.y = element_text(size = 20))
+```
+]
 
 ---
 
@@ -174,7 +258,7 @@ class: inverse, center, middle
 .pull-left[
 
 1. Box: has 3 marks, the limits which represent the first and third quantile and 
-the median or second quantile.
+the median or second quantile. (We will define quantiles on the next lecture)
 
 1. Whiskers: represent the maximum (minimum) of our observations that are lower
 (greater) than 1.5 times the distance between the first and third quantile.
@@ -236,8 +320,8 @@ around the median value, or if there's some bias towards one of the ends.
 
 --
 
-- There are some variables that we would not expect to be symmetric, think about
-reaction times in a game.
+- There are some variables that we would not expect to be symmetric (think about
+reaction times in a game).
 
 
 ---
