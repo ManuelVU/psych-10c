@@ -52,21 +52,21 @@ memory <- read_csv(file = link)
 
 ## Recognition Memory
 
-- The data that we will work on today comes from a recognition memory experiment
+- The data that we will work on today comes from a recognition memory experiment.
 
 --
 
-- In the experiment we asked participants to look at a list of 50 words that 
-would be used on a latter test.
+- We asked participants to look at a list of 50 words that would be used on a 
+later test.
 
 --
 
-- After 5 minutes have passed we showed each participant 100 words one at a time
-and asked them if the word on the screen was on the original list or not.
+- After 5 minutes have passed we showed each participant 100 words, one at a 
+time, and asked them if the word on the screen was on the original list or not.
 
 --
 
-- Then, after one hour we did another test, again presenting participants one 
+- After one hour, we did another test, again presenting participants one 
 word at a time and asking them if the word was on the original list.
 
 --
@@ -88,12 +88,18 @@ look at now.
 
 ## Load data into R
 
-- We will keep working with the memory data from last class
+- We can start by loading the data and looking at the first 6 rows to make sure 
+that we have the correct one.
+
+```{r load-data}
+link <- "https://raw.githubusercontent.com/ManuelVU/psych-10c-data/main/example.csv"
+memory <- read_csv(file = link)
+```
 
 ```{r data-example, echo = FALSE}
 DT::datatable(
-  head(x = memory, n = 8),
-  fillContainer = FALSE, options = list(pageLength = 8)
+  head(x = memory, n = 6),
+  fillContainer = FALSE, options = list(pageLength = 6)
 )
 ```
 

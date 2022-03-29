@@ -1,0 +1,149 @@
+---
+title: "Lecture 3"
+subtitle: "Summary Statistics"
+author: "Psych 10 C"
+institute: "University of California, Irvine"
+date: "03/30/2022"
+output:
+  xaringan::moon_reader:
+    self_contained: true
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+```
+
+```{r xaringan-extra, echo = FALSE}
+xaringanExtra::use_tile_view()
+
+xaringanExtra::use_fit_screen()
+
+xaringanExtra::use_extra_styles(
+  hover_code_line = TRUE,         #<<
+  mute_unhighlighted_code = TRUE  #<<
+)
+
+htmltools::tagList(
+  xaringanExtra::use_clipboard(
+    button_text = "<i class=\"fa fa-clipboard\"></i>",
+    success_text = "<i class=\"fa fa-check\" style=\"color: #90BE6D\"></i>",
+    error_text = "<i class=\"fa fa-times-circle\" style=\"color: #F94144\"></i>"
+  ),
+  rmarkdown::html_dependency_font_awesome()
+)
+```
+
+```{r load-tidy, echo = FALSE, message = FALSE, warning = FALSE}
+library(tidyverse)
+library(flipbookr)
+knitr::opts_chunk$set(fig.width = 6, message = FALSE, 
+                      warning = FALSE, comment = "", 
+                      cache = F)
+link <- "https://raw.githubusercontent.com/ManuelVU/psych-10c-data/main/example.csv"
+memory <- read_csv(file = link)
+```
+
+## Summary Statistics
+
+- Another common way in which information from an experiment or a survey can be 
+summarized is by using an statistic.
+
+--
+
+- Summary statistics are **functions** of **random variables** in an experiment 
+that can be used to convey information about the location of our observations 
+and how they vary.
+
+--
+
+- Not all the variables in an experiment are equally important, so we don't 
+usually look for ways to visualize them, but we still want to make sure that 
+we give all the information we can about our sample.
+
+--
+
+- In that case we can use summary statistics to report some of their properties.
+
+---
+
+class: inverse, center, middle
+
+# Random Variables and Functions
+
+---
+
+## Random variables
+
+- Statisticians are very bad at naming objects...
+
+--
+
+- So when you think of the words random and variable what comes to mind first?
+
+--
+
+- The formal definition is the opposite!
+
+--
+
+- Definition: A random variable is a function of the outcomes of an experiment.
+
+---
+
+# Functions
+
+- Functions have formal definitions, however, what we have to remember is 
+how they "work".
+
+--
+
+- Intuitively, we can think of functions as rules about how to associate two 
+groups of "things".
+
+--
+
+- For example, if throw a coin and then record if it landed as heads or tails. 
+A function could be a rule that states:
+
+  - If the outcome is tails then $x = 0$ if the outcome is heads then $x = 1$
+
+--
+
+- This is a simple rule that just let's us assign numbers to a variable $x$ 
+depending on the result of a coin toss. In other words, $x$ is a function of the 
+outcome of the experiment.
+
+--
+
+- Another simple function would be $y = x + 1$. 
+
+  - This function, tells us that whatever the value of $x$ is, we can 
+  get the value of $y$ by adding $1$ to $x$.
+
+--
+
+- Regardless of how complex they loo,k we can think of functions as a "rode-map"
+that specifies how we get from the values of one variable to the values of 
+another.
+
+---
+
+## Back to Random Variables
+
+- Random variables are neither random nor variables, they are simply the rules 
+we use to assign numbers to the outcomes of an experiment. 
+
+--
+
+- In other words they are deterministic functions (see statisticians are really 
+bad at naming).
+
+
+
+
+
