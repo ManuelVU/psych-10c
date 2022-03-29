@@ -1,13 +1,13 @@
 ---
-title: "homework 1"
-author: "student name"
-date: ""
+title: "Homework 1"
+author: "Write your name here"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
 output: pdf_document
 ---
 
-```{r prep_tinytex, include=FALSE}
-# Run this code chunk to install the package you'll need to output this homework as a PDF
-# (which you can then submit)
+```{r prep_tinytex, include=FALSE, eval=FALSE}
+# Run this code chunk to install the 'tinytex' package you'll need 
+# to knit this homework as a PDF (which you can then submit)
 
 install.packages('tinytex')
 tinytex::install_tinytex()
@@ -15,46 +15,43 @@ tinytex::install_tinytex()
 
 ## Section 1
 
-**Background:** This first data set is from an experiment designed to see if 
-drinking coffee makes people smarter. Participants were divided into two groups. 
-All participants took an IQ test, but one group of participants drank water 5 
-minutes before taking the IQ test (**group 1**). The other group drank coffee 
-**group 2**.
+**Background:** This first data set comes from an experiment designed to test whether 
+drinking coffee makes people smarter. Participants were divided into two groups.
+All participants took an IQ test, but participants in **group 1** drank water 5 
+minutes before the test, while participants in **group 2** drank coffee.
 
 ```{r load_data, echo = TRUE}
-# In this section you should write the code needed to load the data for
-# section 2. The other calculations can be done in the following
-# code chunks. Remember to delete the comments inside the code chunks BEFORE 
-# submitting your homework.
+# In this section you should write (a.k.a. copy from the slides) the code needed 
+# to load the data for section 1. IMPORTANT: Remember to delete the comments 
+# inside the code chunks BEFORE submitting your homework.
 ```
 
 \small Questions 1 - 4 require you to use R code, questions 5 and 6 require you
 to reflect on its outcome.
 
-1. What is the average score on the *IQ* test for participants who did not drink
-coffee?
+1. What is the average score on the *IQ* test for participants who **did not drink coffee?**
 
 ```{r mean_group1, echo = TRUE}
 # In this code chunk you can write the function (or functions) that you need to 
-# use in order to calculate the mean of the FIRST group, remember to save the 
-# result in a new variable so that you can easily it in text. Remember to delete 
+# calculate the mean of the FIRST group, remember to save the result in a new 
+# variable so that you can easily print it in text. Remember to delete 
 # the comments inside the code chunks BEFORE submitting your homework.
 ```
 
-**ANS:** 
+**ANS:** [WRITE YOUR ANSWER HERE]
 
-1. What is the average score on the *IQ* test for participants who drink coffee?
+2. What is the average score on the *IQ* test for participants who **drink coffee?** 
 
 ```{r mean_group2, echo = TRUE}
 # In this code chunk you can write the function (or functions) that you need to 
-# use in order to calculate the mean of the SECOND group, remember to save the 
-# result in a new variable so that you can easily it in text. Remember to delete 
+# calculate the mean of the SECOND group, remember to save the  result in a new 
+# variable so that you can easily insert it in text. Remember to delete 
 # the comments inside the code chunks BEFORE submitting your homework.
 ```
 
-**ANS:** 
+**ANS:** [WRITE YOUR ANSWER HERE]
 
-1. Which group had more variation in their test scores on the *IQ* test, those 
+3. Which group had more variation in their test scores on the *IQ* test, those 
 who drink coffee or those who didn't? How do you know?
 
 ```{r variantion_group, echo = TRUE}
@@ -63,12 +60,11 @@ who drink coffee or those who didn't? How do you know?
 # new variable so that you can use it in text.
 ```
 
-**ANS:**
+**ANS:** [WRITE YOUR ANSWER HERE]
 
-
-1. Create 2 histograms of the *IQ* test results of each group. One should show 
-how participants who weren’t given coffee performed on the IQ test, and the 
-other should show how participants who were given coffee performed. Describe 
+4. Create two histograms for the *IQ* test results that each group got (1 per group). In other words, 
+one of these histograms must show the IQ scores for participants who weren’t given coffee before the IQ test, 
+and the other histogram should show how participants who were given coffee performed. Describe 
 what you see in the histograms in as few words as possible.
 
 ```{r histograms, echo = TRUE, fig.align = 'center'}
@@ -76,28 +72,25 @@ what you see in the histograms in as few words as possible.
 # it would be easier to compare results if you add transparency to the color! 
 ```
 
-**ANS:** 
+**ANS:** [WRITE YOUR ANSWER HERE]
 
-1. We take the mean IQ of participants who drank coffee so that we can get a single number that helps describe the performance of all those participants who drank coffee. We take the mean IQ of participants who didn’t drink coffee so that we can get a single number that helps describe the behavior of all those participants who didn’t drink coffee. Which do you think does a better job of describing the behavior of each respective group, the mean of those who drank coffee or the mean of those who didn’t? In other words, which mean seems more effective for describing the performance of participants in each condition? Why?
+5. We take the mean IQ of participants who drank coffee so that we can get a single number that helps describe the performance of all participants who drank coffee. Similarly, we take the mean IQ of participants who didn’t drink coffee so that we can get a single number that helps describe the behavior of participants who didn’t drink coffee. Which of these means do you think does a better job at describing the behavior of their respective group? Why?
 
-**ANS:**
+**ANS:** [WRITE YOUR ANSWER HERE]
 
-1. If someone asked you, does drinking coffee make a difference for how people perform on IQ tests, what would you say and why?
+6. If someone asked you, does drinking coffee make a difference for how people perform on IQ tests, what would you say and why?
 
-**ANS:**
+**ANS:** [WRITE YOUR ANSWER HERE]
 
 
 
 ## Section 2
 
-**Background:** This second data set comes from an experiment designed to see if 
-a new form of training is effective in improving participant's ability to 
-navigate a maze. Participants in the experimental condition first underwent the 
-new training that might improve their performance. Participants in the control 
-condition played an unrelated game that lasted approximately as long as the 
-training. Participants in both conditions then completed the maze as quickly as 
-possible. The data provides information about how quickly each participant 
-completed the maze, in seconds.
+**Background:** This second data set comes from an experiment designed to test whether a new form of training 
+can improve participants' ability to navigate a maze. Participants in the experimental condition underwent the 
+new training, while participants in the control group played an unrelated game that lasted approximately as long as the 
+training. Participants in both conditions were then instructed to complete a maze as quickly as 
+possible. The data provides information about how quickly each participant completed the maze, in seconds.
 
 ```{r load_data2, echo = TRUE}
 # In this section you should write the code needed to load the data for
