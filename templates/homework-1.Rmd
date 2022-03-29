@@ -15,19 +15,15 @@ tinytex::install_tinytex()
 
 ## Section 1
 
-**Background:** This first data set comes from an experiment designed to test whether 
-drinking coffee makes people smarter. Participants were divided into two groups.
-All participants took an IQ test, but participants in **group 1** drank water 5 
-minutes before the test, while participants in **group 2** drank coffee.
+**Background:** This first data set comes from an experiment designed to test whether  drinking coffee makes people smarter. Participants were divided into two groups. All participants took an IQ test, but participants in **group 1** drank water 5 minutes before the test, while participants in **group 2** drank coffee.
 
 ```{r load_data, echo = TRUE}
-# In this section you should write (a.k.a. copy from the slides) the code needed 
+# In this chunk you should write (a.k.a. copy from the slides) the code needed 
 # to load the data for section 1. IMPORTANT: Remember to delete the comments 
 # inside the code chunks BEFORE submitting your homework.
 ```
 
-\small Questions 1 - 4 require you to use R code, questions 5 and 6 require you
-to reflect on its outcome.
+\small Questions 1 - 4 require you to use R code, questions 5 and 6 require you to draw conclusions from the output.
 
 1. What is the average score on the *IQ* test for participants who **did not drink coffee?**
 
@@ -51,8 +47,7 @@ to reflect on its outcome.
 
 **ANS:** [WRITE YOUR ANSWER HERE]
 
-3. Which group had more variation in their test scores on the *IQ* test, those 
-who drink coffee or those who didn't? How do you know?
+3. Which group had more variation in their test scores on the *IQ* test, those who drink coffee or those who didn't? How do you know?
 
 ```{r variantion_group, echo = TRUE}
 # In this code chink you can write the functions that you need to use in order 
@@ -62,10 +57,7 @@ who drink coffee or those who didn't? How do you know?
 
 **ANS:** [WRITE YOUR ANSWER HERE]
 
-4. Create two histograms for the *IQ* test results that each group got (1 per group). In other words, 
-one of these histograms must show the IQ scores for participants who weren’t given coffee before the IQ test, 
-and the other histogram should show how participants who were given coffee performed. Describe 
-what you see in the histograms in as few words as possible.
+4. Create two histograms for the *IQ* test results that each group got (1 per group). In other words, one of these histograms must show the IQ scores for participants who were not given coffee before the IQ test, and the other histogram should show how participants who were given coffee performed. Describe what you see in the histograms in as few words as possible.
 
 ```{r histograms, echo = TRUE, fig.align = 'center'}
 # Use this code chunk to make the histograms of the IQ test scores of each group
@@ -86,24 +78,21 @@ what you see in the histograms in as few words as possible.
 
 ## Section 2
 
-**Background:** This second data set comes from an experiment designed to test whether a new form of training 
+**Background:** This second data set comes from an experiment designed to test whether a new training technique
 can improve participants' ability to navigate a maze. Participants in the experimental condition underwent the 
 new training, while participants in the control group played an unrelated game that lasted approximately as long as the 
-training. Participants in both conditions were then instructed to complete a maze as quickly as 
-possible. The data provides information about how quickly each participant completed the maze, in seconds.
+training. Participants in both conditions were then instructed to complete a maze as quickly as possible. 
+The data provides information about the time (in seconds) in which each participant completed the maze.
 
 ```{r load_data2, echo = TRUE}
 # In this section you should write the code needed to load the data for
-# section 2. The other calculations can be done in the following
-# code chunks. Remember to delete the comments inside the code chunks BEFORE 
-# submitting your homework.
+# section 2. IMPORTANT: Remember to delete the comments inside the code 
+# chunks BEFORE submitting your homework.
 ```
 
-\small Questions 7 - 10 require you to use R code, questions 11 and 13 require 
-you to reflect on its outcome.
+\small Questions 7 - 10 require you to use R code, questions 11 - 13 require you to draw conclusions based on the outcome.
 
-1. On average, how much did participants in the control condition improve by? Make sure your answer is clear, both in terms of units and $+/-$.
-
+7. On average, how much did participants in the control condition improve their times? Make sure your answer is clear, both in terms of units and $+/-$.
 
 ```{r diff_group, echo = TRUE}
 # In this section you should write the code needed to calculate the average 
@@ -111,13 +100,13 @@ you to reflect on its outcome.
 # to use it in the text accessing the elements of the vector.
 ```
 
-**ANS:**
+**ANS:** [WRITE YOUR ANSWER HERE]
 
-1. On average, how much did participants in the experimental condition improve by? Again, make sure your answer is clear, both in terms of units and $+/-$.
+8. On average, how much did participants in the experimental condition improve their times? Again, make sure your answer is clear, both in terms of units and $+/-$.
 
-**ANS:**
+**ANS:** [WRITE YOUR ANSWER HERE]
 
-1. Which group had more variation in their improvement from one puzzle to the next, those who received the training or those who didn’t? How do you know?
+9. Which group had more variation in their improvement from one puzzle to the next, those who received the training or those who didn’t? How do you know?
 
 ```{r variantion_sec2, echo = TRUE}
 # In this code chunk you can write the functions that you need to use in order 
@@ -125,9 +114,9 @@ you to reflect on its outcome.
 # new variable so that you can use it in text.
 ```
 
-**ANS:**
+**ANS:** [WRITE YOUR ANSWER HERE]
 
-1. Create 2 boxplots. One should show how participants who weren’t given the 
+10. Create 2 boxplots. One should show how participants who weren’t given the 
 training improved from the first puzzle to the second puzzle, and the other 
 should show how participants who did get the training improved. These boxplots 
 should be side by side for comparison purposes. Write a small comment on what 
@@ -138,19 +127,19 @@ you see.
 # after training divided by group.
 ```
 
-**ANS:**
+**ANS:** [WRITE YOUR ANSWER HERE]
 
-1. Similar question 5 from Section 1, which mean do you think does a better job 
+11. Similar question 5 from Section 1, which mean do you think does a better job 
 of describing participants behavior in each condition, the mean improvement of 
 participants who did receive the training or the mean improvement of those who 
 didn’t? Why?
 
-**ANS:**
+**ANS:** [WRITE YOUR ANSWER HERE]
 
-1. If someone asked you whether the training was effective in improving people’s performance on the logic puzzles, what would you say? Why?
+12. If someone asked you whether the training was effective in improving people’s performance on the logic puzzles, what would you say? Why?
 
-**ANS:**
+**ANS:** [WRITE YOUR ANSWER HERE]
 
-1. Considering the data you have looked at in this assignment, would you be more confident in saying that drinking coffee improves people’s performance on IQ tests or that the new training improves people’s performance on logic puzzles? Why?
+13. Considering the data you have looked at in this assignment, would you be more confident in saying that drinking coffee improves people’s performance on IQ tests or that the new training improves people’s performance on logic puzzles? Why?
 
-**ANS:**
+**ANS:** [WRITE YOUR ANSWER HERE]
