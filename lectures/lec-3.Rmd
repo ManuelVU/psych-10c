@@ -58,8 +58,7 @@ memory <- memory %>%
 
 ## Summary Statistics
 
-- Another common way in which information from an experiment or a survey can be 
-summarized is by using a statistic.
+- Another common to summarize information from experimental or survey data is by using a statistic.
 
 --
 
@@ -71,7 +70,7 @@ and how they vary.
 
 - Not all the variables in an experiment are equally important, so we don't 
 usually look for ways to visualize them, but we still want to make sure that 
-we give all the information we can about our sample.
+we gather all the information we can about our sample.
 
 --
 
@@ -91,7 +90,7 @@ class: inverse, center, middle
 
 --
 
-- So when you think of the words random and variable what comes to mind first?
+- When you think of the words "random" and "variable", what comes to mind first?
 
 --
 
@@ -106,26 +105,25 @@ experiment.
 
 # Functions
 
-- Functions have formal definitions, however, what we have to remember is 
+- Functions have formal definitions, however, what's really important is that  we remember
 how they "work".
 
 --
 
-- Intuitively, we can think of functions as rules about how to associate two 
-groups of "things".
+- Intuitively, we can think of functions as rules regarding how two groups of "things" are associated.
 
 --
 
-- For example, if throw a coin and then record if it landed as heads or tails. 
+- For example, imagine we throw a coin and record whether it ends up being heads or tails. 
 A function could be a rule that states:
 
-  - $x = 0$ If the outcome is tails and $x = 1$ if the outcome is heads. 
+  - $x = 0$ if the outcome is tails and $x = 1$ if the outcome is heads. 
 
 --
 
-- This is a simple rule that just let's us assign numbers to a variable $x$ 
-depending on the result of a coin toss. In other words, $x$ is a function of the 
-outcome of the experiment.
+- This is a simple rule that lets us assign numbers to a variable $x$ 
+depending on the result of a coin toss. In other words, $x$ is defined as 
+a function of the outcome of the experiment.
 
 ---
 
@@ -133,14 +131,13 @@ outcome of the experiment.
 
 - Another simple function would be $y = x + 1$. 
 
-  - This function, tells us that whatever the value of $x$ is, we can 
+  - This function tells us that whatever the value of $x$ is, we can 
   get the value of $y$ by adding $1$ to $x$.
 
 --
 
-- Regardless of how complex they look, we can think of functions as a "map"
-that specifies how to get from the values of one variable to the values of 
-another.
+- Regardless of how complex they look, we can always think of functions as a "map"
+that specifies how to go from the values of one variable to values on a second variable.
 
 ---
 
@@ -151,13 +148,13 @@ we use to assign numbers to the outcomes of an experiment.
 
 --
 
-- In other words they are deterministic functions (see statisticians are really 
-bad at naming).
+- In other words random variables are deterministic functions (See? statisticians are really 
+bad at naming things!).
 
 --
 
 - In our previous example with the coin toss, $x$ can be considered a random 
-variable, as it is a rule that allows us to assign a numeric value (0 or 1) to 
+variable, as there's a rule that assigns a numeric value (0 or 1) to 
 the outcome of the experiment (heads or tails).
 
 ---
