@@ -152,7 +152,8 @@ here to impose a condition to be considered when creating this new variable.
 --
 
 - How can we modify the code above to create a new variable that labels 
-participants as "young" if they are older than 35 and "elderly" otherwise?
+participants as "young" if they are less than 35 years old and "elderly" 
+otherwise?
 
 - You have 3 minutes.
 
