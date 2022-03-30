@@ -51,11 +51,11 @@ memory <- read_csv(file = link)
 ## Summary Statistics
 
 - Another common way in which information from an experiment or a survey can be 
-summarized is by using an statistic.
+summarized is by using a statistic.
 
 --
 
-- Summary statistics are **functions** of **random variables** in an experiment 
+- Statistics are **functions** of **random variables** in an experiment 
 that can be used to convey information about the location of our observations 
 and how they vary.
 
@@ -79,7 +79,7 @@ class: inverse, center, middle
 
 ## Random variables
 
-- Statisticians are very bad at naming objects...
+- Statisticians are very bad at naming things ...
 
 --
 
@@ -91,7 +91,8 @@ class: inverse, center, middle
 
 --
 
-- Definition: A random variable is a function of the outcomes of an experiment.
+- **Definition:** A random variable is a function of the outcomes of an 
+experiment.
 
 ---
 
@@ -110,7 +111,7 @@ groups of "things".
 - For example, if throw a coin and then record if it landed as heads or tails. 
 A function could be a rule that states:
 
-  - If the outcome is tails then $x = 0$ if the outcome is heads then $x = 1$
+  - $x = 0$ If the outcome is tails and $x = 1$ if the outcome is heads. 
 
 --
 
@@ -127,7 +128,7 @@ outcome of the experiment.
 
 --
 
-- Regardless of how complex they loo,k we can think of functions as a "rode-map"
+- Regardless of how complex they look, we can think of functions as a "map"
 that specifies how we get from the values of one variable to the values of 
 another.
 
@@ -143,7 +144,150 @@ we use to assign numbers to the outcomes of an experiment.
 - In other words they are deterministic functions (see statisticians are really 
 bad at naming).
 
+--
 
+- In our previous example with the coin toss, $x$ can be considered a random 
+variable, as it is a rule that allows us to assign a numeric value (0 or 1) to 
+the outcome of the experiment (heads or tails).
+
+---
+
+## Example with the memory experiment.
+
+- Let's think of our memory experiment. For a given participant and test (say 
+participant 1, test 1), each time we present a word it can be the case that the 
+participant response was that the word was on the original list or not.
+
+--
+
+- Additionally, each word that we present was either on the test or it wasn't.
+
+--
+
+- We can treat our participants responses as probabilistic given that we are not 
+sure how any person would respond to any word. 
+
+--
+
+- Now we can create a random variable that says:
+
+--
+
+  - if the word was on the original list **and** the participant responds that 
+  the word was on the original list, then $x = 1$.
+
+--
+
+  - if the word was in the original list **and** the participant responds that 
+  the word was **not** in the original list, then $x = 0$
+
+--
+
+- If we record the value of $x$ for all trials for a given participant we would
+have 50 different values that indicate, for each word presented whether that 
+particular response was correct or not.
+
+---
+
+## Statistics
+
+- The examples we have talked about are all Statistics, a statistic is just
+a function of our sample (data).
+
+--
+
+- In our memory experiment we don't have the record of the responses of each 
+participant to each word, we have something "simpler".
+
+--
+
+- We have another random variable that adds all the correct responses.
+
+--
+
+- We have lost some information while doing so. Can you guess what information 
+has been lost?
+
+--
+
+- We made a trade between the information about the order of the correct 
+responses in exchange for a summary of the experiment, the total number of 
+correct responses.
+
+---
+
+## Statistics
+
+- Every time we use a statistic (function of our experimental outcomes) we 
+either:
+
+--
+
+  - keep the same information (for example assigning a value of 1 to a heads 
+  in the coin toss) 
+
+--
+
+  - Lose information (for example when we take the number of correct responses
+  in the memory experiment) 
+
+--
+
+- In the majority of the examples of this course this will not be a problem, 
+however, it is important to keep this loss of information in mind.
+
+---
+
+class: inverse, center, middle
+
+# Commonly Used Statistics
+
+## The Mean
+
+---
+
+## Mean
+
+- As you know from Psych 10 B, one of the properties of a r.v. that we are 
+interested in is its expected value.
+
+--
+
+- This value can be calculated with the formula: 
+$$\mathbb{E}(x) = \sum_x x \ p(x)$$
+
+--
+
+- We are faced with a problem here as, when we gather data form an experiment, 
+we don't know the probability of each of the values of our random variable.
+
+--
+
+- In other words we don't know $p(x)$.
+
+--
+
+- For example, what is the probability that a participant has 40 correct 
+responses?
+
+---
+
+## Mean
+
+- Fortunately, we can mathematically prove that the **average** of a random 
+variable will be close to the expected value.
+
+--
+
+- This is true regardless of the values of $p(x)$.
+
+--
+
+- Of course this is just an approximation and will therefore be prone to error.
+
+--
+
+- But it will be our best guess!
 
 
 
