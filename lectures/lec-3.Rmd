@@ -119,7 +119,9 @@ A function could be a rule that states:
 depending on the result of a coin toss. In other words, $x$ is a function of the 
 outcome of the experiment.
 
---
+---
+
+## Functions
 
 - Another simple function would be $y = x + 1$. 
 
@@ -129,7 +131,7 @@ outcome of the experiment.
 --
 
 - Regardless of how complex they look, we can think of functions as a "map"
-that specifies how we get from the values of one variable to the values of 
+that specifies how to get from the values of one variable to the values of 
 another.
 
 ---
@@ -289,5 +291,50 @@ variable will be close to the expected value.
 
 - But it will be our best guess!
 
+--
 
+- Calculating the average is simple: $$\bar{x} = \sum_{i = 1}^n \frac{x_i}{n}$$
+
+--
+
+- Here we use $x_i$ to indicate each of our observations (remember that in the 
+memory experiment we have 50 0's or 1's). The variable n represents the total 
+number of observations.
+
+---
+
+# Example: average number of correct responses
+
+- Let's  go back to the memory example, and look at the mean age of our 
+participants.
+
+--
+
+```{r mean-age}
+mean_age <- memory %>%
+  summarise("bar_age" = mean(age)) %>% 
+  pull(bar_age)
+```
+
+--
+
+- We can see look at the mean age of our participants by typing the name of the
+variable in the console:
+
+```{r print-mean}
+mean_age
+```
+
+---
+
+# Note:
+
+- For your homework you will need to have average values show in text, an easy
+way to do this is using the following code in the text:
+
+The mean age of the participants on the experiment was ``` ` r name-of-variable` ```
+
+- which will be printed on the pdf as:
+
+The mean age of the participants on the experiment was `r mean_age`.
 
