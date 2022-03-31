@@ -161,86 +161,76 @@ the outcome of the experiment (heads or tails).
 
 ## Example with the memory experiment.
 
-- Let's think of our memory experiment. For a given participant and test (say 
-participant 1, test 1), each time we present a word it can be the case that the 
-participant response was that the word was on the original list or not.
+- Let's think back to our memory experiment. Each time we present one of the 50 words included
+in the original list, participants could respond that the word was on the original list or not.
 
 --
 
-- Additionally, each word that we present was either on the test or it wasn't.
+- We treat our participants' responses as probabilistic. Now we can create a random variable that says:
 
 --
 
-- We can treat our participants responses as probabilistic given that we are not 
-sure how any person would respond to any word. 
-
---
-
-- Now we can create a random variable that says:
-
---
-
-  - if the word was on the original list **and** the participant responds that 
+  - If the word was in the original list **and** the participant responded that 
   the word was on the original list, then $x = 1$.
 
 --
 
-  - if the word was in the original list **and** the participant responds that 
+  - If the word was in the original list **and** the participant responded that 
   the word was **not** in the original list, then $x = 0$
 
 --
 
-- If we record the value of $x$ for all trials for a given participant we would
-have 50 different values that indicate, for each word presented whether that 
-particular response was correct or not.
+- If we get the value of $x$ corresponding to every trial for any given participant, we would
+have 50 different values that indicate whether each word was recognized correctly
+or if it was missed.
 
 ---
 
 ## Statistics
 
-- The examples we have talked about are all Statistics, a statistic is just
+- The examples we have talked about are all Statistics. A statistic is just
 a function of our sample (data).
 
 --
 
-- In our memory experiment we don't have the record of the responses of each 
-participant to each word, we have something "simpler".
+- In our memory experiment, we don't have a record of the responses each 
+participant gave to each word, we have something "simpler".
 
 --
 
-- We have another random variable that adds all the correct responses.
+- We have a random variable that sums all the correct responses.
 
 --
 
-- We have lost some information while doing so. Can you guess what information 
+- We have lost some information in doing so. Can you guess what information 
 has been lost?
 
 --
 
-- We made a trade between the information about the order of the correct 
-responses in exchange for a summary of the experiment, the total number of 
-correct responses.
+- We traded-off information about the order in which the correct
+responses occur, in exchange of being able to summarize the whole experiment
+with a single number: the total number of correct responses.
 
 ---
 
 ## Statistics
 
-- Every time we use a statistic (function of our experimental outcomes) we 
+- Every time we use a statistic (i.e. a function of our experimental outcomes) we 
 either:
 
 --
 
-  - keep the same information (for example assigning a value of 1 to a heads 
-  in the coin toss) 
+  - Keep the same information (for example, when we assigned a value of 1 to every head outcome
+  in a series of coin toss) 
 
 --
 
-  - Lose information (for example when we take the number of correct responses
-  in the memory experiment) 
+  - Lose information (for example, when we calculated the total number of correct responses
+  observed in the memory experiment) 
 
 --
 
-- In the majority of the examples of this course this will not be a problem, 
+- This will not be a problem of interest in the majority of the examples we'll cover in this course, 
 however, it is important to keep this loss of information in mind.
 
 ---
@@ -255,18 +245,18 @@ class: inverse, center, middle
 
 ## Mean
 
-- As you know from Psych 10 B, one of the properties of a r.v. that we are 
-interested in is its expected value.
+- As you know from Psych 10B, one of the properties of any r.v. that we are 
+interested in is the expected value.
 
 --
 
-- This value can be calculated with the formula: 
+- Expected values can be computed from the formula: 
 $$\mathbb{E}(x) = \sum_x x \ p(x)$$
 
 --
 
-- We are faced with a problem here as, when we gather data form an experiment, 
-we don't know the probability of each of the values of our random variable.
+- We now face a problem, because whenever we gather data from an experiment, 
+we don't know the probability of each value observed in our random variable.
 
 --
 
@@ -274,41 +264,40 @@ we don't know the probability of each of the values of our random variable.
 
 --
 
-- For example, what is the probability that a participant has 40 correct 
-responses?
+- For example, what is the probability that a participant has exactly 40 correct responses?
 
 ---
 
 ## Mean
 
-- Fortunately, we can mathematically prove that the **average** of a random 
-variable will be close to the expected value.
+- Fortunately, we can prove mathematically that the **average** of any random 
+variable is always going to be close to its expected value.
 
 --
 
-- This is true regardless of the values of $p(x)$.
+- This is true regardless of the value of $p(x)$.
 
 --
 
-- Of course this is just an approximation and will therefore be prone to error.
+- Of course, this is just an approximation and therefore, there will be a certain discrepancy between the specific values computed.
 
 --
 
-- But it will be our best guess!
+- But it will always be the best guess available!
 
 --
 
-- Calculating the average is simple: $$\bar{x} = \sum_{i = 1}^n \frac{x_i}{n}$$
+- Calculating the average is simple: $$\bar{x} = \frac{\sum_{i = 1}^n x_i}{n}$$
 
 --
 
-- Here we use $x_i$ to indicate each of our observations (remember that in the 
-memory experiment we have 50 0's or 1's). The variable n represents the total 
-number of observations.
+- Here, $x_i$ corresponds to each individual observation (remember, in the 
+memory experiment we have fifty observations, 0's or 1's), and the variable $n$ 
+indicates to the total number of observations.
 
 ---
 
-# Example: average number of correct responses
+# Example: Average number of correct responses
 
 - Let's  go back to the memory example, and look at the mean age of our 
 participants.
@@ -323,7 +312,7 @@ mean_age <- memory %>%
 
 --
 
-- We can see look at the mean age of our participants by typing the name of the
+- We can now take a look at the mean age of our participants by typing the name of the
 variable in the console:
 
 ```{r print-mean}
@@ -334,33 +323,33 @@ mean_age
 
 # Note:
 
-- For your homework you will need to have average values show in text, an easy
-way to do this is using the following code in the text:
+- On Homework 1, you are expected to print average values in-text (_"in line chunks"_), 
+an easy way to do this is using the following code in the text:
 
 --
 
-The mean age of the participants on the experiment was 
 ``` 
 ` r name-of-variable` 
 ```
 
 --
 
-- which will be printed on the pdf as:
+- This will print the value of `name-of-the-variable` directly to the pdf as:
 
-The mean age of the participants on the experiment was `r mean_age`.
+"The mean age of the participants on the experiment was `r mean_age`".
 
 ---
 
-# Mean of more than one group
+# Mean by group
 
-- Using the function `group_by()` in the `tidyverse` package we can group our
-observations according to some variable and then get summaries.
+- Using the `group_by()` function of the `tidyverse` package, we can group our
+observations with respect to a specific variable. That way, we can compute group-specific 
+statistics to summarize our data.
 
 --
 
 - In our memory example, if we want to calculate the mean number of correct 
-responses by test condition (test-1 vs test-2) we can use the following code:
+responses registered on each test (test-1 vs test-2) we can use the following code:
 
 ```{r mean-test}
 mean_test <- memory %>% 
@@ -370,14 +359,13 @@ mean_test <- memory %>%
 
 --
 
-- We don't use the pull function in this case because we need to know the value 
-for each test.
+- We now exclude the 'pull()' function because we need to know the value per test.
 
 ---
 
-# Mean of more than one group
+# Mean by group
 
-- We can look at the result by typing the name of our variable into the console:
+- We can now look at the result by typing the name of our new variable into the console:
 
 ```{r print-mean-test}
 mean_test
@@ -385,7 +373,7 @@ mean_test
 
 --
 
-- we can also look at the results one at a time:
+- We can also look at the results, one at a time:
 
 .pull-left[
 - test 1:
@@ -405,7 +393,7 @@ mean_test$mean[2]
 
 class: inverse, center, middle
 
-# Commonly Used Statistics
+# Commonly used Statistics
 
 ## Sample variance
 
@@ -413,47 +401,49 @@ class: inverse, center, middle
 
 # Variance
 
-- Another important property of a random variable is called variance.
+- Another important property of random variables is the variance.
 
 --
 
-- Definition: variance is the expected (squared) distance of a random variable 
-to its expected value.
+- Definition: The variance is the expected squared distance between the random variable 
+and its expected value.
 
 --
 
-- Notice that this is an expectation with respect to another expectation.
+- In other words, the variance is an expectation computed with respect to another expectation.
 
 --
 
-- It is formally defined as: $$\mathbb{V}ar(x) = \mathbb{E}[(x - \mathbb{E}(x))^2]$$
+$$\mathbb{V}ar(x) = \mathbb{E}[(x - \mathbb{E}(x))^2]$$
 
 --
 
-- We can look at it as ant other expectation and get something like this:
+- Based on the definition of an expected value, we can rewrite this as:
+$$\mathbb{E}(x) = \sum_x x \ p(x)$$
 $$\mathbb{E}[(x - \mathbb{E}(x))^2] = \sum_x (x - \mathbb{E}(x))^2\ p(x)$$
 
-- This looks very similar to our definition of an expected value so maybe we can
-do something similar and find a good approximation.
+- Once again, based what we know about expected values, it's reasonable to question whether we can
+find a good approximation to the variance.
 
 ---
 
 # Sample variance
 
-- From the formal definition we know that we are missing two parts $$\mathbb{E}[(x - \mathbb{E}(x))^2] = \sum_x (x - \mathbb{E}(x))^2\ p(x)$$
+- Let's go back to the formal definition of Variance. 
+
+$$\mathbb{E}[(x - \mathbb{E}(x))^2] = \sum_x (x - \mathbb{E}(x))^2\ p(x)$$
 
 --
 
-- The probability of the outcomes $p(x)$ and the expected value of $x$.
+- There's two things that we're clearly missing: the probability of the outcomes $p(x)$ and the expected value of $x$ ($\mathbb{E}(x))$).
 
 --
 
-- But we already have a good approximation to the expected value, the mean!
+- But we already established that we have a good approximation to the expected value, the mean!
 
 --
 
-- To find an approximation to the variance we can take the average of the 
-distance of our observations to the mean.
+- Therefore, to approximate the variance we can use the average distance between each of our observations and the mean.
 
 --
 
@@ -464,25 +454,25 @@ to the real variance: $$s^2 = \sum_{i=1}^{n} \frac{(x_i - \bar{x})^2}{n}$$
 
 # Note:
 
-- In other classes you might see the definition of the sample variance using an 
+- In other classes, you might encounter the sample variance as being defined with an 
 $n-1$ in the denominator: $$s^2 = \sum_{i=1}^{n} \frac{(x_i - \bar{x})^2}{n-1}$$
 
 --
 
-- This is a better approximation and indeed is the one that R calculates by 
-default (and the one you need to use on homework 1).
+- This is indeed the most appropriate approximation and the one that R uses by 
+default (therefore, the one you need to use on homework 1).
 
 --
 
-- However, for the rest of the class we will use the definition that uses $n$ in 
+- However, for the sake of simplicity, in this class we will use the definition that uses $n$ in 
 the denominator.
 
 ---
 
 ## Sample variance
 
-- We can get the sample variance using a similar code as with the mean, for 
-example the variance of the age of our participants can be obtained with:
+- We can get the sample variance using a similar code as with the mean. For 
+example, the variance of the age of our participants can be computed as:
 
 ```{r var-age}
 var_age <- memory %>%
@@ -492,8 +482,7 @@ var_age <- memory %>%
 
 --
 
-- Remember that the variance is in squared unites! so it's not that easy to 
-interpret. 
+- Remember that the variance is in squared units! Its interpretation isn't straight-forward. 
 
 --
 
@@ -501,14 +490,14 @@ interpret.
 
 ---
 
-# Sample variance 
+# Sample variance by group
 
-- We can also calculate the variance of the number of correct responses by test 
-in our memory experiment.
+- We can calculate the variance of the number of correct 
+responses per test in our memory experiment.
 
 --
 
-- The code will be almost the same:
+- The code will be almost the same as before:
 
 ```{r var-test}
 var_test <- memory %>% 
@@ -516,7 +505,7 @@ var_test <- memory %>%
   summarise("variance" = var(correct))
 ```
 
-- we can also look at the results one at a time:
+- And once again, we can look at each result, one at a time by:
 
 .pull-left[
 - test 1:
