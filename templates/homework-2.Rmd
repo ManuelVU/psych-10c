@@ -1,0 +1,150 @@
+---
+title: "Homework 2"
+author: "Write your name here"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output: pdf_document
+---
+
+## Section 1
+
+**Background:** For section we will work with our coffee data set again. 
+This data set comes from an experiment designed to test whether  drinking coffee 
+makes people smarter. Participants were divided into  two groups. All 
+participants took an IQ test, but participants in **group 1** 
+drank water 5 minutes before the test, while participants in **group 2** drank 
+coffee. 
+
+We have two competing hypothesis (models), the first one is that 
+drinking coffee doesn't make a difference in IQ test scores between people who 
+drank water (group 1) and people who drank coffee (group 2). The second one 
+states that people who drank coffee are smarter, in other words, that the IQ 
+test scores should be different between groups. For both hypothesis we will 
+assume that variances are equal across observations and groups.
+
+```{r load_data, echo = TRUE}
+# In this chunk you should write (a.k.a. copy from the slides) the code needed 
+# to load the data for section 1. IMPORTANT: Remember to delete the comments 
+# inside the code chunks BEFORE submitting your homework.
+```
+
+1. Write the first model (**no differences between groups**) in mathematical
+notation
+
+**ANS:** [WRITE YOUR ANSWER HERE]
+
+2. Make a density graph of model 1 (**no differences between groups**). Remember 
+that at this point the units (values of x) don't matter, we are only interested 
+in what the model expects the data to look like.
+
+```{r density-m1-s1, echo = TRUE, fig.align = 'center'}
+# In this code chunk you can write the code used to generate the density plot
+# for model 1. remember that the values on the x axis are not important, what we 
+# look at is what the model expects the data to look like.
+```
+
+3. Calculate the prediction of the first model and add it as a new variable 
+(column) to the data set (remember to give the variable a name!). What is the 
+prediction of the first model?
+
+```{r pred-m1-s1, echo = TRUE}
+# In this code chunk you can write the functions that you need to use in order 
+# to calculate the predictions of model one and add it to the data set as a new
+# column. Report the value(s) as text text below.
+```
+
+**ANS:** [WRITE YOUR ANSWER HERE]
+
+4. Calculate the squared error (SE) of each observation for the first model and
+add it to the data set as a new variable. What is the mean Sum of Squared Errors 
+(m-SSE) of the no group differences model (model 1)?
+
+```{r sse-m1-s1, echo = TRUE}
+# In this code chunk you can write the functions that you need to use in order 
+# to calculate the squared error of each observation and the functions you need 
+# to calculate the sum of squared errors of the no differences model.
+```
+
+5. What is the value of the Bayesian Information Criterion for model 1?
+
+```{r bic-m1-s1, echo = TRUE}
+# In this code chunk you can write the functions that you need in order to 
+# calculate the BIC associated to model 1. Save it as a new variable and 
+# report the value as text below.
+```
+
+**ANS:** [WRITE YOUR ANSWER HERE]
+
+6. Write the second model (**groups are different**) in mathematical notation.
+
+**ANS:** [WRITE YOUR ANSWER HERE]
+
+7. Make a density graph of model 2 (**groups are different**). Remember that at 
+this point the units (values of x) don't matter, we are only interested in what 
+the model expects the data to look like.
+
+```{r density-m2-s1, echo = TRUE, fig.align = 'center'}
+# In this code chunk you can write the code used to generate the density plot
+# for model 2. remember that the values on the x axis are not important, what we 
+# look at is what the model expects the data to look like.
+```
+
+8. Calculate the prediction of the second model and add it as a new variable 
+(column) to the data set (remember to give the variable a different name!). What 
+are the prediction of the second model?
+
+```{r pred-m2-s1, echo = TRUE}
+# In this code chunk you can write the functions that you need to use in order 
+# to calculate the predictions of model two and add it to the data set as a new
+# column. Report the value(s) as text below
+```
+
+**ANS:** [WRITE YOUR ANSWER HERE]
+
+9. Calculate the squared error (SE) of each observation for the second model and
+add it to the data set as a new variable. What is the mean Sum of Squared Errors 
+(m-SSE) of the group differences model (model 2)?
+
+```{r sse-m2-s1, echo = TRUE}
+# In this code chunk you can write the functions that you need to use in order 
+# to calculate the squared error of each observation and the functions you need 
+# to calculate the mean sum of squared errors of the group differences model.
+```
+
+**ANS:** [WRITE YOUR ANSWER HERE]
+
+10. What is the value of the Bayesian Information Criterion for model 2?
+
+```{r bic-m2-s1, echo = TRUE}
+# In this code chunk you can write the functions that you need in order to 
+# calculate the BIC associated to model 2. Save it as a new variable and 
+# report the value as text below.
+```
+
+**ANS:** [WRITE YOUR ANSWER HERE]
+
+11. Which of the two models would you select and why?
+
+**ANS:** [WRITE YOUR ANSWER HERE]
+
+
+
+## Section 2
+
+**Background:** For section we will work with our response time data set again.
+This data set comes from an experiment designed to test 
+whether a new training technique can improve participants' ability to navigate 
+a maze. Participants in the experimental condition underwent the new training, 
+while participants in the control group played an unrelated game that lasted 
+approximately as long as the training. Participants in both conditions were then 
+instructed to complete a maze as quickly as possible. The data provides 
+information about the time (in seconds) in which each participant completed the 
+maze.
+
+```{r load_data2, echo = TRUE}
+# In this section you should write the code needed to load the data for
+# section 2. IMPORTANT: Remember to delete the comments inside the code 
+# chunks BEFORE submitting your homework.
+```
+
+
+
