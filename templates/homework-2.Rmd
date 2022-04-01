@@ -178,6 +178,12 @@ assume that the model variance is equal to 2.
 
 14. Write the predictions of the first model (**no improvement**).
 
+```{r pred-m1-s2, echo = TRUE}
+# In this code chunk you can write the functions that you need to use in order 
+# to calculate the predictions of model one and add it to the data set as a new
+# column. Report the value(s) as text below.
+```
+
 **ANS:** [WRITE YOUR ANSWER HERE]
 
 15. Calculate the squared error (SE) of each observation for the first model and
