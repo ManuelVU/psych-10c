@@ -79,7 +79,7 @@ a new column to our data set. What is the mean Sum of Squared Errors
 # 
 # In this code chunk you can write the functions that you need to use in order 
 # to calculate the squared error of each observation and the functions you need 
-# to calculate the sum of squared errors of the "no differences" model.
+# to calculate the mean sum of squared errors of the "no differences" model.
 ```
 
 5. What is the value of the Bayesian Information Criterion (BIC) for Model 1?
@@ -156,6 +156,9 @@ differences" model (Model 2)?
 
 **ANS:** [WRITE YOUR ANSWER HERE]
 
+12. What does the Model that you selected tell us about our research question?
+
+**ANS:** [WRITE YOUR ANSWER HERE]
 
 
 ## Section 2
@@ -187,11 +190,11 @@ the second time (after participants have undergone the training).
 # chunks BEFORE submitting your homework.
 ```
 
-12. Write Model 1 (**no improvement**) in mathematical notation.
+13. Write Model 1 (**no improvement**) in mathematical notation.
 
 **ANS:** [WRITE YOUR ANSWER HERE]
 
-13. Make a density graph for Model 1 (**no improvement**). To make the plot, 
+14. Make a density graph for Model 1 (**no improvement**). To make the plot, 
 assume that the model variance is equal to 2.
 
 ```{r density-m1-s2, echo = TRUE, fig.align = 'center'}
@@ -201,7 +204,7 @@ assume that the model variance is equal to 2.
 # for model 1.
 ```
 
-14. What are the predictions made by Model 1 (**no improvement**)? Again, make sure to test them by adding the corresponding variable (column) to our data base.
+15. What are the predictions made by Model 1 (**no improvement**)? Again, make sure to test them by adding the corresponding variable (column) to our data base.
 
 ```{r pred-m1-s2, echo = TRUE}
 # Code 12: Testing the predictions made by Model 1
@@ -213,7 +216,7 @@ assume that the model variance is equal to 2.
 
 **ANS:** [WRITE YOUR ANSWER HERE]
 
-15. Calculate the squared error (SE) of each observation for Model 1 and
+16. Calculate the squared error (SE) of each observation for Model 1 and
 add them to the data set as a new variable. What is the mean Sum of Squared Errors 
 (m-SSE) of the "no improvement" model (Model 1)?
 
@@ -226,7 +229,7 @@ add them to the data set as a new variable. What is the mean Sum of Squared Erro
 ```
 **ANS:** [WRITE YOUR ANSWER HERE]
 
-16. What is the value of the Bayesian Information Criterion for Model 1?
+17. What is the value of the Bayesian Information Criterion for Model 1?
 
 ```{r bic-m1-s2, echo = TRUE}
 # Code 14: Calculating the BIC for Model 1
@@ -238,11 +241,11 @@ add them to the data set as a new variable. What is the mean Sum of Squared Erro
 
 **ANS:** [WRITE YOUR ANSWER HERE]
 
-17. Write Model 2 (**improvement**) in mathematical notation.
+18. Write Model 2 (**improvement**) in mathematical notation.
 
 **ANS:** [WRITE YOUR ANSWER HERE]
 
-18. Make a density graph for Model 2 (**improvement**). Remember that at 
+19. Make a density graph for Model 2 (**improvement**). Remember that at 
 this point, the units (values of x) don't matter. We are only interested in what 
 the model expects the data to look like.
 
@@ -254,7 +257,7 @@ the model expects the data to look like.
 # look at is what the model expects the data to look like.
 ```
 
-19. Calculate the predictions of the second model and add them as a new variable 
+20. Calculate the predictions of the second model and add them as a new variable 
 (column) to the data set (remember to give the variable a DIFFERENT name!). What 
 are the predictions of the second model?
 
@@ -268,7 +271,7 @@ are the predictions of the second model?
 
 **ANS:** [WRITE YOUR ANSWER HERE]
 
-20. Calculate the squared error (SE) of each observation for the second model 
+21. Calculate the squared error (SE) of each observation for the second model 
 and add them to the data set as a new variable. What is the mean Sum of Squared 
 Errors (m-SSE) of the "improvement" model (model 2)?
 
@@ -282,7 +285,7 @@ Errors (m-SSE) of the "improvement" model (model 2)?
 
 **ANS:** [WRITE YOUR ANSWER HERE]
 
-21. What is the value of the Bayesian Information Criterion for model 2?
+22. What is the value of the Bayesian Information Criterion for model 2?
 
 ```{r bic-m2-s2, echo = TRUE}
 # Code 18: Calculating the BIC for Model 2
@@ -294,7 +297,12 @@ Errors (m-SSE) of the "improvement" model (model 2)?
 
 **ANS:** [WRITE YOUR ANSWER HERE]
 
-22. Which of the two models would you select and why?
+23. Which of the two models would you select and why?
+
+**ANS:** [WRITE YOUR ANSWER HERE]
+
+
+24. What does the Model that you selected tell us about our research question?
 
 **ANS:** [WRITE YOUR ANSWER HERE]
 
