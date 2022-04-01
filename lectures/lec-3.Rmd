@@ -294,8 +294,9 @@ variable is always going to be close to its expected value.
 --
 
 - Here, $x_i$ corresponds to each individual observation (remember, in the 
-memory experiment we have fifty observations, 0's or 1's), and the variable $n$ 
-indicates to the total number of observations.
+memory experiment we now have one observation for each participant, the number 
+of correctly recognized words), and the variable $n$ indicates to the total 
+number of observations (participants).
 
 ---
 
@@ -407,7 +408,7 @@ class: inverse, center, middle
 
 --
 
-- Definition: The variance is the expected squared distance between the random variable 
+- **Definition:** The variance is the expected squared distance between the random variable 
 and its expected value.
 
 --
@@ -421,8 +422,15 @@ $$\mathbb{V}ar(x) = \mathbb{E}[(x - \mathbb{E}(x))^2]$$
 --
 
 - Based on the definition of an expected value, we can rewrite this as:
+
+--
+
 $$\mathbb{E}(x) = \sum_x x \ p(x)$$
+--
+
 $$\mathbb{E}[(x - \mathbb{E}(x))^2] = \sum_x (x - \mathbb{E}(x))^2\ p(x)$$
+
+--
 
 - Once again, based what we know about expected values, it's reasonable to question whether we can
 find a good approximation to the variance.
@@ -478,9 +486,15 @@ example, the variance of the age of our participants can be computed as:
 
 ```{r var-age}
 var_age <- memory %>%
+  group_by(test_id) %>% 
   summarise("var_age" = var(age)) %>% 
   pull(var_age)
 ```
+
+--
+
+- In this case we need to use the **`group_by()`** function because each 
+participant has been entered into the data twice!
 
 --
 
@@ -488,7 +502,7 @@ var_age <- memory %>%
 
 --
 
-- The variance in participants age was `r var_age`.
+- The variance in participants age was `r var_age[1]`.
 
 ---
 
@@ -506,6 +520,8 @@ var_test <- memory %>%
   group_by(test_id) %>% 
   summarise("variance" = var(correct))
 ```
+
+--
 
 - And once again, we can look at each result, one at a time by:
 
