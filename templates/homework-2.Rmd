@@ -8,29 +8,29 @@ output: pdf_document
 ```{r load_data, echo = FALSE}
 # Use this chunk to load whatever libraries you need. They should already have been
 # installed for the first homework, but you need to load them using library()
-# in order to use them.
+# in order to use them. IMPORTANT: Remember to delete the comments inside the code
+# chunks BEFORE submitting your homework.
 ```
 
 ## Section 1
 
-**Background:** For section we will work with our coffee data set again. 
-This data set comes from an experiment designed to test whether  drinking coffee 
-makes people smarter. Participants were divided into  two groups. All 
+**Background:** For this section, we will work with our coffee data set again. 
+This data set comes from an experiment designed to test whether drinking coffee 
+makes people smarter. Participants were divided into two groups. All 
 participants took an IQ test, but participants in **group 1** 
 drank water 5 minutes before the test, while participants in **group 2** drank 
 coffee. 
 
-We have two competing hypothesis (models), the first one is that 
+We have two competing hypotheses (models). The first one is that 
 drinking coffee doesn't make a difference in IQ test scores between people who 
 drank water (group 1) and people who drank coffee (group 2). The second one 
-states that people who drank coffee are smarter, in other words, that the IQ 
-test scores should be different between groups. For both hypothesis we will 
+is that people who drank coffee are smarter; in other words, the IQ 
+test scores should be different between groups. For both hypotheses, we will 
 assume that variances are equal across observations and groups.
 
 ```{r load_data, echo = TRUE}
-# In this chunk you should write (a.k.a. copy from the slides) the code needed 
-# to load the data for section 1. IMPORTANT: Remember to delete the comments 
-# inside the code chunks BEFORE submitting your homework.
+# In this chunk, you should write (a.k.a. copy from the slides) the code needed 
+# to load the data for section 1.
 ```
 
 1. Write the first model (**no differences between groups**) in mathematical
@@ -39,12 +39,12 @@ notation
 **ANS:** [WRITE YOUR ANSWER HERE]
 
 2. Make a density graph of model 1 (**no differences between groups**). Remember 
-that at this point the units (values of x) don't matter, we are only interested 
+that at this point the units (values of x) don't matter. We are only interested 
 in what the model expects the data to look like. Assume that the model variance 
 is equal to 3.
 
 ```{r density-m1-s1, echo = TRUE, fig.align = 'center'}
-# In this code chunk you can write the code used to generate the density plot
+# In this code chunk, you can write the code used to generate the density plot
 # for model 1. remember that the values on the x axis are not important, what we 
 # look at is what the model expects the data to look like.
 ```
