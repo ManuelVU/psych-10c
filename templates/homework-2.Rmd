@@ -5,6 +5,12 @@ date: "`r format(Sys.time(), '%d %B, %Y')`"
 output: pdf_document
 ---
 
+```{r load_data, echo = FALSE}
+# Use this chunk to load whatever libraries you need. They should already have been
+# installed for the first homework, but you need to load them using library()
+# in order to use them.
+```
+
 ## Section 1
 
 **Background:** For section we will work with our coffee data set again. 
