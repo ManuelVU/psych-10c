@@ -29,7 +29,7 @@ test scores should be different between groups. For both hypotheses, we will
 assume that variances are equal across observations and groups.
 
 ```{r load_data, echo = TRUE}
-# In this chunk, you should write (a.k.a. copy from the slides) the code needed 
+# In this chunk you should write (a.k.a. copy from the slides) the code needed 
 # to load the data for section 1.
 ```
 
@@ -39,43 +39,43 @@ notation
 **ANS:** [WRITE YOUR ANSWER HERE]
 
 2. Make a density graph of model 1 (**no differences between groups**). Remember 
-that at this point the units (values of x) don't matter. We are only interested 
+that at this point, the units (values of x) don't matter. We are only interested 
 in what the model expects the data to look like. Assume that the model variance 
 is equal to 3.
 
 ```{r density-m1-s1, echo = TRUE, fig.align = 'center'}
-# In this code chunk, you can write the code used to generate the density plot
-# for model 1. remember that the values on the x axis are not important, what we 
-# look at is what the model expects the data to look like.
+# In this code chunk you can write the code used to generate the density plot
+# for model 1. Remember that the values on the x axis are not important. What we 
+# are looking at is what the model expects the data to look like.
 ```
 
-3. Calculate the prediction of the first model and add it as a new variable 
+3. Calculate the predictions of the first model and add them as a new variable 
 (column) to the data set (remember to give the variable a name!). What are the 
-prediction of the first model?
+predictions of the first model?
 
 ```{r pred-m1-s1, echo = TRUE}
 # In this code chunk you can write the functions that you need to use in order 
 # to calculate the predictions of model one and add it to the data set as a new
-# column. Report the value(s) as text text below.
+# column. Report the value(s) as text below.
 ```
 
 **ANS:** [WRITE YOUR ANSWER HERE]
 
 4. Calculate the squared error (SE) of each observation for the first model and
 add it to the data set as a new variable. What is the mean Sum of Squared Errors 
-(m-SSE) of the no group differences model (model 1)?
+(m-SSE) of the "no group differences" model (model 1)?
 
 ```{r sse-m1-s1, echo = TRUE}
 # In this code chunk you can write the functions that you need to use in order 
 # to calculate the squared error of each observation and the functions you need 
-# to calculate the sum of squared errors of the no differences model.
+# to calculate the sum of squared errors of the "no differences" model.
 ```
 
 5. What is the value of the Bayesian Information Criterion for model 1?
 
 ```{r bic-m1-s1, echo = TRUE}
 # In this code chunk you can write the functions that you need in order to 
-# calculate the BIC associated to model 1. Save it as a new variable and 
+# calculate the BIC associated with model 1. Save it as a new variable and 
 # report the value as text below.
 ```
 
@@ -86,36 +86,36 @@ add it to the data set as a new variable. What is the mean Sum of Squared Errors
 **ANS:** [WRITE YOUR ANSWER HERE]
 
 7. Make a density graph of model 2 (**groups are different**). Remember that at 
-this point the units (values of x) don't matter, we are only interested in what 
+this point, the units (values of x) don't matter. We are only interested in what 
 the model expects the data to look like. Assume that the model variance 
 is equal to 3.
 
 ```{r density-m2-s1, echo = TRUE, fig.align = 'center'}
 # In this code chunk you can write the code used to generate the density plot
-# for model 2. remember that the values on the x axis are not important, what we 
-# look at is what the model expects the data to look like.
+# for model 2. Remember that the values on the x axis are not important. What we 
+# are looking at is what the model expects the data to look like.
 ```
 
-8. Calculate the prediction of the second model and add it as a new variable 
+8. Calculate the predictions of the second model and add them as a new variable 
 (column) to the data set (remember to give the variable a different name!). What 
-are the prediction of the second model?
+are the predictions of the second model?
 
 ```{r pred-m2-s1, echo = TRUE}
 # In this code chunk you can write the functions that you need to use in order 
 # to calculate the predictions of model two and add it to the data set as a new
-# column. Report the value(s) as text below
+# column. Report the value(s) as text below.
 ```
 
 **ANS:** [WRITE YOUR ANSWER HERE]
 
 9. Calculate the squared error (SE) of each observation for the second model and
 add it to the data set as a new variable. What is the mean Sum of Squared Errors 
-(m-SSE) of the group differences model (model 2)?
+(m-SSE) of this "group differences" model (model 2)?
 
 ```{r sse-m2-s1, echo = TRUE}
 # In this code chunk you can write the functions that you need to use in order 
 # to calculate the squared error of each observation and the functions you need 
-# to calculate the mean sum of squared errors of the group differences model.
+# to calculate the mean sum of squared errors of the "group differences" model.
 ```
 
 **ANS:** [WRITE YOUR ANSWER HERE]
@@ -124,7 +124,7 @@ add it to the data set as a new variable. What is the mean Sum of Squared Errors
 
 ```{r bic-m2-s1, echo = TRUE}
 # In this code chunk you can write the functions that you need in order to 
-# calculate the BIC associated to model 2. Save it as a new variable and 
+# calculate the BIC associated with model 2. Save it as a new variable and 
 # report the value as text below.
 ```
 
@@ -138,25 +138,24 @@ add it to the data set as a new variable. What is the mean Sum of Squared Errors
 
 ## Section 2
 
-**Background:** For section we will work with our response time data set again.
-This data set comes from an experiment designed to test 
-whether a new training technique can improve participants' ability to navigate 
-a maze. Participants first completed a maze after playing a game that lasted 
-as long as the new training approach. Then they underwent the new training 
-and completed a second maze of the same difficulty (we will assume that, if 
-there is a difference in response times it is only because of the training and
-not because of experience with maze solving). The data provides 
-information about the time (in seconds) in which each participant completed each 
-maze.
+**Background:** For this section, we will work with our response time data set again.
+This data set comes from an experiment designed to test whether a new training 
+technique can improve participants' ability to navigate a maze. Participants 
+first completed a maze after playing a game that lasted as long as the new 
+training approach. Then they underwent the new training and completed a second 
+maze of the same difficulty (we will assume that, if there is a difference in 
+response times, it is only because of the training and not because of experience 
+with maze solving). The data provides information about the time (in seconds) 
+in which each participant completed each maze.
 
-We have two competing models (hypothesis) about the performance of participants
-on the maze before and after training, the first one (**no improvement**) states 
-that the new training method does not make any difference, in other words that 
-there will be no improvement on time to solve the maze. 
+We have two competing models (hypotheses) about the performance of participants
+on the maze before and after training. The first one (**no improvement**) states 
+that the new training method does not make any difference. In other words, 
+there will be no improvement in how quickly people solve the maze. 
 
 The second model (**improvement**) states that the new training method is 
-effective, and so the time to solve a maze should be shorter after training than 
-before the training session.
+effective, and so the time people need to solve a maze should be shorter 
+the second time (after participants have undergone the training).
 
 ```{r load_data2, echo = TRUE}
 # In this section you should write the code needed to load the data for
@@ -165,11 +164,11 @@ before the training session.
 ```
 
 12. Write the first model (**no improvement**) in mathematical
-notation
+notation.
 
 **ANS:** [WRITE YOUR ANSWER HERE]
 
-13. Make a density graph of model 1 (**no improvement**). To make the plot 
+13. Make a density graph of model 1 (**no improvement**). To make the plot, 
 assume that the model variance is equal to 2.
 
 ```{r density-m1-s2, echo = TRUE, fig.align = 'center'}
@@ -177,7 +176,7 @@ assume that the model variance is equal to 2.
 # for model 1.
 ```
 
-14. Write the predictions of the first model (**no improvement**)?
+14. Write the predictions of the first model (**no improvement**).
 
 **ANS:** [WRITE YOUR ANSWER HERE]
 
