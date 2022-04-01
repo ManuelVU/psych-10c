@@ -180,7 +180,7 @@ assume that the model variance is equal to 2.
 
 ```{r pred-m1-s2, echo = TRUE}
 # In this code chunk you can write the functions that you need to use in order 
-# to calculate the predictions of model one and add it to the data set as a new
+# to calculate the predictions of model 1 and add it to the data set as a new
 # column. Report the value(s) as text below.
 ```
 
@@ -195,6 +195,7 @@ add it to the data set as a new variable. What is the mean Sum of Squared Errors
 # to calculate the squared error of each observation and the functions you need 
 # to calculate the sum of squared errors of the no improvement model.
 ```
+**ANS:** [WRITE YOUR ANSWER HERE]
 
 16. What is the value of the Bayesian Information Criterion for model 1?
 
