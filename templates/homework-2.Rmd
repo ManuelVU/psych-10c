@@ -62,7 +62,7 @@ predictions of the first model?
 **ANS:** [WRITE YOUR ANSWER HERE]
 
 4. Calculate the squared error (SE) of each observation for the first model and
-add it to the data set as a new variable. What is the mean Sum of Squared Errors 
+add them to the data set as a new variable. What is the mean Sum of Squared Errors 
 (m-SSE) of the "no group differences" model (model 1)?
 
 ```{r sse-m1-s1, echo = TRUE}
@@ -109,7 +109,7 @@ are the predictions of the second model?
 **ANS:** [WRITE YOUR ANSWER HERE]
 
 9. Calculate the squared error (SE) of each observation for the second model and
-add it to the data set as a new variable. What is the mean Sum of Squared Errors 
+add them to the data set as a new variable. What is the mean Sum of Squared Errors 
 (m-SSE) of this "group differences" model (model 2)?
 
 ```{r sse-m2-s1, echo = TRUE}
@@ -187,13 +187,13 @@ assume that the model variance is equal to 2.
 **ANS:** [WRITE YOUR ANSWER HERE]
 
 15. Calculate the squared error (SE) of each observation for the first model and
-add it to the data set as a new variable. What is the mean Sum of Squared Errors 
-(m-SSE) of the no group differences model (model 1)?
+add them to the data set as a new variable. What is the mean Sum of Squared Errors 
+(m-SSE) of the "no improvement" model (model 1)?
 
 ```{r sse-m1-s2, echo = TRUE}
 # In this code chunk you can write the functions that you need to use in order 
 # to calculate the squared error of each observation and the functions you need 
-# to calculate the sum of squared errors of the no improvement model.
+# to calculate the sum of squared errors of the "no improvement" model.
 ```
 **ANS:** [WRITE YOUR ANSWER HERE]
 
@@ -212,7 +212,7 @@ add it to the data set as a new variable. What is the mean Sum of Squared Errors
 **ANS:** [WRITE YOUR ANSWER HERE]
 
 18. Make a density graph of model 2 (**improvement**). Remember that at 
-this point the units (values of x) don't matter, we are only interested in what 
+this point, the units (values of x) don't matter. We are only interested in what 
 the model expects the data to look like.
 
 ```{r density-m2-s2, echo = TRUE, fig.align = 'center'}
@@ -221,26 +221,26 @@ the model expects the data to look like.
 # look at is what the model expects the data to look like.
 ```
 
-19. Calculate the prediction of the second model and add it as a new variable 
+19. Calculate the predictions of the second model and add them as a new variable 
 (column) to the data set (remember to give the variable a different name!). What 
-are the prediction of the second model?
+are the predictions of the second model?
 
 ```{r pred-m2-s2, echo = TRUE}
 # In this code chunk you can write the functions that you need to use in order 
-# to calculate the predictions of model two and add it to the data set as a new
+# to calculate the predictions of model 2 and add it to the data set as a new
 # column. Report the value(s) as text below
 ```
 
 **ANS:** [WRITE YOUR ANSWER HERE]
 
 20. Calculate the squared error (SE) of each observation for the second model 
-and add it to the data set as a new variable. What is the mean Sum of Squared 
-Errors (m-SSE) of the group differences model (model 2)?
+and add them to the data set as a new variable. What is the mean Sum of Squared 
+Errors (m-SSE) of the "improvement" model (model 2)?
 
 ```{r sse-m2-s2, echo = TRUE}
 # In this code chunk you can write the functions that you need to use in order 
 # to calculate the squared error of each observation and the functions you need 
-# to calculate the mean sum of squared errors of the group differences model.
+# to calculate the mean sum of squared errors of the "improvement" model.
 ```
 
 **ANS:** [WRITE YOUR ANSWER HERE]
@@ -249,7 +249,7 @@ Errors (m-SSE) of the group differences model (model 2)?
 
 ```{r bic-m2-s2, echo = TRUE}
 # In this code chunk you can write the functions that you need in order to 
-# calculate the BIC associated to model 2. Save it as a new variable and 
+# calculate the BIC associated with model 2. Save it as a new variable and 
 # report the value as text below.
 ```
 
