@@ -58,11 +58,12 @@ memory <- memory %>%
 
 ## Summary Statistics
 
-- Another common to summarize information from experimental or survey data is by using a statistic.
+- Another common way to summarize information from experimental or survey data 
+is by using a statistic.
 
 --
 
-- Statistics are **functions** of **random variables** in an experiment 
+- Statistics are **functions** of the **random variables** in an experiment 
 that can be used to convey information about the location of our observations 
 and how they vary.
 
@@ -86,7 +87,7 @@ class: inverse, center, middle
 
 ## Random variables
 
-- Statisticians are very bad at naming things ...
+- Statisticians are very bad at naming things...
 
 --
 
@@ -137,7 +138,7 @@ a function of the outcome of the experiment.
 --
 
 - Regardless of how complex they look, we can always think of functions as a "map"
-that specifies how to go from the values of one variable to values on a second variable.
+that specifies how to go from values on one variable to values on a second variable.
 
 ---
 
@@ -148,8 +149,8 @@ we use to assign numbers to the outcomes of an experiment.
 
 --
 
-- In other words random variables are deterministic functions (See? statisticians are really 
-bad at naming things!).
+- In other words, random variables are deterministic functions (See? 
+statisticians are really bad at naming things!).
 
 --
 
@@ -166,7 +167,7 @@ in the original list, participants could respond that the word was on the origin
 
 --
 
-- We treat our participants' responses as probabilistic. Now we can create a random variable that says:
+- We treat our participants' responses as probabilistic and we can create a random variable that says:
 
 --
 
@@ -220,18 +221,19 @@ either:
 
 --
 
-  - Keep the same information (for example, when we assigned a value of 1 to every head outcome
-  in a series of coin toss) 
+  - Keep the same information (for example, when we assigned a value of 1 to 
+  every head outcome in a series of coin tosses) 
 
 --
 
-  - Lose information (for example, when we calculated the total number of correct responses
-  observed in the memory experiment) 
+  - Lose information (for example, when we calculated the total number of 
+  correct responses observed in the memory experiment) 
 
 --
 
-- This will not be a problem of interest in the majority of the examples we'll cover in this course, 
-however, it is important to keep this loss of information in mind.
+- This will not be a problem of interest in the majority of the examples we'll 
+cover in this course, however, it is important to keep this loss of information 
+in mind.
 
 ---
 
@@ -246,7 +248,7 @@ class: inverse, center, middle
 ## Mean
 
 - As you know from Psych 10B, one of the properties of any r.v. that we are 
-interested in is the expected value.
+interested in is their expected value.
 
 --
 
@@ -435,7 +437,7 @@ $$\mathbb{E}[(x - \mathbb{E}(x))^2] = \sum_x (x - \mathbb{E}(x))^2\ p(x)$$
 
 --
 
-- There's two things that we're clearly missing: the probability of the outcomes $p(x)$ and the expected value of $x$ ($\mathbb{E}(x))$).
+- There's two things that we're clearly missing: the probability of the outcomes $p(x)$ and the expected value of $x$ ( $\mathbb{E}(x)$ ).
 
 --
 
