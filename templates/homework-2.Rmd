@@ -55,7 +55,7 @@ predictions of the first model?
 
 ```{r pred-m1-s1, echo = TRUE}
 # In this code chunk you can write the functions that you need to use in order 
-# to calculate the predictions of model one and add it to the data set as a new
+# to calculate the predictions of model 1 and add it to the data set as a new
 # column. Report the value(s) as text below.
 ```
 
@@ -102,7 +102,7 @@ are the predictions of the second model?
 
 ```{r pred-m2-s1, echo = TRUE}
 # In this code chunk you can write the functions that you need to use in order 
-# to calculate the predictions of model two and add it to the data set as a new
+# to calculate the predictions of model 2 and add it to the data set as a new
 # column. Report the value(s) as text below.
 ```
 
