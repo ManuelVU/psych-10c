@@ -54,7 +54,7 @@ knitr::opts_chunk$set(fig.width = 6, message = FALSE,
 
 --
 
-- R is a programing lenguaje
+- R is a programming language
 
 --
 
@@ -76,8 +76,8 @@ class: inverse, center, middle
 
 ## R scripts
 
-- R scripts are use to write and store code, for example, if we want to analize
-the data od an experimenta, we can write a script that does multiple operations
+- R scripts are use to write and store code, for example, if we want to analyze
+the data of an experiment, we can write a script that does multiple operations
 and stores new data with what we want to show.
 
 --
@@ -97,18 +97,18 @@ save the code we used to generate a plot.
 
 --
 
-- Whever we "knit" this type of file, the integrated R code is executed and the 
+- Whenever we "knit" this type of file, the integrated R code is executed and the 
 variables are saved momentarily.
 
 --
 
 - Notice that the variables are not saved in R as when "running" an R script, 
-but they are saved in memory while the file is beign created, which means that
+but they are saved in memory while the file is being created, which means that
 we can use them inside the document.
 
 --
 
-- This is really usefull when we have graphs or outcomes of a data analysis that 
+- This is really useful when we have graphs or outcomes of a data analysis that 
 we want to integrate into a report. 
 
 ---
@@ -124,8 +124,15 @@ class: inverse, center, middle
 - RStudio is a graphical interface for R. It makes it easier to interact with R
 by maintaining the console, scripts and graphs all in the same place.
 
-- From this point on, we will work simultaneously with RStudi and the lecture 
-notes as you should do when working on your homeworks.
+--
+
+- From this point on, we will work simultaneously with RStudio and the lecture 
+notes as you should do when working on your assignments.
+
+--
+
+Let's say that we have been assigned a data file to work with on a homework, 
+and that we are given a URL to the file such as:
 
 
 
