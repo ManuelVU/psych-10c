@@ -24,3 +24,9 @@ ggplot(data = memory,
        aes(x = correct, fill = test_id)) + 
   geom_histogram(binwidth = 1, border = "white")
   
+
+
+# Example R intro ---------------------------------------------------------
+
+
+
