@@ -28,5 +28,27 @@ ggplot(data = memory,
 
 # Example R intro ---------------------------------------------------------
 
+# R intro example ---------------------------------------------------------
+
+library(tidyverse)
+
+id <- rep(seq(1,10), times = 2)
+
+mu <- 20
+
+control <- rnorm(n = 10, mean = mu, sd = 2)
+
+incongruent <- rnorm(n = 10, mean = mu + 15, sd = 2.2)
+
+stroop <- tibble("id" = as.character(id), 
+                 "response_time" = c(control, incongruent),
+                 "condition" = rep(c("control", "incongruent"), each = 10))
+
+stroop_wide <- stroop %>% 
+  pivot_wider(id_cols = id, names_from = condition, 
+              values_from = response_time)
+
+write_csv(x = stroop, file = "data/week-2/stroop.csv")
+write_csv(x = stroop_wide, file = "data/week-2/stroop-wide.csv")
 
 
