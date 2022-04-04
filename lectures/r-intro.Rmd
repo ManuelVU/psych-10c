@@ -76,13 +76,13 @@ class: inverse, center, middle
 
 ## R scripts
 
-- R scripts are use to write and store code, for example, if we want to analyze
+- R scripts are used to write and store code, for example, if we want to analyze
 the data of an experiment, we can write a script that does multiple operations
-and stores new data with what we want to show.
+and stores new data set with what we want to show.
 
 --
 
-- We use them to make sure that we can replicate a data analysis, or to 
+- We use scripts to make sure that we can replicate a data analysis, or to 
 save the code we used to generate a plot.
 
 ---
@@ -93,18 +93,19 @@ save the code we used to generate a plot.
 
 --
 
-- It allows us to integrate text and R code in a single file.
+- They allow us to integrate text and R code into a single file.
 
 --
 
-- Whenever we "knit" this type of file, the integrated R code is executed and the 
-variables are saved momentarily.
+- Whenever we "knit" this type of files, the integrated R code is executed and 
+the variables are saved momentarily.
 
 --
 
-- Notice that the variables are not saved in R as when "running" an R script, 
-but they are saved in memory while the file is being created, which means that
-we can use them inside the document.
+- Notice that the variables are **not** saved in R as it would if we were
+executing or "running" an R script. On the contrary, the variables are just 
+saved in memory while the file is being created, which allows us to use 
+them inside the document.
 
 --
 
