@@ -1,0 +1,242 @@
+---
+title: "Lecture 4"
+subtitle: "Statistical Models and Notation"
+author: "Psych 10 C"
+institute: "University of California, Irvine"
+date: "04/06/2022"
+output:
+  xaringan::moon_reader:
+    self_contained: true
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+```
+
+```{r xaringan-extra, echo = FALSE}
+xaringanExtra::use_tile_view()
+
+xaringanExtra::use_fit_screen()
+
+xaringanExtra::use_extra_styles(
+  hover_code_line = TRUE,         #<<
+  mute_unhighlighted_code = TRUE  #<<
+)
+
+htmltools::tagList(
+  xaringanExtra::use_clipboard(
+    button_text = "<i class=\"fa fa-clipboard\"></i>",
+    success_text = "<i class=\"fa fa-check\" style=\"color: #90BE6D\"></i>",
+    error_text = "<i class=\"fa fa-times-circle\" style=\"color: #F94144\"></i>"
+  ),
+  rmarkdown::html_dependency_font_awesome()
+)
+```
+
+```{r load-tidy, echo = FALSE, message = FALSE, warning = FALSE}
+library(tidyverse)
+
+library(flipbookr)
+
+knitr::opts_chunk$set(fig.width = 6, message = FALSE, 
+                      warning = FALSE, comment = "", 
+                      cache = F)
+
+link <- "https://raw.githubusercontent.com/ManuelVU/psych-10c-data/main/example.csv"
+
+memory <- read_csv(file = link)
+
+memory <- memory %>% 
+  mutate("test_id" = ifelse(test = time_test == 300, 
+                            yes = "test_1", no = "test_2")) %>%
+  filter(test_id == "test_1")
+```
+
+## Models in Science
+
+- Models are abstract representations of the world. 
+
+--
+
+- They are a way in which we can formalize our believes about events.
+
+--
+
+- For example, if we have an experiment where we throw a coin and have two 
+two competing ideas about the coin:
+
+--
+
+  - The coin is **fair**.
+  
+--
+
+  - The coin is **not fair**.
+
+--
+
+- We can formalize these two believes using a statistical model.
+
+--
+
+  - The coin is fair: $P(\{heads\})\ =\ P(\{tails\})\ =\ 0.5$
+  
+--
+
+  - The coin is not fair: $P(\{heads\})\ \neq\ P(\{tails\})$
+  
+--
+
+- We moved from two verbal statements about our believes regarding the coin to
+two formal statements bout the proabibility of "heads" as an outcome.
+  
+---
+
+## Statistical Models
+
+- Statistical models are the formal representation of our believes or hypothesis
+about the outcomes of an experiment. 
+
+--
+
+- Given that we assume that the outcomes are probabilistic, our models will have 
+a probabilisitic component associated with them. 
+
+--
+
+- Given the probabilistic nature of our observations it will be almost imposible
+for us to tell if a model is TRUE or FALSE. However, we can compare how useful 
+they are on a given situation. 
+
+--
+
+- Statistical models will allow us to make predictions about our observations, 
+ans we will use these predictions to compare how useful they are.
+
+--
+
+- However, before we continue it will be useful to introduce some notation!
+
+--
+
+- This will provide us with a way to express our models in a formal and 
+standard way.
+
+---
+
+class: inverse, middle, center
+
+# Notation
+
+---
+
+## Example: Memory Experiment
+
+- Whenever we run an experiment, we have a variable that we are interested in. 
+In homework one we had the results of an IQ test, in our memory example we had
+the number of words that are correctly recognized.
+
+--
+
+- We will call the variable that we are interested in the **dependent** variable.
+
+--
+
+- To reference a particular observation in an experiment we will use the 
+lowercase letter $y_{i}$.
+
+--
+
+- Where the subscripts $i$ indicates our *i-th* observation.
+
+--
+
+- Let's look back at the data for test one in our memory experiment
+
+---
+
+## Example
+
+- Now we will use the data only from one of the test of our experiment, however, 
+we have added a new variable that indicates the **age_group**.
+
+```{r data-example, echo = FALSE}
+DT::datatable(
+  head(x = memory, n = 100),
+  fillContainer = FALSE, options = list(pageLength = 6)
+)
+```
+
+---
+
+## Example
+
+- In our experiment we have $100$ observations, in other words we have a sequence
+of $y$ values that goes from $y_1, y_2, \dots, y_{100}$.
+
+--
+
+- Where $y_1$ denotes our first observation, in other words, $y_1 =$ `r memory$correct[1]`.
+
+--
+
+- $y_{50}$ denotes our *50-th* observation or $y_{50} =$ `r memory$correct[50]`.
+
+--
+
+- When we have more than one group we can add a second subscript to our observations.
+
+--
+
+- For example, let's divide our memory data example in two groups, participants 
+who are 35 or younger will be classified as "young" while participants that are 
+older than 35 will be classified as "elder".
+
+```{r age-group}
+memory <- memory %>% 
+  mutate("age_group" = ifelse(test = age > 35, 
+                            yes = "elder", no = "young"))
+```
+
+---
+
+## Example
+
+- Now we have two groups and we can denote their observations using two subscripts
+
+--
+
+- For example, the *i-th* observation of the "young" group can be denoted with 
+$y_{i1}$ while the *i-th* observation of the "elder" group will be $y_{i2}$.
+
+--
+
+- In general, we can say that the *i-th* observation of the *j-th* group will be 
+$y_{ij}$
+
+--
+
+- In our experiment, the first observation (number of correctly recognized words)
+of the first participant in the "young" group was $y_{11}=$ `r memory$correct[1]`.
+
+--
+
+- While the first observation of the "elder" group was $y_{12}=$ `r memory$correct[51]` 
+
+---
+
+## Statistical models
+
+
+
+
+
+
+
+
+
