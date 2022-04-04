@@ -1,0 +1,95 @@
+---
+title: "Homework 1"
+author: "Write your name here"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output: pdf_document
+---
+
+## Intro Example
+
+**Background:** The data set used here comes from an experiment design to 
+measure the "stroop" effect, in other words, to measure the effect of 
+incongruent visual information on response times. In the control condition
+participants looked at a colored square on a screen and had to repeat the color
+out loud. On the incongruent condition participants would look at a color's name 
+on the screen printed on a different color. For example, they would see the word
+"green" printed on a blue font, participants had to repeat the word regardless 
+of the font color (say "green"). We recorded the total number of second that 
+it took for participants to complete 20 trials.
+
+```{r load_data, echo = TRUE}
+# In this chunk you should write (a.k.a. copy from the slides) the code needed 
+# to load the data for the example. IMPORTANT: Remember to delete the comments 
+```
+
+1. What is the average response time for participants in the **control** condition? 
+
+```{r mean_group1, echo = TRUE}
+# In this code chunk you can write the function (or functions) that you need to 
+# calculate the mean of the CONTROL condition, remember to save the result 
+# in a new variable so that you can easily print it in text. Remember to delete 
+# the comments inside the code chunks.
+```
+
+**ANS:** [WRITE YOUR ANSWER HERE]
+
+2. What is the average response time for participants on the  **incongruent** condition? 
+
+```{r mean_group2, echo = TRUE}
+# In this code chunk you can write the function (or functions) that you need to 
+# calculate the mean of the INCONGRUENT condition, remember to save the result 
+# in a new variable so that you can easily insert it in text. Remember to delete 
+# the comments inside the code chunks.
+```
+
+**ANS:** [WRITE YOUR ANSWER HERE]
+
+3. Which condition has more variation on response times, the control or the 
+incongruent condition?
+
+```{r variantion_group, echo = TRUE}
+# In this code chink you can write the functions that you need to use in order 
+# to calculate the variation of both conditions. Remember to assign each value 
+# to a new variable so that you can use it in text.
+```
+
+**ANS:** [WRITE YOUR ANSWER HERE]
+
+4. Create a histogram for the response times of each condition (1 per group). 
+Describe what you see in the histograms in as few words as possible.
+
+```{r histograms, echo = TRUE, fig.align = 'center'}
+# Use this code chunk to make the histograms of the IQ test scores of each group
+# it would be easier to compare results if you add transparency to the color! 
+```
+
+**ANS:** [WRITE YOUR ANSWER HERE]
+
+5. On average how much more time did it take participants on the incongruent 
+condition to read the color names printed on the screen? (**Note that we will always give you the data on a format that is easier to use**)
+
+```{r load-wide}
+# In this chunk you should write (a.k.a. copy from the slides) the code needed 
+# to load the data for the second part of the example.
+```
+
+```{r mean-dif}
+
+```
+
+**ANS:** [WRITE YOUR ANSWER HERE]
+
+6. How much variation is there on the difference in response times between conditions?
+
+```{r var-dif}
+
+```
+
+**ANS:** [WRITE YOUR ANSWER HERE]
+
+7. Create a boxplot of the difference between the two conditions.
+
+```{r box-plt}
+
+```
+

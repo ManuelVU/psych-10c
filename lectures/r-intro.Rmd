@@ -134,7 +134,9 @@ notes as you should do when working on your assignments.
 Let's say that we have been assigned a data file to work with on a homework, 
 and that we are given a URL to the file such as:
 
-
+```{r link-example, eval = FALSE}
+link <- "https://raw.githubusercontent.com/ManuelVU/psych-10c-data/main/stroop.csv"
+```
 
 
 

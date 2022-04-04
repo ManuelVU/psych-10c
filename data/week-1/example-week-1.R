@@ -38,7 +38,7 @@ mu <- 20
 
 control <- rnorm(n = 10, mean = mu, sd = 2)
 
-incongruent <- rnorm(n = 10, mean = mu + 15, sd = 2.2)
+incongruent <- rnorm(n = 10, mean = mu + 15, sd = 3)
 
 stroop <- tibble("id" = as.character(id), 
                  "response_time" = c(control, incongruent),
