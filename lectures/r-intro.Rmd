@@ -131,6 +131,10 @@ notes as you should do when working on your assignments.
 
 --
 
+- Let's start by working with an R markdown file first
+
+--
+
 Let's say that we have been assigned a data file to work with on a homework, 
 and that we are given a URL to the file such as:
 
