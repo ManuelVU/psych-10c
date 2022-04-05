@@ -163,17 +163,18 @@ differences" model (Model 2)?
 
 ## Section 2
 
-**Background:** For this section, we will work with our response time data set again.
-This data set comes from an experiment designed to test whether a new training 
-technique can improve participants' ability to navigate a maze. Participants 
-first completed a maze after playing a game that lasted as long as the new 
-training approach. Then they underwent the new training and completed a second 
-maze of the same difficulty (we will assume that, if there is a difference in 
-response times, it is only because of the training and not because of experience 
+**Background:** For this section, we will work with our response time data set 
+again. This data set comes from an experiment designed to test whether a new 
+training technique can improve participants' ability to navigate a maze. 
+Participants first completed a maze after playing a game that lasted as long as 
+the new training approach. Then they underwent the new training and completed a 
+second maze of the same difficulty (we will assume that, if there is a difference 
+in response times, it is only because of the training and not because of experience 
 with maze solving). The data provides information about the time (in seconds) 
 in which each participant completed each maze.
 
-Once again, we have two competing models (hypotheses) about the performance of participants on the maze before and after training. Model 1 (**no improvement**)
+Once again, we have two competing models (hypotheses) about the performance of 
+participants on the maze before and after training. Model 1 (**no improvement**)
 states that the new training method wouldn't make any difference. In other 
 words, Model 1 predicts that there will be no improvement in terms of how 
 quickly people solve the maze after being trained. 
@@ -204,7 +205,8 @@ assume that the model variance is equal to 2.
 # for model 1.
 ```
 
-15. What are the predictions made by Model 1 (**no improvement**)? Again, make sure to test them by adding the corresponding variable (column) to our data base.
+15. What are the predictions made by Model 1 (**no improvement**)? Again, make 
+sure to test them by adding the corresponding variable (column) to our data base.
 
 ```{r pred-m1-s2, echo = TRUE}
 # Code 12: Testing the predictions made by Model 1
@@ -217,8 +219,8 @@ assume that the model variance is equal to 2.
 **ANS:** [WRITE YOUR ANSWER HERE]
 
 16. Calculate the squared error (SE) of each observation for Model 1 and
-add them to the data set as a new variable. What is the mean Sum of Squared Errors 
-(m-SSE) of the "no improvement" model (Model 1)?
+add them to the data set as a new variable. What is the mean Sum of Squared 
+Errors (m-SSE) of the "no improvement" model (Model 1)?
 
 ```{r sse-m1-s2, echo = TRUE}
 # Code 13: Adding a column for the SE and calculating the m-SSE

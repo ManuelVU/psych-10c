@@ -57,18 +57,47 @@ memory <- memory %>%
   filter(test_id == "test_1")
 ```
 
-## Models in Science
+## Objective in research
 
-- Models are abstract representations of the world. 
+- One of our main objectives in research is to contrast our believes about the
+world with the outcomes of experiments.
 
 --
 
-- They are a way in which we can formalize our believes about events.
+- We do so by starting with some "verbal" statement or belief about the world 
+which we then formalize using a statistical model.
+
+--
+
+- Statistical models will allow us to make predictions about future 
+observations. In the case of an experiment, they will allow us to make 
+predictions about the outcomes.
+
+--
+
+- The next step is to evaluate those predictions by comparing them with the 
+outcomes (data) of the experiment.
+
+--
+
+- Finally, we would like to go back and interpret the results of our evaluations
+with respect to our original believes or statements about the world.
+
+---
+ 
+## Statistical models
+
+- Statistical models are abstract representations of the world. 
+
+--
+
+- They are a way in which we can formalize our believes about probabilistic 
+events.
 
 --
 
 - For example, if we have an experiment where we throw a coin and have two 
-two competing ideas about the coin:
+competing ideas about the coin:
 
 --
 
@@ -93,7 +122,7 @@ two competing ideas about the coin:
 --
 
 - We moved from two verbal statements about our believes regarding the coin to
-two formal statements bout the proabibility of "heads" as an outcome.
+two formal statements about the probability of "heads".
   
 ---
 
@@ -105,18 +134,18 @@ about the outcomes of an experiment.
 --
 
 - Given that we assume that the outcomes are probabilistic, our models will have 
-a probabilisitic component associated with them. 
+a probabilistic component associated with them. 
 
 --
 
-- Given the probabilistic nature of our observations it will be almost imposible
-for us to tell if a model is TRUE or FALSE. However, we can compare how useful 
-they are on a given situation. 
+- Given the nature of our observations it will be almost impossible for us to 
+tell if a model is TRUE or FALSE. However, we can compare how useful they are on 
+a given situation. 
 
 --
 
 - Statistical models will allow us to make predictions about our observations, 
-ans we will use these predictions to compare how useful they are.
+which we will then use to compare how useful they are.
 
 --
 
@@ -135,106 +164,72 @@ class: inverse, middle, center
 
 ---
 
-## Example: Memory Experiment
+## Example:
 
-- Whenever we run an experiment, we have a variable that we are interested in. 
-In homework one we had the results of an IQ test, in our memory example we had
-the number of words that are correctly recognized.
+- To introduce notation we will start with a problem.
 
 --
 
-- We will call the variable that we are interested in the **dependent** variable.
+- **Problem:** We want to know if people that smoke have lower lung capacity in 
+comparison with people that do not smoke.
 
 --
 
-- To reference a particular observation in an experiment we will use the 
-lowercase letter $y_{i}$.
+- We have a variable that we are interested in, which is lung capacity as 
+measured by some standard test.
 
 --
 
-- Where the subscripts $i$ indicates our *i-th* observation.
+- We also have a variable that indicates if a given participant smokes or not.
 
 --
 
-- Let's look back at the data for test one in our memory experiment
+- We call the first one a **dependent** variable, because we want to see how it 
+"depends" on the values of another.
+
+--
+
+- We call the smoker indicator variable an **independent** variable. We are 
+interested in how our independent variable affects the values of our dependent 
+variable.
+
+--
+
+- In other words, we want to know if lung capacity is a function of smoking 
+status.
 
 ---
 
-## Example
+## Example: Smoking
 
-- Now we will use the data only from one of the test of our experiment, however, 
-we have added a new variable that indicates the **age_group**.
+- We collect data from 8 participants, 4 smokers and 4 non smokers.
 
-```{r data-example, echo = FALSE}
-DT::datatable(
-  head(x = memory, n = 100),
-  fillContainer = FALSE, options = list(pageLength = 6)
+--
+
+```{r, echo = FALSE}
+smokers <- tibble("id" = as.character(seq(1,8)),
+  "lung_capacity" = round(x = rnorm(n = 8, 
+                                    mean = rep(x = c(77, 70), each = 4), 
+                                    sd = rep(x = c(2, 3), each = 4)), 
+                          digits = 1),
+  "smoke_status" = rep(c("non_smoker", "smoker"), each = 4))
+DT::datatable(data = smokers,
+  fillContainer = FALSE, options = list(pageLength = 4)
 )
 ```
 
----
-
-## Example
-
-- In our experiment we have $100$ observations, in other words we have a sequence
-of $y$ values that goes from $y_1, y_2, \dots, y_{100}$.
-
 --
 
-- Where $y_1$ denotes our first observation, in other words, $y_1 =$ `r memory$correct[1]`.
-
---
-
-- $y_{50}$ denotes our *50-th* observation or $y_{50} =$ `r memory$correct[50]`.
-
---
-
-- When we have more than one group we can add a second subscript to our observations.
-
---
-
-- For example, let's divide our memory data example in two groups, participants 
-who are 35 or younger will be classified as "young" while participants that are 
-older than 35 will be classified as "elder".
-
-```{r age-group}
-memory <- memory %>% 
-  mutate("age_group" = ifelse(test = age > 35, 
-                            yes = "elder", no = "young"))
-```
+- We will denote values of our dependent variables using $y$ for example, the 
+first observation of our first group (non-smokers) is denoted as $y_{11}$ while 
+the fourth observation of the same group is denoted $y_{41}$
 
 ---
 
-## Example
-
-- Now we have two groups and we can denote their observations using two subscripts
-
---
-
-- For example, the *i-th* observation of the "young" group can be denoted with 
-$y_{i1}$ while the *i-th* observation of the "elder" group will be $y_{i2}$.
-
---
-
-- In general, we can say that the *i-th* observation of the *j-th* group will be 
-$y_{ij}$
-
---
-
-- In our experiment, the first observation (number of correctly recognized words)
-of the first participant in the "young" group was $y_{11}=$ `r memory$correct[1]`.
-
---
-
-- While the first observation of the "elder" group was $y_{12}=$ `r memory$correct[51]` 
-
----
-
-## Statistical models
-
-
-
-
+- In general we say that the *i-th* observation of the *j-th* group is denoted 
+as $y_{ij}$. Note that the letters $i$ and $j$ are a way to denote a general 
+observation, if we want to look at a particular one we can write $y_{21}=$ 
+`r smokers$lung_capacity[2]`.
 
 
 
