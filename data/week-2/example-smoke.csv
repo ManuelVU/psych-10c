@@ -1,0 +1,9 @@
+id,lung_capacity,smoke_status
+1,78.3,non_smoker
+2,80,non_smoker
+3,73.6,non_smoker
+4,77.4,non_smoker
+5,68,smoker
+6,64.4,smoker
+7,70.8,smoker
+8,65.5,smoker

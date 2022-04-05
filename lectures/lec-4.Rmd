@@ -59,12 +59,12 @@ memory <- memory %>%
 
 ## Objective in research
 
-- One of our main objectives in research is to contrast our believes about the
+- One of our main objectives in research is to contrast our beliefs about the
 world with the outcomes of experiments.
 
 --
 
-- We do so by starting with some "verbal" statement or belief about the world 
+- We do so by starting with some "verbal" statement or beliefs about the world 
 which we then formalize using a statistical model.
 
 --
@@ -81,7 +81,7 @@ outcomes (data) of the experiment.
 --
 
 - Finally, we would like to go back and interpret the results of our evaluations
-with respect to our original believes or statements about the world.
+with respect to our original beliefs or statements about the world.
 
 ---
  
@@ -91,7 +91,7 @@ with respect to our original believes or statements about the world.
 
 --
 
-- They are a way in which we can formalize our believes about probabilistic 
+- They are a way in which we can formalize our beliefs about probabilistic 
 events.
 
 --
@@ -109,7 +109,7 @@ competing ideas about the coin:
 
 --
 
-- We can formalize these two believes using a statistical model.
+- We can formalize these two beliefs using a statistical model.
 
 --
 
@@ -121,14 +121,14 @@ competing ideas about the coin:
   
 --
 
-- We moved from two verbal statements about our believes regarding the coin to
+- We moved from two verbal statements about our beliefs regarding the coin to
 two formal statements about the probability of "heads".
   
 ---
 
 ## Statistical Models
 
-- Statistical models are the formal representation of our believes or hypothesis
+- Statistical models are the formal representation of our beliefs or hypotheses
 about the outcomes of an experiment. 
 
 --
@@ -245,7 +245,7 @@ their variability.
 
 --
 
-- Remember that our objective is to formalize our beliefs or hypothesis about 
+- Remember that our objective is to formalize our beliefs or hypotheses about 
 the world. 
 
 --
@@ -384,6 +384,19 @@ variability of the distribution.
 - In other words, we know the density (height of the curve) assigned to each 
 value of the random variable.
 
+--
+
+- Another important thing to note is that both parameters are independent, in 
+the sense that they control different aspects of the function. For example, 
+we can have 2 Normal distributions that have the same variance and centered at 
+different points.
+
+--
+
+In teams of 3 students, draw two normal distributions that have the same 
+$\sigma^2$ but different $\mu$'s. Then draw two Normal distributions with the 
+same $\mu$ but different $\simga^2$'s.
+
 ---
 
 ## Statistical models
@@ -396,7 +409,7 @@ value of the random variable.
 
 --
 
-- We can start formalizing our hypothesis about the outcomes of an experiment.
+- We can start formalizing our hypotheses about the outcomes of an experiment.
 
 --
 
