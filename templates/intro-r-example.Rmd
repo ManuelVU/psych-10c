@@ -53,7 +53,8 @@ var_resp <- stroop %>%
   summarise("variance" = var(response_time))
 ```
 
-**ANS:** the variance of the control condition was `r var_resp$variance[1]` and the variance for the incongruent condition was `r var_resp$variance[2]`. 
+**ANS:** the variance of the control condition was `r var_resp$variance[1]` and 
+the variance for the incongruent condition was `r var_resp$variance[2]`. 
 
 4. Create a histogram for the response times of each condition (1 per group). 
 Describe what you see in the histograms in as few words as possible.
@@ -76,30 +77,63 @@ ggplot(data = stroop) +
 **ANS:** [WRITE YOUR ANSWER HERE]
 
 5. On average how much more time did it take participants on the incongruent 
-condition to read the color names printed on the screen? (**Note that we will always give you the data on a format that is easier to use**)
+condition to read the color names printed on the screen? 
+(**Note that we will always give you the data on a format that is easier to use**)
 
 ```{r load-wide}
 # In this chunk you should write (a.k.a. copy from the slides) the code needed 
 # to load the data for the second part of the example.
+link_wide <- "https://raw.githubusercontent.com/ManuelVU/psych-10c-data/main/stroop-wide.csv"
+stroop_wide <- read_csv(file = link_wide)
 ```
+
+Notice that now we have a new data file called stroop_wide, this will make it 
+easy for us to calculate variables like the difference between conditions.
+
+First we will add our new "difference" variable to the data stroop_wide
 
 ```{r mean-dif}
+# First we get our new variable
+stroop_wide <- stroop_wide %>% 
+  mutate(difference = control - incongruent)
 
+# Now we can calculate the average improvement between conditions
+mean_improve <- stroop_wide %>% 
+  summarise(average = mean(difference)) %>% 
+  pull(average)
 ```
 
-**ANS:** [WRITE YOUR ANSWER HERE]
+**ANS:** The average difference between response times in the control and 
+incongruent condition was `r mean_improve`.
 
-6. How much variation is there on the difference in response times between conditions?
+6. How much variation is there on the difference in response times between 
+conditions?
+
+Now that we have the difference between conditions by participant we can just
+calculate the variance of those observations.
 
 ```{r var-dif}
-
+# To calculate the variance we use the following code
+var_improve <- stroop_wide %>% 
+  summarise(variation = var(difference)) %>% 
+  pull(variation)
 ```
 
-**ANS:** [WRITE YOUR ANSWER HERE]
+**ANS:** The variance of the difference in response time of participants in the
+control condition in comparison to the incongruent condition was `r var_improve`
 
 7. Create a boxplot of the difference between the two conditions.
 
-```{r box-plt}
+To create a boxplot we just need to copy the code on the slides and make a 
+couple of changes because in this case we only have one variable, the difference!
 
+```{r box-plt, fig.width = 3, fig.align = 'center'}
+ggplot(data = stroop_wide) +
+  aes(y = difference) +
+  geom_boxplot() +
+  theme_classic() +
+  xlab("") +
+  ylab("Difference in RT between conditions") +
+  theme(axis.title.y = element_text(size = 15)) 
 ```
 
