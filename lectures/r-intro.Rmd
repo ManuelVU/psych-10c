@@ -116,7 +116,7 @@ we want to integrate into a report.
 
 class: inverse, center, middle
 
-# RSudio
+# RStudio
 
 ---
 

@@ -226,10 +226,157 @@ the fourth observation of the same group is denoted $y_{41}$
 
 ---
 
+## Example: Smoking
+
 - In general we say that the *i-th* observation of the *j-th* group is denoted 
 as $y_{ij}$. Note that the letters $i$ and $j$ are a way to denote a general 
-observation, if we want to look at a particular one we can write $y_{21}=$ 
-`r smokers$lung_capacity[2]`.
+observation, if we want to look at a particular one we can write:
+
+--
+
+  - $y_{21}=$ `r smokers$lung_capacity[2]`
+  
+  - $y_{32}=$ `r smokers$lung_capacity[7]`
+
+--
+
+- Now that we have a notation for our observations, we need a way to describe 
+their variability.
+
+--
+
+- Remember that our objective is to formalize our beliefs or hypothesis about 
+the world. 
+
+--
+
+- We know that our observations are probabilistic so we need a way to describe 
+their variability.
+
+--
+
+- In order to do this we will use the normal distribution.
+
+---
+
+class: inverse, middle, center
+
+# The Normal (Gaussian) Distribution
+
+---
+
+## The Normal distribution
+
+- The normal distribution is one of the most used statistical models in the 
+literature. 
+
+--
+
+- One of its main advantages is that it can be described using two parameters, 
+$\mu$ and $\sigma^2$.
+
+--
+
+- We denote the Normal distribution as $\text{Normal}(\mu,\sigma^2)$.
+
+---
+
+## Standard Normal distribution 
+
+- $\text{Normal}(\mu = 0,\sigma^2 = 1)$
+
+```{r norm-examp, fig.align = 'center', echo = FALSE, fig.width = 10}
+curve(dnorm(x, mean = 0, sd = 1), from = -4, to = 4,
+      ann = FALSE, axes = FALSE, lwd = 2, col = "#1b2021")
+axis(1, at = seq(-4,4), cex.axis = 1.3)
+axis(1, at = c(-1,1), labels = c(expression(mu-sigma),
+                                 expression(mu+sigma)),
+     col.axis = "#eb861e",
+     padj = 2, cex.axis = 1.5)
+axis(1, at = 0, labels = expression(mu),
+     col.axis = "#6da7de",
+     padj = 2, cex.axis = 1.5)
+abline(v = seq(-1,1), col = c("#eb861e","#6da7de","#eb861e"),
+       lwd = 2, lty = c(3,1,3))
+box(bty = "l")
+```
+
+---
+
+## Normal distribution
+
+- The first parameter of the normal distribution $mu$ represents the center of 
+the distribution. Notice that this is the value that has the highest density.
+
+--
+
+- The second parameter $\sigma^2$ (or $\sigma$) controls the dispersion of the 
+normal distribution:
+
+--
+
+- For example, two normal distributions with the same variance (or value of $\sigma^2$)
+can be drawn in R using:
+
+.pull-left[
+```{r norm-ex-1, eval = FALSE}
+ggplot(data = data.frame(support = c(-4, 6))) + 
+  aes(x = support) +
+  scale_y_continuous(breaks = NULL) +
+  ylab(label = "") + 
+  xlab("Support") +
+  theme_classic() +
+  theme(axis.title.x = element_text(size = 20)) +
+  stat_function(fun = dnorm, args = list(mean = 0, sd = 1), col='red') +
+  stat_function(fun = dnorm, args = list(mean = 2, sd = 1), col='blue')
+```
+]
+
+.pull-right[
+```{r norm-ex-1-out, ref.label = "norm-ex-1", fig.align = 'center', echo = FALSE, fig.height = 4.3}
+
+```
+
+]
+
+---
+
+## Normal distribution
+
+- An example of two normal distributions with the same value of $\mu$ but 
+different $\sigma^2$ would be:
+
+.pull-left[
+```{r norm-ex-2, eval = FALSE}
+ggplot(data = data.frame(support = c(-9, 9))) + 
+  aes(x = support) +
+  scale_y_continuous(breaks = NULL) +
+  ylab(label = "") + 
+  xlab("Support") +
+  theme_classic() +
+  theme(axis.title.x = element_text(size = 20)) +
+  stat_function(fun = dnorm, args = list(mean = 0, sd = 1), col='red') +
+  stat_function(fun = dnorm, args = list(mean = 0, sd = 3), col='blue')
+```
+]
+
+.pull-right[
+```{r norm-ex-2-out, ref.label = "norm-ex-2", fig.align = 'center', echo = FALSE, fig.height = 4.3}
+
+```
+]
+
+--
+
+- Note that once we have assigned a value to our parameters $\mu$ and $\sigma^2$
+or $\sigma$ in ggplot, we have defined a Normal distribution completely. 
+
+--
+
+- In other words, we know the density assigned to each value of a random variable.
+
+
+
 
 
 
