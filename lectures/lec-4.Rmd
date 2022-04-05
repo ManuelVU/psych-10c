@@ -320,15 +320,13 @@ can be drawn in R using:
 
 .pull-left[
 ```{r norm-ex-1, eval = FALSE}
-ggplot(data = data.frame(support = c(-4, 6))) + 
-  aes(x = support) +
-  scale_y_continuous(breaks = NULL) +
-  ylab(label = "") + 
-  xlab("Support") +
-  theme_classic() +
-  theme(axis.title.x = element_text(size = 20)) +
-  stat_function(fun = dnorm, args = list(mean = 0, sd = 1), col='red') +
-  stat_function(fun = dnorm, args = list(mean = 2, sd = 1), col='blue')
+par(mai = c(1,0.1,0.1,0.1))
+curve(dnorm(x, mean = 0, sd = 1), from = -4, to = 6,
+      axes = FALSE, ann = FALSE, col = "red")
+curve(dnorm(x, mean = 2, sd = 1), col = "blue", add = T)
+box(bty = "l")
+axis(1, cex.axis = 1.3)
+mtext(text = "Support", side = 1, line = 2, cex = 1.6)
 ```
 ]
 
@@ -348,15 +346,13 @@ different $\sigma^2$ would be:
 
 .pull-left[
 ```{r norm-ex-2, eval = FALSE}
-ggplot(data = data.frame(support = c(-9, 9))) + 
-  aes(x = support) +
-  scale_y_continuous(breaks = NULL) +
-  ylab(label = "") + 
-  xlab("Support") +
-  theme_classic() +
-  theme(axis.title.x = element_text(size = 20)) +
-  stat_function(fun = dnorm, args = list(mean = 0, sd = 1), col='red') +
-  stat_function(fun = dnorm, args = list(mean = 0, sd = 3), col='blue')
+par(mai = c(1,0.1,0.1,0.1))
+curve(dnorm(x, mean = 0, sd = 1), from = -9, to = 9,
+      axes = FALSE, ann = FALSE, col = "red")
+curve(dnorm(x, mean = 0, sd = 3), col = "blue", add = T)
+box(bty = "l")
+axis(1, cex.axis = 1.3)
+mtext(text = "Support", side = 1, line = 2, cex = 1.6)
 ```
 ]
 
@@ -368,17 +364,169 @@ ggplot(data = data.frame(support = c(-9, 9))) +
 
 --
 
-- Note that once we have assigned a value to our parameters $\mu$ and $\sigma^2$
-or $\sigma$ in ggplot, we have defined a Normal distribution completely. 
+- As we can see in the plot, as the standard deviation $\sigma$ 
+increases from 1 to 3, the normal distribution becomes more wide and less tall.
 
 --
 
-- In other words, we know the density assigned to each value of a random variable.
+- This indicates that $\sigma^2$ and its root square $\sigma$ control the 
+variability of the distribution.
 
+---
 
+## Note
 
+- Once we have assigned a value to our parameters $\mu$ and $\sigma^2$
+(or $\sigma$ in R), we have defined a Normal distribution completely. 
 
+--
 
+- In other words, we know the density (height of the curve) assigned to each 
+value of the random variable.
 
+---
 
+## Statistical models
 
+- Now that we have a notation for our observations $y_{ij}$.
+
+--
+
+- And we have a statistical model in the Normal distribution.
+
+--
+
+- We can start formalizing our hypothesis about the outcomes of an experiment.
+
+--
+
+- Let's go back to the smoking example...
+
+---
+
+## Smoking: Null model
+
+- Remember that our problem was that we wanted to know if people that smoke have 
+lower lung capacity in comparison with people that do not smoke.
+
+--
+
+- We tested the lung capacity of 8 participants, 4 non-smokers and 4 smokers.
+
+--
+
+- We will denote each observation of the non-smokers group as
+$y_{11},y_{21},y_{31},y_{41}$ and each observation of our smokers group as
+$y_{12},y_{22},y_{32},y_{42}$.
+
+--
+
+- For short, we can say that we denote with $i = 1,\dots,4$ the observation 
+number on group $j = 1,2$ where $1$ represents the non-smokers.
+
+--
+
+- Both statements give us the same information, however, the second one is 
+shorter. 
+
+--
+
+- Imagine if we had 50 observations in each group, listing all of them
+would take us a page...
+
+---
+
+## Smoking: Null model
+
+- Now we can think of two possibilities, the first one is that there are 
+**no differences** between non-smokers and smokers. In other words, that even
+when our observations have some variability, lung capacity is not a function 
+of smoking status.
+
+--
+
+- The second one (and the one that we might be more interested in) is that lung
+capacity is a function of smoking status, in other words, that the 
+groups are different.
+
+--
+
+- The first model is known as the **NULL Model**. A model that states that there 
+are no difference in lung capacity between groups!
+
+--
+
+- We denote this model in the following way: $$y_{ij} \sim \text{Normal}(\mu,\sigma^2)$$
+
+---
+
+## Smoking: Null model
+
+- The **Null Model** formalizes the assumption that, regardless of the 
+observation number $i$, and the group $j$ (smoking status), participant are all described by the same parameters.
+
+--
+
+- In other words, even though there might be some variability in our measures 
+of lung capacity, non-smokers and smokers are all observations from the same 
+distribution!
+
+--
+
+- A Normal distribution that is centered at some value $\mu$ and that has some
+variability $\sigma^2$.
+
+--
+
+- Notice that we don't know the values of $\mu$ and $\sigma^2$ which define our
+statistical model, however, we can graph what the Null Model expects the data to 
+look like.
+
+---
+
+## Graphical representation of the Null Model
+
+.pull-left[
+```{r normal-null, eval = FALSE}
+par(mai = c(1,0.1,0.1,0.1))
+curve(dnorm(x, mean = 0, sd = 1), from = -4, to = 6,
+      axes = FALSE, ann = FALSE, col = "red", lwd = 3)
+curve(dnorm(x, mean = 0, sd = 1), col = "blue", add = T, lty = 3, lwd = 3)
+box(bty = "l")
+mtext(text = "Lung capacity", side = 1, line = 2, cex = 1.6)
+legend("topleft", bty = "n", col = c("blue","red"), 
+       legend = c("non-smokers", "smokers"), lty = c(3, 1))
+```
+]
+
+.pull-right[
+```{r normal-null-out, ref.label = "normal-null", fig.align = 'center', echo = FALSE, fig.height = 4.6}
+
+```
+]
+
+--
+
+- Notice that we have not added any numbers on the x axis, this is because we 
+don't know the values of the distribution, however, given the specification of 
+the model, we know that it expects all of our observations to come from the same
+distribution!
+
+---
+
+## Statistical Inferece
+
+- Once we have defined our model, our new objective will be to find some 
+suitable values for the parameters $\mu$ and $\sigma^2$ which define our 
+statistical model.
+
+--
+
+- This is known as Statistical Inference, and it will be the main objective of 
+this class. 
+
+--
+
+- In general we can say that Statistical Inference refers to the process by 
+which we "infer" or learn the values of the parameters of a statistical model
+based on our observations of the world (Data).
