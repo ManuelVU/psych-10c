@@ -398,11 +398,11 @@ same $\mu$ but different $\sigma^2$'s.
 
 ## Statistical models
 
-- Now that we have a notation for our observations $y_{ij}$.
+- Now, we have a notation for our observations $y_{ij}$.
 
 --
 
-- And we have a statistical model in the Normal distribution.
+- And we found a statistical model in the Normal distribution.
 
 --
 
@@ -416,8 +416,8 @@ same $\mu$ but different $\sigma^2$'s.
 
 ## Smoking: Null model
 
-- Remember that our problem was that we wanted to know if people that smoke have 
-lower lung capacity in comparison with people that do not smoke.
+- Reminder: We want to know if people who smoke have lower lung capacity 
+than people who do not smoke.
 
 --
 
@@ -425,14 +425,14 @@ lower lung capacity in comparison with people that do not smoke.
 
 --
 
-- We will denote each observation of the non-smokers group as
-$y_{11},y_{21},y_{31},y_{41}$ and each observation of our smokers group as
+- We will denote each observation of the non-smokers' group as
+$y_{11},y_{21},y_{31},y_{41}$ and each observation of our smokers' group as
 $y_{12},y_{22},y_{32},y_{42}$.
 
 --
 
 - For short, we can say that we denote with $i = 1,\dots,4$ the observation 
-number on group $j = 1,2$ where $1$ represents the non-smokers.
+number on group $j = 1,2$ where $j = 1$ corresponds to the non-smokers.
 
 --
 
@@ -456,13 +456,13 @@ of smoking status.
 --
 
 - The second one (and the one that we might be more interested in) is that lung
-capacity is a function of smoking status, in other words, that the 
-groups are different.
+capacity is a function of smoking status, in other words, that the **groups 
+are different**.
 
 --
 
-- The first model is known as the **NULL Model**. A model that states that there 
-are no difference in lung capacity between groups!
+- The first model is known as the **NULL Model**: A model that states that there 
+are **no differences** in lung capacity between groups!
 
 --
 
@@ -473,7 +473,8 @@ are no difference in lung capacity between groups!
 ## Smoking: Null model
 
 - The **Null Model** formalizes the assumption that, regardless of the 
-observation number $i$, and the group $j$ (smoking status), participant are all described by the same parameters.
+observation number $i$, and the group $j$ (smoking status), participant are all 
+described by the same parameters.
 
 --
 
