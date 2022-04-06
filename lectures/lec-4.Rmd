@@ -239,8 +239,7 @@ observation, if we want to look at a particular one we can write:
 
 --
 
-- Now that we have a notation for our observations, we need a way to describe 
-their variability.
+- Now, we have a notation for our observations!
 
 --
 
@@ -249,7 +248,7 @@ the world.
 
 --
 
-- We know that our observations are probabilistic so we need a way to describe 
+- We know that our observations are probabilistic, so we need a way to describe 
 their variability.
 
 --
@@ -271,8 +270,8 @@ literature.
 
 --
 
-- One of its main advantages is that it can be described using two parameters, 
-$\mu$ and $\sigma^2$.
+- One of its main advantages is that it can be described using only two 
+parameters, $\mu$ and $\sigma^2$.
 
 --
 
@@ -304,7 +303,7 @@ box(bty = "l")
 
 ## Normal distribution
 
-- The first parameter of the normal distribution $mu$ represents the center of 
+- The first parameter of the normal distribution $\mu$ represents the center of 
 the distribution. Notice that this is the value that has the highest density.
 
 --
@@ -314,7 +313,7 @@ normal distribution:
 
 --
 
-- For example, two normal distributions with the same variance (or value of $\sigma^2$)
+- For example, two normal distributions with the same variance ($\sigma^2$)
 can be drawn in R using:
 
 .pull-left[
@@ -363,38 +362,37 @@ mtext(text = "Support", side = 1, line = 2, cex = 1.6)
 
 --
 
-- As we can see in the plot, as the standard deviation $\sigma$ 
-increases from 1 to 3, the normal distribution becomes more wide and less tall.
+- As we can see in the plot, as the standard deviation $\sigma$ increases from 
+1 to 3, the normal distribution becomes wider and less tall.
 
 --
 
-- This indicates that $\sigma^2$ and its root square $\sigma$ control the 
-variability of the distribution.
+- In other words, $\sigma^2$ (or $\sigma$) control the variability of 
+the distribution.
 
 ---
 
 ## Note
 
 - Once we have assigned a value to our parameters $\mu$ and $\sigma^2$
-(or $\sigma$ in R), we have defined a Normal distribution completely. 
+(R uses $\sigma$), we have completely defined a Normal distribution. 
 
 --
 
-- In other words, we know the density (height of the curve) assigned to each 
+- With this, we can know the density (i.e. height of the curve) assigned to each 
 value of the random variable.
 
 --
 
-- Another important thing to note is that both parameters are independent, in 
-the sense that they control different aspects of the function. For example, 
-we can have 2 Normal distributions that have the same variance and centered at 
-different points.
+- Another important thing to note is that both parameters are independent. They 
+control different aspects of the function. For example, we can have two Normal 
+distributions that have the same variance and centered at different points.
 
 --
 
-In teams of 3 students, draw two normal distributions that have the same 
+In teams of 3 students, draw two Normal distributions that have the same 
 $\sigma^2$ but different $\mu$'s. Then draw two Normal distributions with the 
-same $\mu$ but different $\simga^2$'s.
+same $\mu$ but different $\sigma^2$'s.
 
 ---
 
