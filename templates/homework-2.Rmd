@@ -16,12 +16,12 @@ output: pdf_document
 
 ## Section 1
 
-**Background:** For this section, we will work with our coffee data set again. 
+**Background:** For this section, we will work with our coffee experiment. 
 This data set comes from an experiment designed to test whether drinking coffee 
 makes people smarter. Participants were divided into two groups. All 
 participants took an IQ test, but participants in **group 1** 
 drank water 5 minutes before the test, while participants in **group 2** drank 
-coffee. 
+coffee. (**The data is not the same as in Homework 1**)
 
 We have two competing hypotheses (models). Model 1 states that drinking 
 coffee doesn't make a difference in IQ test scores between people who 
@@ -32,7 +32,7 @@ group 1). Both hypotheses assume that variances are equal across observations
 and groups.
 
 ```{r load_data, echo = TRUE}
-# Code 1: Load the data (Hint: Go back to Lec-1 (or homework-1!))
+# Code 1: Load the data (Hint: Go back to Lec-4)
 #
 # In this chunk you should write (a.k.a. copy from the slides) the code needed 
 # to load the data for section 1.
@@ -163,15 +163,16 @@ differences" model (Model 2)?
 
 ## Section 2
 
-**Background:** For this section, we will work with our response time data set 
-again. This data set comes from an experiment designed to test whether a new 
+**Background:** For this section, we will work with our response time experiment. 
+This data set comes from an experiment designed to test whether a new 
 training technique can improve participants' ability to navigate a maze. 
 Participants first completed a maze after playing a game that lasted as long as 
 the new training approach. Then they underwent the new training and completed a 
 second maze of the same difficulty (we will assume that, if there is a difference 
 in response times, it is only because of the training and not because of experience 
 with maze solving). The data provides information about the time (in seconds) 
-in which each participant completed each maze.
+in which each participant completed each maze. 
+(**The data is not the same as in Homework 1**)
 
 Once again, we have two competing models (hypotheses) about the performance of 
 participants on the maze before and after training. Model 1 (**no improvement**)
@@ -184,7 +185,7 @@ effective, and so the time people need to solve the maze should be shorter
 the second time (after participants have undergone the training).
 
 ```{r load_data2, echo = TRUE}
-# Code 10: Load the data (Hint: Go back to Lec-1 (or homework-1!))
+# Code 10: Load the data (Hint: Go back to Lec-4 and use the link)
 #
 # In this section you should write the code needed to load the data for
 # section 2. IMPORTANT: Remember to delete the comments inside the code 

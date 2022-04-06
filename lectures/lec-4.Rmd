@@ -543,3 +543,19 @@ this class.
 - In general we can say that Statistical Inference refers to the process by 
 which we "infer" or learn the values of the parameters of a statistical model
 based on our observations of the world (Data).
+
+---
+
+# Data files for homework 2
+
+- Link for data Section 1 homework 2:
+
+```{r link-1}
+link_1 <- "https://raw.githubusercontent.com/ManuelVU/psych-10c-data/main/hw-2-problem-1.csv"
+```
+
+- Link for data Section 2 homework 2:
+
+```{r link-2}
+link_2 <- "https://raw.githubusercontent.com/ManuelVU/psych-10c-data/main/hw-2-problem-2.csv"
+```
