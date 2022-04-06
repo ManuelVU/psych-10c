@@ -169,8 +169,8 @@ class: inverse, middle, center
 
 --
 
-- **Problem:** We want to know if people who smoke have lower lung capacity than 
-people who don't smoke.
+- **Problem:** We want to know if people who smoke have different lung capacity 
+than people who don't smoke.
 
 --
 
@@ -313,7 +313,7 @@ normal distribution:
 
 --
 
-- For example, two normal distributions with the same variance ($\sigma^2$)
+- For example, two normal distributions with the same variance $\sigma^2$
 can be drawn in R using:
 
 .pull-left[
@@ -416,7 +416,7 @@ same $\mu$ but different $\sigma^2$'s.
 
 ## Smoking: Null model
 
-- Reminder: We want to know if people who smoke have lower lung capacity 
+- Reminder: We want to know if people who smoke have different lung capacity 
 than people who do not smoke.
 
 --
@@ -448,16 +448,25 @@ would take us a page...
 
 ## Smoking: Null model
 
-- Now we can think of two possibilities, the first one is that there are 
-**no differences** between non-smokers and smokers. In other words, that even
-when our observations have some variability, lung capacity is not a function 
-of smoking status.
+- Now we can think of two hypotheses, 
 
 --
 
-- The second one (and the one that we might be more interested in) is that lung
-capacity is a function of smoking status, in other words, that the **groups 
-are different**.
+- **First:** There are **no differences** between non-smokers and smokers. 
+
+--
+
+- In other words, that even when our observations have some variability, lung 
+capacity is not a function of smoking status.
+
+--
+
+- **Second:** Lung capacity is a function of smoking status (and the one that we 
+might be more interested in). 
+
+--
+
+- In other words, that the **groups are different**.
 
 --
 
@@ -466,14 +475,15 @@ are **no differences** in lung capacity between groups!
 
 --
 
-- We denote this model in the following way: $$y_{ij} \sim \text{Normal}(\mu,\sigma^2)$$
+- We denote this model in the following way: 
+$$y_{ij} \sim \text{Normal}(\mu,\sigma^2)$$
 
 ---
 
 ## Smoking: Null model
 
 - The **Null Model** formalizes the assumption that, regardless of the 
-observation number $i$, and the group $j$ (smoking status), every observation is
+observation number $i$, and the group $j$ (smoking status), they are all
 described by the same parameters.
 
 --
@@ -489,9 +499,9 @@ variability $\sigma^2$.
 
 --
 
-- Notice that we don't specify the values of $\mu$ and $\sigma^2$ that define our
-statistical model. Hhowever, we can still graph what the Null Model expects the 
-data to look like.
+- Notice that we don't specify the values of $\mu$ and $\sigma^2$ that define 
+our statistical model. However, we can still graph what the Null Model expects 
+the data to look like.
 
 ---
 
