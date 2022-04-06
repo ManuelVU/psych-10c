@@ -473,25 +473,25 @@ are **no differences** in lung capacity between groups!
 ## Smoking: Null model
 
 - The **Null Model** formalizes the assumption that, regardless of the 
-observation number $i$, and the group $j$ (smoking status), participant are all 
+observation number $i$, and the group $j$ (smoking status), every observation is
 described by the same parameters.
 
 --
 
 - In other words, even though there might be some variability in our measures 
-of lung capacity, non-smokers and smokers are all observations from the same 
-distribution!
+of lung capacity, observations collected for non-smokers and smokers come 
+from the same distribution!
 
 --
 
-- A Normal distribution that is centered at some value $\mu$ and that has some
+- A single Normal distribution centered at some value $\mu$ and which has some
 variability $\sigma^2$.
 
 --
 
-- Notice that we don't know the values of $\mu$ and $\sigma^2$ which define our
-statistical model, however, we can graph what the Null Model expects the data to 
-look like.
+- Notice that we don't specify the values of $\mu$ and $\sigma^2$ that define our
+statistical model. Hhowever, we can still graph what the Null Model expects the 
+data to look like.
 
 ---
 
@@ -518,7 +518,7 @@ legend("topleft", bty = "n", col = c("blue","red"),
 
 --
 
-- Notice that we have not added any numbers on the x axis, this is because we 
+- Notice that we have not added any numbers on the x axis. This is because we 
 don't know the values of the distribution, however, given the specification of 
 the model, we know that it expects all of our observations to come from the same
 distribution!
@@ -528,7 +528,7 @@ distribution!
 ## Statistical Inferece
 
 - Once we have defined our model, our new objective will be to find some 
-suitable values for the parameters $\mu$ and $\sigma^2$ which define our 
+suitable values for the parameters $\mu$ and $\sigma^2$ to better define our 
 statistical model.
 
 --
