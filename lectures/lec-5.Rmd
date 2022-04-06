@@ -216,3 +216,236 @@ DT::datatable(data = smokers,
 - mean Squared Error: 
 ]
 
+---
+
+class: inverse, middle, center
+
+# The Effects Model
+
+---
+
+## Effects Model
+
+- Now we will formalize our second model.
+
+--
+
+- Our original problem stated that we wanted to know if there where any 
+differences in lung capacity between smokers and non-smokers.
+
+--
+
+- Our first model was constructed on the idea that there are no differences 
+between groups.
+
+--
+
+- We will call the model that assumes that groups are different the 
+**Effects Model**.
+
+---
+
+## Effects Model
+
+- Following the logic used to formalize the Null Model, we will use our 
+observations notation $y_{ij}$ and the Normal distribution as the statistical 
+model.
+
+--
+
+- In mathematical notation the **Effects Model** is: 
+$$y_{i1}\sim\text{Normal}(\mu_1,\sigma_e^2)$$ $$y_{i2}\sim\text{Normal}(\mu_2,\sigma_e^2)$$
+
+--
+
+or $$y_{ij}\sim\text{Normal}(\mu_j,\sigma_e^2)$$
+
+--
+
+- Notice that both statements convey the same information, however, the second 
+one is shorter.
+
+--
+
+- This new statistical model formalizes the idea that the $i = 1, \dots, 4$ 
+observations on each group $j = 1, 2$ are samples of two different Normal 
+distributions, one centered at $\mu_1$ and the other one centered ar $\mu_2$.
+
+---
+
+## Effects Model
+
+- Another important part to notice on the definition of the model is that we 
+assume that both distributions have the same variance denoted as $\sigma_e^2$.
+
+--
+
+- This means that our model will assume that the only difference between the 
+two groups is their expected value and not how much they vary.
+
+--
+
+- This will allow us to use all of our observations to calculate a single error
+estimate of the model.
+
+--
+
+- Why is it called the **Effects Model**?
+
+--
+
+- The difference between our parameters, $\mu_1$ and $\mu_2$ can be interpreted
+as the effect on our random variable of been in group 1 in comparison to group 2.
+
+--
+
+- In our smoking example, the difference between $\mu_1$ and $\mu_2$ can be 
+interpreted as the effect of smoking on lung capacity.
+
+--
+
+- In other words, how much do we *expect* lung capacity to change if a person 
+smokes in comparison to a person that does not.
+
+---
+
+# Graphical Representation Effects Model
+
+- As we did with the Null Model, we can also represents the effects model 
+graphically.
+
+--
+
+- Notice that we still don't have values for our parameters, so we can make a 
+graph that shows that we expect each group to be represented by a 
+different normal distribution with a different mean but same variance.
+
+--
+
+- We can use the following R code to generate that representation:
+
+.pull-left[
+```{r normal-effect, eval = FALSE}
+par(mai = c(1,0.1,0.1,0.1))
+curve(dnorm(x, mean = 0, sd = 1), from = -4, to = 6,
+      axes = FALSE, ann = FALSE, col = "red", lwd = 3)
+curve(dnorm(x, mean = 2, sd = 1), col = "blue", add = T, lty = 3, lwd = 3)
+box(bty = "l")
+mtext(text = "Lung capacity", side = 1, line = 2, cex = 1.6)
+legend("topleft", bty = "n", col = c("blue","red"), 
+       legend = c("non-smokers", "smokers"), lty = c(3, 1))
+```
+]
+
+.pull-right[
+```{r normal-effect-out, ref.label = "normal-effect", fig.align = 'center', echo = FALSE, fig.height = 4.6}
+
+```
+]
+
+---
+
+# Graphical Representation
+
+- Notice that in the previous plot we do not have values assigned to the 
+variable lung capacity.
+
+--
+
+- This is because we only want to show that the model is assuming that the 
+groups are samples from two different normal distributions.
+
+--
+
+- However, we can (and should) formalize our Theories about the world before
+even looking at the data.
+
+--
+
+- In other words, we will always have a specification of our models even before 
+running an experiment (so we can't estimate the values of our parameters).
+
+---
+
+## Estimators for the Effects model
+
+- Now that we have specified our new model (that assumes that the groups are 
+different), we have 3 parameters for which we want to find appropriate 
+estimators.
+
+--
+
+- Our parameters are $\mu_1$, $\mu_2$ and $\sigma_e^2$. Again, our estimators 
+will be a statistic (a function of the sample) and we will denote them with a 
+hat.
+
+--
+
+$$\hat{\mu_1} = \frac{1}{n} \sum_i y_{i1}$$ 
+
+--
+
+$$\hat{\mu_2} = \frac{1}{n} \sum_i y_{i2}$$
+
+--
+
+and finally, 
+
+$$\hat{\sigma}_e^2 = \frac{1}{n} \sum_j \sum_i (y_{ij} - \hat{\mu}_j)^2$$
+
+---
+
+## Estimators for the Effects Model
+
+- Notice that our estimators for $\mu_1$ and $\mu_2$ are just the mean of our
+observations of each group respectively.
+
+--
+
+- Again, we can interpret $\hat{\mu}_j$ as the prediction of the model for each
+observation $i = 1, \dots, 4$ of group $j = 1, 2$. 
+
+--
+
+- Then we can interpret our estimator for $\hat{\sigma}_e^2$ as the average 
+error in the predictions of the model. In other words, how far on average are 
+our observations from what our predictions $\hat{\mu}_j$ for the group.
+
+--
+
+- As we did with the null model, we will be interested again in the total error
+of the model, also known as the Sum of Squared Error of the **Effects Model**.
+
+--
+
+- We will denote the Sum of Squared Error of the **Effects Model** as:
+$$SSE_e = \sum_j \sum_i (y_{ij} - \hat{\mu}_j)^2$$
+
+---
+
+- Form teams of 3 and calculate the model predictions for each group, the sum of 
+squared errors and the mean squared error of the **Effects Model** for the 
+smokers data:
+
+```{r show-data2, echo = FALSE}
+DT::datatable(data = smokers,
+  fillContainer = FALSE, options = list(pageLength = 8))
+```
+
+---
+
+## Smokers data: Effects Model
+
+.can-edit.key-likes[
+- Prediction: 
+]
+
+.can-edit.key-likes[
+- SSE: 
+]
+
+.can-edit.key-likes[
+- mean Squared Error: 
+]
+
+
