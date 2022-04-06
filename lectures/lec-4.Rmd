@@ -59,29 +59,29 @@ memory <- memory %>%
 
 ## Objective in research
 
-- One of our main objectives in research is to contrast our beliefs about the
-world with the outcomes of experiments.
+- One of our main goals in research is to be able to contrast our beliefs about 
+the world against the outcomes of experiments.
 
 --
 
-- We do so by starting with some "verbal" statement or beliefs about the world 
-which we then formalize using a statistical model.
+- We start with a "verbal" statement that captures our beliefs about the world, 
+which we then formalize into a statistical model.
 
 --
 
-- Statistical models will allow us to make predictions about future 
-observations. In the case of an experiment, they will allow us to make 
-predictions about the outcomes.
+- Statistical models allow us to make predictions about future observations. 
+In the case of an experiment, they allow us to make predictions about the 
+outcomes.
 
 --
 
-- The next step is to evaluate those predictions by comparing them with the 
-outcomes (data) of the experiment.
+- We evaluate these predictions by comparing them with the outcomes (data) 
+of the experiment.
 
 --
 
-- Finally, we would like to go back and interpret the results of our evaluations
-with respect to our original beliefs or statements about the world.
+- Finally, we interpret the results of our evaluation with respect to our 
+original beliefs or statements about the world.
 
 ---
  
@@ -91,12 +91,11 @@ with respect to our original beliefs or statements about the world.
 
 --
 
-- They are a way in which we can formalize our beliefs about probabilistic 
-events.
+- They are formalizations of our beliefs about probabilistic events.
 
 --
 
-- For example, if we have an experiment where we throw a coin and have two 
+- For example, if we have an experiment where we throw a coin, we have two 
 competing ideas about the coin:
 
 --
@@ -109,7 +108,7 @@ competing ideas about the coin:
 
 --
 
-- We can formalize these two beliefs using a statistical model.
+- We can formalize these two beliefs into a statistical model.
 
 --
 
@@ -121,8 +120,8 @@ competing ideas about the coin:
   
 --
 
-- We moved from two verbal statements about our beliefs regarding the coin to
-two formal statements about the probability of "heads".
+- We moved from verbal statements of our beliefs regarding the coin to
+formal statements about the probability of observing "heads" or "tails".
   
 ---
 
@@ -134,7 +133,7 @@ about the outcomes of an experiment.
 --
 
 - Given that we assume that the outcomes are probabilistic, our models will have 
-a probabilistic component associated with them. 
+a probabilistic component associated to them. 
 
 --
 
@@ -144,16 +143,16 @@ a given situation.
 
 --
 
-- Statistical models will allow us to make predictions about our observations, 
-which we will then use to compare how useful they are.
+- Statistical models allow us to make predictions about our observations, 
+which we can use to determine how useful these models are.
 
 --
 
-- However, before we continue it will be useful to introduce some notation!
+- Before we continue, it will be useful to introduce some notation!
 
 --
 
-- This will provide us with a way to express our models in a formal and 
+- Notation provides us with a way to express our models in a formal and 
 standard way.
 
 ---
@@ -166,17 +165,17 @@ class: inverse, middle, center
 
 ## Example:
 
-- To introduce notation we will start with a problem.
+- To introduce notation, we will start with a problem.
 
 --
 
-- **Problem:** We want to know if people that smoke have lower lung capacity in 
-comparison with people that do not smoke.
+- **Problem:** We want to know if people who smoke have lower lung capacity than 
+people who don't smoke.
 
 --
 
-- We have a variable that we are interested in, which is lung capacity as 
-measured by some standard test.
+- We have a variable that we are interested in: lung capacity. Let's assume it's
+measured with some standard test.
 
 --
 
@@ -185,7 +184,7 @@ measured by some standard test.
 --
 
 - We call the first one a **dependent** variable, because we want to see how it 
-"depends" on the values of another.
+"depends" on the values of other variables.
 
 --
 
@@ -195,7 +194,7 @@ variable.
 
 --
 
-- In other words, we want to know if lung capacity is a function of smoking 
+- In other words, we want to determine if lung capacity is a function of smoking 
 status.
 
 ---
@@ -220,7 +219,7 @@ DT::datatable(data = smokers,
 
 --
 
-- We will denote values of our dependent variables using $y$ for example, the 
+- We will denote specific values of our dependent variables using $y_{ij}$. For example, the 
 first observation of our first group (non-smokers) is denoted as $y_{11}$ while 
 the fourth observation of the same group is denoted $y_{41}$
 
