@@ -1,0 +1,218 @@
+---
+title: "Lecture 5"
+subtitle: "The Effects Model"
+author: "Psych 10 C"
+institute: "University of California, Irvine"
+date: "04/08/2022"
+output:
+  xaringan::moon_reader:
+    self_contained: true
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+```
+
+```{r xaringan-extra, echo = FALSE}
+xaringanExtra::use_tile_view()
+
+xaringanExtra::use_fit_screen()
+
+xaringanExtra::use_editable(expires = 1)
+
+xaringanExtra::use_extra_styles(
+  hover_code_line = TRUE,         #<<
+  mute_unhighlighted_code = TRUE  #<<
+)
+
+htmltools::tagList(
+  xaringanExtra::use_clipboard(
+    button_text = "<i class=\"fa fa-clipboard\"></i>",
+    success_text = "<i class=\"fa fa-check\" style=\"color: #90BE6D\"></i>",
+    error_text = "<i class=\"fa fa-times-circle\" style=\"color: #F94144\"></i>"
+  ),
+  rmarkdown::html_dependency_font_awesome()
+)
+```
+
+```{r load-tidy, echo = FALSE, message = FALSE, warning = FALSE}
+library(tidyverse)
+
+library(flipbookr)
+
+knitr::opts_chunk$set(fig.width = 6, message = FALSE, 
+                      warning = FALSE, comment = "", 
+                      cache = F)
+link <- "https://raw.githubusercontent.com/ManuelVU/psych-10c-data/main/example-smoke.csv"
+smokers <- read_csv(file = link)
+```
+
+## Null Model
+
+- Last class we used mathematical notation and the normal distribution to 
+represent what we called the **Null Model**
+
+--
+
+- This model assumed that all $i = 1,\dots, 4$ observed participants of the 
+$j=1,2$ groups where samples from the same distribution.
+
+--
+
+- In other words, it formalizes our verbal hypothesis that there are no 
+differences between groups.
+
+--
+
+- The **Null Model** is defined as: $$y_{ij} \sim \text{Normal}(\mu, \sigma^2)$$
+
+--
+
+- Finally, we said that given that we don't know the values of our parameters
+$\mu$ and $\sigma^2$ which completely define the Normal distribution, we needed
+to infer (learn) them from our observations.
+
+--
+
+- This is called **Statistical Inference**, but how can we actually get those 
+numbers?
+
+---
+
+## Statistical Inference for the Normal distribution
+
+- One of the key advantages of the Normal distribution is that its parameters 
+are directly associated with the expectation and the variance of a random 
+variable.
+
+--
+
+- Our model assumes that our observations are random variables that follow a 
+Normal distribution with parameters $\mu$ and $\sigma^2$.
+
+--
+
+- If a random variable $y$ follows a Normal distribution with parameters $\mu$ 
+and $\sigma^2$, then we know that the following two statements are **TRUE**:
+$$\mathbb{E}(y) = \mu$$ and $$\mathbb{V}ar(y) = \sigma^2$$
+
+--
+
+- Remember that we already have a very good approximation to both $\mathbb{E}(y)$
+and to the $\mathbb{V}ar(y)$!
+
+---
+
+class: inverse, middle, center
+
+# Estimators
+
+---
+
+## Estimators
+
+- In week 1 we talked about statistics as functions of our observations.
+
+--
+
+- A statistic that is used to approximate the parameter (like $\mu$) in a 
+statistical model is called an **estimator**.
+
+--
+
+- Given that we know that our best statistic for the expected value of a r.v. is
+the mean or average of our observations, we can use it as an **estimator** for 
+$\mu$.
+
+--
+
+- We denote those estimators by adding a "hat" on top of the Greek character: 
+$$\hat{\mu}_0 = \frac{1}{n} \sum_{i} \sum_{j} y_{ij}$$
+
+--
+
+- Here, $n$ represents the total number of observations that we added to 
+calculate the mean, and the indices $i$ and $j$ denote the observation number 
+and the group respectively.
+
+---
+
+## Variance estimator
+
+- We also had a good approximation for the variance of a random variable in the 
+sample variance $s^2$, however, we will write it slightly different this time 
+to make other models easy to understand.
+
+--
+
+- Our estimator for the variance will be denoted as: 
+$$\hat{\sigma}^2_0 = \frac{1}{n} \sum_i \sum_j \left(y_{ij}-\hat{\mu}\right)^2$$
+
+--
+
+- If you look at your previous notes, you will see that we replaced the value 
+of the mean $\bar{y}$ with our **estimator** $\hat{\mu}$ and that we changed 
+from $s^2$ to $\hat{\sigma}_0^2$.
+
+--
+
+- This is because "0" indicates that this is an estimator for the variance of 
+the **Null Model**. 
+
+---
+
+## The Null Model
+
+- Together, we refer to our new estimators $\hat{\mu}$ and $\hat{\sigma}_0^2$
+as:
+
+--
+
+  1. Model Prediction: $\hat{\mu}$
+  
+--
+
+  1. Mean Squared Error: $\hat{\sigma}_0^2$
+  
+--
+
+- When using this type of statistical models (like we will most of this class) 
+we will also be interested on the Sum of Squared Errors, which is denoted as: 
+$$SSE_0 = \sum_i \sum_j \left(y_{ij}-\hat{\mu}\right)^2$$
+
+--
+
+- Again we have added as "0" to make it clear that this is the Sum of Squared 
+Errors associated to the **Null Model**.
+
+---
+
+- Form teams of 3 and calculate the model prediction, the sum of squared errors 
+and the mean squared error of the **Null Model** for the smokers data:
+
+```{r show-data, echo = FALSE}
+DT::datatable(data = smokers,
+  fillContainer = FALSE, options = list(pageLength = 8))
+```
+
+---
+
+## Smokers data: Null Model
+
+.can-edit.key-likes[
+- Prediction: 
+]
+
+.can-edit.key-likes[
+- SSE: 
+]
+
+.can-edit.key-likes[
+- mean Squared Error: 
+]
+
