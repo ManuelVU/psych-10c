@@ -132,7 +132,7 @@ $\mu$.
 --
 
 - We denote those estimators by adding a "hat" on top of the Greek character: 
-$$\hat{\mu} = \frac{1}{n} \sum_{i} \sum_{j} y_{ij}$$
+$$\hat{\mu} = \frac{1}{n} \sum_{j} \sum_{i} y_{ij}$$
 
 --
 
@@ -151,7 +151,7 @@ to make other models easy to understand.
 --
 
 - Our estimator for the variance will be denoted as: 
-$$\hat{\sigma}^2_0 = \frac{1}{n} \sum_i \sum_j \left(y_{ij}-\hat{\mu}\right)^2$$
+$$\hat{\sigma}^2_0 = \frac{1}{n} \sum_j \sum_i \left(y_{ij}-\hat{\mu}\right)^2$$
 
 --
 
@@ -183,7 +183,7 @@ as:
 
 - When using this type of statistical models (like we will most of this class) 
 we will also be interested on the Sum of Squared Errors, which is denoted as: 
-$$SSE_0 = \sum_i \sum_j \left(y_{ij}-\hat{\mu}\right)^2$$
+$$SSE_0 = \sum_j \sum_i \left(y_{ij}-\hat{\mu}\right)^2$$
 
 --
 

@@ -1,0 +1,230 @@
+---
+title: "Lecture 6"
+subtitle: "Model Evaluation"
+author: "Psych 10 C"
+institute: "University of California, Irvine"
+date: "04/11/2022"
+output:
+  xaringan::moon_reader:
+    self_contained: true
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+```
+
+```{r xaringan-extra, echo = FALSE}
+xaringanExtra::use_tile_view()
+
+xaringanExtra::use_fit_screen()
+
+xaringanExtra::use_editable(expires = 1)
+
+xaringanExtra::use_extra_styles(
+  hover_code_line = TRUE,         #<<
+  mute_unhighlighted_code = TRUE  #<<
+)
+
+htmltools::tagList(
+  xaringanExtra::use_clipboard(
+    button_text = "<i class=\"fa fa-clipboard\"></i>",
+    success_text = "<i class=\"fa fa-check\" style=\"color: #90BE6D\"></i>",
+    error_text = "<i class=\"fa fa-times-circle\" style=\"color: #F94144\"></i>"
+  ),
+  rmarkdown::html_dependency_font_awesome()
+)
+```
+
+```{r load-tidy, echo = FALSE, message = FALSE, warning = FALSE}
+library(tidyverse)
+
+library(flipbookr)
+
+knitr::opts_chunk$set(fig.width = 6, message = FALSE, 
+                      warning = FALSE, comment = "", 
+                      cache = F)
+link <- "https://raw.githubusercontent.com/ManuelVU/psych-10c-data/main/example-smoke.csv"
+smokers <- read_csv(file = link)
+```
+
+## Summary
+
+- Last week we started with two different hypotheses about the relation between
+lung capacity and smoking status.
+
+--
+
+- The Null model stated that there where no differences in lung capacity as a 
+function of smoking status, and the model was formalized as:
+$$y_{ij}\sim\text{Normal}(\mu,\sigma^2)$$
+
+--
+
+- We found two estimators for the parameters in the mode, $\hat{\mu}$ which is 
+the average of the participants lung capacity regardless of smoking status.
+
+--
+
+- And $\hat{\sigma}^2_0$ which is the error or variability of our observations 
+when we use $\hat{\mu}$ as a prediction for our data.
+
+--
+
+- Finally we said that we would be interested on the Sum of Squared Error of the
+Null model which is defined as: 
+$$SSE_0 = \sum_j \sum_i \left(y_{ij}-\hat{\mu}\right)^2$$
+
+---
+
+## Summary
+
+- On the other hand we have the Effects Model which assumes that there is a 
+difference in lung capacity as a function of smoking status. This model is 
+formalized as:
+
+--
+
+$$y_{ij}\sim\text{Normal}(\mu_j,\sigma_e^2)$$
+
+--
+
+- The estimator of our parameter $\mu_j$ (one for each group $\hat{\mu}_j$) was 
+equal to the average of each group (taken independently).  
+
+--
+
+- The estimator for $\sigma_e^2$ was equal to the error of the model, which is 
+the average squared difference between each observation and the model's 
+prediction for that observation $\hat{\mu}_j$.
+
+--
+
+- Finally, we mention that we will also be interested in the Sum of Squared 
+Errors of the Effects Model, which is defined as:
+$$SSE_e = \sum_j \sum_i \left(y_{ij}-\hat{\mu}_j\right)^2$$
+
+---
+
+## Adding predictions
+
+- The firs thing that we want to do is add our predictions and the 
+squared error of each observation to our data.
+
+--
+
+```{r predictions}
+# total sample size
+n_total <- nrow(smokers)
+# get the predictions of effects model (\hat{\mu}_j)
+eff_pred <- smokers %>% 
+  group_by(smoke_status) %>% 
+  summarise("prediction" = mean(lung_capacity))
+# add predictions to data
+smokers <- smokers %>% 
+  mutate("pred_null" = rep(x = mean(lung_capacity), times = n_total),
+         "pred_eff" = ifelse(test = smoke_status == "smoker",
+                             yes = eff_pred$prediction[2], 
+                             no = eff_pred$prediction[1]))
+```
+
+---
+
+## Adding errors
+
+- Now to add the squared errors we can use the difference between prediction and
+observation squared:
+
+```{r add-error}
+smokers <- smokers %>% 
+  mutate("error_null" = (lung_capacity - pred_null)^2,
+         "error_eff" = (lung_capacity - pred_eff)^2)
+```
+
+--
+
+- Now our data file has the relevant variables for each observation:
+
+```{r show-data, echo = FALSE}
+DT::datatable(data = round(smokers[,c(2,4,5,6,7)],2),
+  fillContainer = FALSE, options = list(pageLength = 4),)
+```
+
+---
+
+## Sum of Squared Errors
+
+- Using the updated table it's easy to get the values of the SSE and the 
+estimators $\hat{\sigma}_0^2$ and $\hat{\sigma}_e^2$.
+
+```{r sse-msse}
+# the sse of the null model is:
+sse_0 <- sum(smokers$error_null)
+# the sse for the effects model is:
+sse_e <- sum(smokers$error_eff)
+# mean sse null model
+sigma_0 <- 1/n_total * sse_0
+# mean sse effects model
+sigma_e <- 1/n_total * sse_e
+```
+
+--
+
+Their values are:
+
+.pull-left[
+Null Model
+
+$SSE_0$ = `r round(sse_0, 2)`
+
+$\hat{\sigma}_0^2$ = `r round(sigma_0, 2)`
+]
+
+.pull-right[
+Effects Model
+
+$SSE_e$ = `r round(sse_e, 2)`
+
+$\hat{\sigma}_e^2$ = `r round(sigma_e, 2)`
+]
+
+---
+
+class: inverse, center, middle
+
+# Model Evaluation
+
+---
+
+## Model Evaluation
+
+- Now that we have our hypotheses formalized and have estimators for the 
+parameters of each model we can start evaluating our models.
+
+--
+
+- Our intention is to select the model that can best account for the data.
+
+--
+
+- A first approach is to do this visually, we can do so by making a graph
+of our observations and drawing the model's predictions on top. 
+
+--
+
+- However, this time we will use our estimators to replace the theoretical 
+values of our parameters.
+
+--
+
+- This time we will work with a larger sample of smokers and non-smokers, now
+we have data of 70 of each for a total of 140 participants.
+
+
+
+
+
