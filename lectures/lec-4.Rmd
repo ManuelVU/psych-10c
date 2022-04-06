@@ -47,14 +47,8 @@ knitr::opts_chunk$set(fig.width = 6, message = FALSE,
                       warning = FALSE, comment = "", 
                       cache = F)
 
-link <- "https://raw.githubusercontent.com/ManuelVU/psych-10c-data/main/example.csv"
-
-memory <- read_csv(file = link)
-
-memory <- memory %>% 
-  mutate("test_id" = ifelse(test = time_test == 300, 
-                            yes = "test_1", no = "test_2")) %>%
-  filter(test_id == "test_1")
+link <- "https://raw.githubusercontent.com/ManuelVU/psych-10c-data/main/example-smoke.csv"
+smokers <- read_csv(file = link)
 ```
 
 ## Objective in research
@@ -206,12 +200,6 @@ status.
 --
 
 ```{r, echo = FALSE}
-smokers <- tibble("id" = as.character(seq(1,8)),
-  "lung_capacity" = round(x = rnorm(n = 8, 
-                                    mean = rep(x = c(77, 70), each = 4), 
-                                    sd = rep(x = c(2, 3), each = 4)), 
-                          digits = 1),
-  "smoke_status" = rep(c("non_smoker", "smoker"), each = 4))
 DT::datatable(data = smokers,
   fillContainer = FALSE, options = list(pageLength = 4)
 )
