@@ -181,6 +181,12 @@ as:
   
 --
 
+- We call the variance estimator $\hat{\sigma}_0^2$ the Mean Squared Error 
+because it is the average distance (in squared units) between what we expected to
+observe ( $\hat{\mu}$ ) and what we actually observed ( $y_{ij}$ ).
+
+--
+
 - When using this type of statistical models (like we will most of this class) 
 we will also be interested on the Sum of Squared Errors, which is denoted as: 
 $$SSE_0 = \sum_j \sum_i \left(y_{ij}-\hat{\mu}\right)^2$$
