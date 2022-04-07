@@ -60,22 +60,22 @@ lung capacity and smoking status.
 --
 
 - The Null model stated that there where no differences in lung capacity as a 
-function of smoking status, and the model was formalized as:
+function of smoking status, the model was formalized as:
 $$y_{ij}\sim\text{Normal}(\mu,\sigma^2)$$
 
 --
 
-- We found two estimators for the parameters in the mode, $\hat{\mu}$ which is 
+- We found two estimators for the parameters in the model, $\hat{\mu}$ which is 
 the average of the participants lung capacity regardless of smoking status.
 
 --
 
 - And $\hat{\sigma}^2_0$ which is the error or variability of our observations 
-when we use $\hat{\mu}$ as a prediction for our data.
+when we use $\hat{\mu}$ as a prediction of each observation.
 
 --
 
-- Finally we said that we would be interested on the Sum of Squared Error of the
+- Finally we said that we would be interested on the Sum of Squared Errors of the
 Null model which is defined as: 
 $$SSE_0 = \sum_j \sum_i \left(y_{ij}-\hat{\mu}\right)^2$$
 
@@ -83,7 +83,7 @@ $$SSE_0 = \sum_j \sum_i \left(y_{ij}-\hat{\mu}\right)^2$$
 
 ## Summary
 
-- On the other hand we have the Effects Model which assumes that there is a 
+- Our second hypothesis was the Effects Model, which assumes that there is a 
 difference in lung capacity as a function of smoking status. This model is 
 formalized as:
 
@@ -198,31 +198,166 @@ class: inverse, center, middle
 
 # Model Evaluation
 
+## $R^2$ 
+
 ---
 
-## Model Evaluation
+## Model Evaluation: $R^2$
 
-- Now that we have our hypotheses formalized and have estimators for the 
-parameters of each model we can start evaluating our models.
-
---
-
-- Our intention is to select the model that can best account for the data.
+- $R^2$ is a method that allows us to "measure" how good a general model is in 
+comparison to a **nested** model.
 
 --
 
-- A first approach is to do this visually, we can do so by making a graph
-of our observations and drawing the model's predictions on top. 
+- In our problem, the Null model is nested on the Effects model, but what does 
+it mean for a model to be nested?
 
 --
 
-- However, this time we will use our estimators to replace the theoretical 
-values of our parameters.
+- We say that one model is nested on another when the values that the parameters
+of the nested model are a special case of the second.
 
 --
 
-- This time we will work with a larger sample of smokers and non-smokers, now
-we have data of 70 of each for a total of 140 participants.
+- For example, in our effects model there is nothing that makes it impossible 
+for $\mu_1$ to be equal to $\mu_2$, which would be the same as saying that the
+expectation of each group was the same...
+
+--
+
+- But that was the assumption of the **Null Model**!
+
+--
+
+- This means that the Null model is nested in the Effects Model, in other words, 
+the **Null Model** is a special case of the **Effects Model**.
+
+---
+
+## Model Evaluation: $R^2$
+
+- What does it mean for our results for the Null Model to be nested on the 
+Effects Model?
+
+--
+
+- Well this means that, in terms of error or variability, the Effects Model 
+will always have a lower than or equal error than the Null Model.
+
+--
+
+- In other words, the worse that the Effects Model can do is to be equal to the 
+Null Model, everything else will make the Effects Model better.
+
+--
+
+- We can express this new information formally using the following equation:
+$$SSE_0 = SSE_a + SSE_e$$
+
+--
+
+- Where the new variable $SSE_a$ represents the error or variation that is 
+reduced or accounted for when we use the Effects Model In comparison to the 
+Null.
+
+--
+
+- Given that we know that $SSE_e$ will always be **equal or slower** than $SSE_0$
+we can express the error accounted for by the Effects Model as:
+$$SSE_a = SSE_0 - SSE_e$$
+
+---
+
+## Model Evaluation: $R^2$
+
+- $R^2$ can be interpreted as the proportion of error accounted for by the 
+effects model out of the total error.
+
+--
+
+- The total error is the error of the Null model, and the error accounted for is 
+$SSE_a$. Therefore, we can express the proportion of accounted error $(R^2)$ as:
+$$R^2 = \frac{SSE_a}{SSE_0} = \frac{SSE_0 - SSE_e}{SSE_0}$$
+
+--
+
+- By definition we have that: $$0 \leq R^2 \leq 1$$
+
+---
+
+## Model Evaluation: $R^2$
+
+- When $R^2 = 0$ there is no difference in the error (variance) of the models.
+  
+--
+
+- When $R^2 = 1$ it means that the error (variance) of the Effects model is 0 (which will can't happen unless that our observations have no variability).
+
+--
+
+- This means that the closer the value of $R^2$ is to 1 the better the effects 
+model is!
+
+--
+
+- Whenever you see a Journal paper that uses a linear model it is likely that 
+you will encounter a value of $R^2$ defined as the proportion of error accounted
+for by the Effects model (or linear model).
+
+--
+
+- Let's calculate the proportion of error accounted for in our smokers example.
+
+---
+
+## $R^2$: Smokers Experiment
+
+- Using the Sum of Squared Errors that we calculated before we can obtain the 
+proportion of error accounted for by the effects model.
+
+--
+
+- Go back to slide 6 and using the values there calculate the proportion of 
+error accounted for by the effects model in the smokers data set.
+
+--
+
+<br>
+
+.can-edit.key-likes[
+$R^2 =$
+]
+
+---
+
+## $R^2$
+
+- $R^2$ will give us a first look at how the Effects model is doing in a given 
+situation.
+
+--
+
+- However, there is a problem with $R^2$ that can't be avoided... 
+
+--
+
+- Remember that we said that the error (variance) of the Effects model will 
+always be equal or lower than that of the Null model.
+
+--
+
+- This is because using two distributions instead of one gives us more 
+flexibility.
+
+--
+
+- In other words, we can always do better using two normal distributions than usin 
+a single one as in the Null model.
+
+--
+
+- 
+
 
 
 
