@@ -54,18 +54,18 @@ smokers <- read_csv(file = link)
 
 ## Null Model
 
-- Last class we used mathematical notation and the normal distribution to 
+- Last class we used mathematical notation and the Normal distribution to 
 represent what we called the **Null Model**
 
 --
 
-- This model assumed that all $i = 1,\dots, 4$ observed participants of the 
-$j=1,2$ groups where samples from the same distribution.
+- The Null model assumed that observations from every participant $i=1,\dots,I$ 
+are sampled from the same distribution, regardless of their group $j=1,2$.
 
 --
 
-- In other words, it formalizes our verbal hypothesis that there are no 
-differences between groups.
+- The Null model formalized an initial verbal hypothesis: that there are **no 
+differences between groups**.
 
 --
 
@@ -73,27 +73,25 @@ differences between groups.
 
 --
 
-- Finally, we said that given that we don't know the values of our parameters
-$\mu$ and $\sigma^2$ which completely define the Normal distribution, we needed
-to infer (learn) them from our observations.
+- Finally, we said that since we don't know the values of the parameters $\mu$ 
+and $\sigma^2$ that fully define the Normal distribution, we needed to infer 
+(learn) them from our observations.
 
 --
 
-- This is called **Statistical Inference**, but how can we actually get those 
-numbers?
+- This can be done through a process called **Statistical Inference**.
 
 ---
 
 ## Statistical Inference for the Normal distribution
 
 - One of the key advantages of the Normal distribution is that its parameters 
-are directly associated with the expectation and the variance of a random 
-variable.
+can be tracked directly to the Expectation and Variance of the random variable.
 
 --
 
-- Our model assumes that our observations are random variables that follow a 
-Normal distribution with parameters $\mu$ and $\sigma^2$.
+- In other words, the Null model assumes that our observations are random 
+variables that follow a Normal distribution with parameters $\mu$ and $\sigma^2$.
 
 --
 
@@ -103,7 +101,7 @@ $$\mathbb{E}(y) = \mu$$ and $$\mathbb{V}ar(y) = \sigma^2$$
 
 --
 
-- Remember that we already have a very good approximation to both $\mathbb{E}(y)$
+- Remember that we already have a very good approximation for both $\mathbb{E}(y)$
 and to the $\mathbb{V}ar(y)$!
 
 ---
@@ -116,37 +114,38 @@ class: inverse, middle, center
 
 ## Estimators
 
-- In week 1 we talked about statistics as functions of our observations.
+- In Week 1 we talked about statistics as functions of our observations.
 
 --
 
-- A statistic that is used to approximate the parameter (like $\mu$) in a 
-statistical model is called an **estimator**.
+- When a statistic is used to approximate a parameter (e.g. $\mu$) in a 
+statistical model, it is called an **estimator**.
 
 --
 
-- Given that we know that our best statistic for the expected value of a r.v. is
-the mean or average of our observations, we can use it as an **estimator** for 
-$\mu$.
+- Since we know that our best statistic for the expected value of a r.v. is
+the mean (i.e. the average of our observations), we can use it as an 
+**estimator** for $\mu$.
 
 --
 
-- We denote those estimators by adding a "hat" on top of the Greek character: 
+- We represent these estimators by adding a "hat" on top of the Greek character
+corresponding to the parameter they estimate: 
 $$\hat{\mu} = \frac{1}{n} \sum_{j} \sum_{i} y_{ij}$$
 
 --
 
-- Here, $n$ represents the total number of observations that we added to 
-calculate the mean, and the indices $i$ and $j$ denote the observation number 
-and the group respectively.
+- Here, $n$ represents the total number of observations that we add together to 
+calculate the mean, while the indices $i$ and $j$ denote the observation number 
+and the group, respectively.
 
 ---
 
 ## Variance estimator
 
-- We also had a good approximation for the variance of a random variable in the 
-sample variance $s^2$, however, we will write it slightly different this time 
-to make other models easy to understand.
+- We also said that a good approximation for the variance of a r.v. is the 
+sample variance $s^2$. However, this time we will write it slightly different
+to make other models easier to understand.
 
 --
 
@@ -155,51 +154,53 @@ $$\hat{\sigma}^2_0 = \frac{1}{n} \sum_j \sum_i \left(y_{ij}-\hat{\mu}\right)^2$$
 
 --
 
-- If you look at your previous notes, you will see that we replaced the value 
-of the mean $\bar{y}$ with our **estimator** $\hat{\mu}$ and that we changed 
-from $s^2$ to $\hat{\sigma}_0^2$.
+- If you look at your previous notes, you will see that we replaced the sample 
+mean $\bar{y}$ with our **estimator** $\hat{\mu}$, and that now we refer to it 
+as $\hat{\sigma}_0^2$ rather than $s^2$.
 
 --
 
-- This is because "0" indicates that this is an estimator for the variance of 
+- The subscript "0" indicates that this estimator corresponds to the variance of 
 the **Null Model**. 
 
 ---
 
 ## The Null Model
 
-- Together, we refer to our new estimators $\hat{\mu}$ and $\hat{\sigma}_0^2$
-as:
+- In the case of our Null model, we can use our new estimators $\hat{\mu}$ 
+and $\hat{\sigma}_0^2$ to refer to:
 
 --
 
-  1. Model Prediction: $\hat{\mu}$
+  1. The Model Prediction: $\hat{\mu}$
   
 --
 
-  1. Mean Squared Error: $\hat{\sigma}_0^2$
+  1. The Mean Squared Error: $\hat{\sigma}_0^2$
   
 --
 
-- We call the variance estimator $\hat{\sigma}_0^2$ the Mean Squared Error 
-because it is the average distance (in squared units) between what we expected to
-observe ( $\hat{\mu}$ ) and what we actually observed ( $y_{ij}$ ).
+- The variance estimator $\hat{\sigma}_0^2$ is referred to as the Mean Squared 
+Error because it captures the average distance (in squared units) between what 
+we expect to observe ( $\hat{\mu}$ ) and what we actually observed ( $y_{ij}$ ).
 
 --
 
-- When using this type of statistical models (like we will most of this class) 
-we will also be interested on the Sum of Squared Errors, which is denoted as: 
+- When using this type of statistical models (as we'll do for most of this 
+class), we will also be interested on the Sum of Squared Errors, which is 
+denoted as: 
 $$SSE_0 = \sum_j \sum_i \left(y_{ij}-\hat{\mu}\right)^2$$
 
 --
 
-- Again we added a "0" to make it clear that this is the Sum of Squared 
-Errors associated to the **Null Model**.
+- Again, we add "0" as a subscript to make it clear that this Sum of Squared 
+Errors is associated to the **Null Model**.
 
 ---
 
 - Form teams of 3 and calculate the model prediction, the sum of squared errors 
-and the mean squared error of the **Null Model** for the smokers data:
+and the mean squared error that would correspond to the **Null Model** for the 
+smokers data:
 
 ```{r show-data, echo = FALSE}
 DT::datatable(data = smokers,
@@ -236,30 +237,30 @@ class: inverse, middle, center
 
 --
 
-- Our original problem stated that we wanted to know if there where any 
+- Our original problem stated that we wanted to know if there were any 
 differences in lung capacity between smokers and non-smokers.
 
 --
 
-- Our first model was constructed on the idea that there are no differences 
+- Our first model was constructed from the idea that there are no differences 
 between groups.
 
 --
 
-- We will call the model that assumes that groups are different the 
+- We will call the model that assumes that **groups are different** the 
 **Effects Model**.
 
 ---
 
 ## Effects Model
 
-- Following the logic used to formalize the Null Model, we will use our 
-observations notation $y_{ij}$ and the Normal distribution as the statistical 
-model.
+- Following the logic we used to formalize the Null Model, we will keep on using
+our observations' notation $y_{ij}$ and the Normal distribution as the basis for
+this second statistical model.
 
 --
 
-- In mathematical notation the **Effects Model** is: 
+- In mathematical notation, the **Effects Model** would be: 
 $$y_{i1}\sim\text{Normal}(\mu_1,\sigma_e^2)$$ $$y_{i2}\sim\text{Normal}(\mu_2,\sigma_e^2)$$
 
 --
@@ -268,31 +269,31 @@ or $$y_{ij}\sim\text{Normal}(\mu_j,\sigma_e^2)$$
 
 --
 
-- Notice that both statements convey the same information, however, the second 
-one is shorter.
+- Both ways of writing the model convey the same information, but the second 
+one is just shorter.
 
 --
 
 - This new statistical model formalizes the idea that the $i = 1, \dots, 4$ 
-observations on each group $j = 1, 2$ are samples of two different Normal 
-distributions, one centered at $\mu_1$ and the other one centered ar $\mu_2$.
+observations on each group $j = 1, 2$ are sampled from two different Normal 
+distributions, one centered at $\mu_1$ and the other one centered at $\mu_2$.
 
 ---
 
 ## Effects Model
 
-- Another important part to notice on the definition of the model is that we 
-assume that both distributions have the same variance denoted as $\sigma_e^2$.
+- Another important thing to notice from our definition of the model is that we 
+assume that both distributions have the same variance, ($\sigma_e^2$).
 
 --
 
-- This means that our model will assume that the only difference between the 
+- This means that our model assumes that the only difference between the 
 two groups is their expected value and not how much they vary.
 
 --
 
-- This will allow us to use all of our observations to calculate a single error
-estimate of the model.
+- We can now use all of our observations to calculate a single error estimate 
+for this model.
 
 --
 
@@ -300,36 +301,37 @@ estimate of the model.
 
 --
 
-- The difference between $\mu_2$ and $\mu_1$ can be interpreted as the effect
-on our random variable that comes from being in group 2 in comparison to being 
-in group 1.
+- The difference between $\mu_1$ and $\mu_2$ is interpreted as the group-effect. 
+In other words, the effect on our random variable that comes from being a member 
+of either group 1 or group 2.
 
 --
 
-- In our smoking example, the difference between $\mu_2$ and $\mu_1$ can be 
-interpreted as the effect that smoking has on lung capacity.
+- In our smoking example, the difference between $\mu_2$ and $\mu_1$ would 
+capture the effect that smoking has on lung capacity.
 
 --
 
-- In other words, how much do we *expect* lung capacity to change if a person 
-smokes in comparison to a person that does not.
+- How much do we *expect* lung capacity to differ between a person that smokes 
+and a person that does not smoke.
 
 ---
 
 # Graphical Representation Effects Model
 
-- As we did with the Null Model, we can also represents the effects model 
+- As we did with the Null Model, we can also represents the Effects model 
 graphically.
 
 --
 
-- Notice that we still don't have values for our parameters, so we can make a 
-graph that shows that we expect each group to be represented by a 
-different normal distribution with a different mean but same variance.
+- Notice that once again, we don't have values for our parameters, but we can 
+still make a graph that shows that we expect each group to be represented by a 
+different Normal distribution, which differ in their mean but share the same 
+variance.
 
 --
 
-- We can use the following R code to generate that representation:
+- We can use the following R code to generate this visualization:
 
 .pull-left[
 ```{r normal-effect, eval = FALSE}
@@ -354,23 +356,24 @@ legend("topleft", bty = "n", col = c("blue","red"),
 
 ## Graphical Representation
 
-- Notice that in the previous plot we do not have values assigned to the 
+- Notice that in the previous plot we did not assign any specific values to the 
 variable lung capacity.
 
 --
 
-- This is because we only want to show that the model is assuming that the 
-groups are samples from two different normal distributions.
+- This is because at this point we only want to convey the fact that the Effects
+model assumes that observations collected on each group are sampled from their 
+own Normal distribution.
 
 --
 
-- However, we can (and should) formalize our Theories about the world before
-even looking at the data.
+- We can (and should) formalize our theories about the world before even 
+looking at the data.
 
 --
 
-- In other words, we will always have a specification of our models even before 
-running an experiment (so we can't estimate the values of our parameters).
+- In other words, we will always specify our models before even running the 
+experiment (so we can't estimate the values of our parameters).
 
 ---
 
@@ -407,8 +410,8 @@ the number of observations in group $j = 1, 2$
 
 ## Estimators for the Effects Model
 
-- Notice that our estimators for $\mu_1$ and $\mu_2$ are just the mean of our
-observations by group!
+- Notice that our estimators for $\mu_1$ and $\mu_2$ are just the mean of the
+observations collected by group!
 
 --
 
@@ -417,14 +420,14 @@ observation $i = 1, \dots, 4$ of group $j = 1, 2$.
 
 --
 
-- Then we can interpret our estimator for $\hat{\sigma}_e^2$ as the average 
-error in the predictions of the model. In other words, how far on average are 
-our observations from our best prediction $\hat{\mu}_j$ of the group.
+- Similarly, we can interpret our estimator for $\hat{\sigma}_e^2$ as the 
+average error in the predictions of the model. In other words, how far on 
+average are our observations from the prediction $\hat{\mu}_j$ made by group.
 
 --
 
-- As we did with the null model, we will be interested again in the total error
-of the model, also known as the Sum of Squared Error of the **Effects Model**.
+- As with the Null model, we are now interested in calculating the total error
+of the model: the Sum of Squared Error of the **Effects Model**.
 
 --
 
