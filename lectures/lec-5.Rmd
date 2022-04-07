@@ -86,12 +86,13 @@ and $\sigma^2$ that fully define the Normal distribution, we needed to infer
 ## Statistical Inference for the Normal distribution
 
 - One of the key advantages of the Normal distribution is that its parameters 
-can be tracked directly to the Expectation and Variance of the random variable.
+can be directly tied back to the Expectation and Variance of the random variable.
 
 --
 
 - In other words, the Null model assumes that our observations are random 
-variables that follow a Normal distribution with parameters $\mu$ and $\sigma^2$.
+variables that follow a Normal distribution with expected value $\mu$ and 
+and variance $\sigma^2$.
 
 --
 
@@ -220,7 +221,7 @@ DT::datatable(data = smokers,
 ]
 
 .can-edit.key-likes[
-- mean Squared Error: 
+- Mean Squared Error: 
 ]
 
 ---
@@ -233,7 +234,7 @@ class: inverse, middle, center
 
 ## Effects Model
 
-- Now we will formalize our second model.
+- Now we will formalize our second hypothesis.
 
 --
 
@@ -276,14 +277,14 @@ one is just shorter.
 
 - This new statistical model formalizes the idea that the $i = 1, \dots, 4$ 
 observations on each group $j = 1, 2$ are sampled from two different Normal 
-distributions, one centered at $\mu_1$ and the other one centered at $\mu_2$.
+distributions, one centered at $\mu_1$ and the other one at $\mu_2$.
 
 ---
 
 ## Effects Model
 
 - Another important thing to notice from our definition of the model is that we 
-assume that both distributions have the same variance, ($\sigma_e^2$).
+assume that both distributions have the same variance $\sigma_e^2$.
 
 --
 
@@ -302,8 +303,8 @@ for this model.
 --
 
 - The difference between $\mu_1$ and $\mu_2$ is interpreted as the group-effect. 
-In other words, the effect on our random variable that comes from being a member 
-of either group 1 or group 2.
+In other words, the difference on our random variable that comes from being a 
+member of either group 1 or group 2.
 
 --
 
@@ -391,11 +392,11 @@ hat.
 
 --
 
-$$\hat{\mu_1} = \frac{1}{n_1} \sum_i y_{i1}$$ 
+$$\hat{\mu}_1 = \frac{1}{n_1} \sum_i y_{i1}$$ 
 
 --
 
-$$\hat{\mu_2} = \frac{1}{n_2} \sum_i y_{i2}$$
+$$\hat{\mu}_2 = \frac{1}{n_2} \sum_i y_{i2}$$
 
 --
 
@@ -450,7 +451,9 @@ DT::datatable(data = smokers,
 ## Smokers data: Effects Model
 
 .can-edit.key-likes[
-- Prediction: 
+- Prediction:
+  - non-smokers =
+  - smokers =
 ]
 
 .can-edit.key-likes[
@@ -458,7 +461,7 @@ DT::datatable(data = smokers,
 ]
 
 .can-edit.key-likes[
-- mean Squared Error: 
+- Mean Squared Error: 
 ]
 
 
