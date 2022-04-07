@@ -38,12 +38,7 @@ and groups.
 # to load the data for section 1.
 ```
 
-1. Write the Model 1 (**no differences between groups**) in mathematical
-notation
-
-**ANS:** [WRITE YOUR ANSWER HERE]
-
-2. Make a density graph of Model 1 (**no differences between groups**). Remember 
+1. Make a density graph of Model 1 (**no differences between groups**). Remember 
 that at this point, the actual values of x don't matter. We are
 interested in **what the model expects the data to look like**. Do it with a 
 variance equal to 3.
@@ -56,9 +51,9 @@ variance equal to 3.
 # just want to visualize what the model expects the data to look like.
 ```
 
-3. Test Model 1 by adding the required calculations as a new variable 
-(column) to the data set (remember to give this new variable a name!). What are 
-the predictions that you need to test for the first model?
+2. Obtain the predictions of Model 1 add the required values as a 
+new variable (column) to the data set (remember to give this new variable a 
+name!). What are the values of IQ predicted by Model 1 for each group?
 
 ```{r pred-m1-s1, echo = TRUE}
 # Code 3: Testing the predictions made by Model 1
@@ -70,7 +65,7 @@ the predictions that you need to test for the first model?
 
 **ANS:** [WRITE YOUR ANSWER HERE]
 
-4. Calculate the squared error (SE) of each observation under Model 1 by adding
+3. Calculate the squared error (SE) of each observation under Model 1 by adding
 a new column to our data set. What is the mean Sum of Squared Errors 
 (m-SSE) of the "no group differences" model (model 1)?
 
@@ -82,7 +77,7 @@ a new column to our data set. What is the mean Sum of Squared Errors
 # to calculate the mean sum of squared errors of the "no differences" model.
 ```
 
-5. What is the value of the Bayesian Information Criterion (BIC) for Model 1?
+4. What is the value of the Bayesian Information Criterion (BIC) for Model 1?
 
 ```{r bic-m1-s1, echo = TRUE}
 # Code 5: Calculate the BIC for Model 1
@@ -94,11 +89,7 @@ a new column to our data set. What is the mean Sum of Squared Errors
 
 **ANS:** [WRITE YOUR ANSWER HERE]
 
-6. Write Model 2 (**groups are different**) in mathematical notation.
-
-**ANS:** [WRITE YOUR ANSWER HERE]
-
-7. Make a density graph of Model 2 (**coffee group is better**). Remember that 
+5. Make a density graph of Model 2 (**coffee group is better**). Remember that 
 the actual values of x don't matter. Right now, we only want to visualize
 what the model expects the data to look like. Assume that the model variance 
 is equal to 3.
@@ -111,9 +102,9 @@ is equal to 3.
 # are looking at is what the model expects the data to look like.
 ```
 
-8. Test Model 2 by adding the required calculations as a new variable 
+6. Obtain the predictions of Model 2 add the required values as a new variable 
 (column) to the data set (remember to give this new variable a DIFFERENT name!). 
-What are the predictions that you need to test for this second model?
+What are the values of IQ predicted by Model 2 for each group?
 
 ```{r pred-m2-s1, echo = TRUE}
 # Code 7: Testing the predictions made by Model 2
@@ -125,7 +116,7 @@ What are the predictions that you need to test for this second model?
 
 **ANS:** [WRITE YOUR ANSWER HERE]
 
-9. Calculate the squared error (SE) for each observation under Model 2 by adding
+7. Calculate the squared error (SE) for each observation under Model 2 by adding
 a new column to the data set (again, watch out the names you give to the new 
 column!). What is the mean Sum of Squared Errors (m-SSE) of this "group 
 differences" model (Model 2)?
@@ -140,7 +131,7 @@ differences" model (Model 2)?
 
 **ANS:** [WRITE YOUR ANSWER HERE]
 
-10. What is the value of the Bayesian Information Criterion (BIC) for Model 2?
+8. What is the value of the Bayesian Information Criterion (BIC) for Model 2?
 
 ```{r bic-m2-s1, echo = TRUE}
 # Code 9: Calculate the BIC for Model 1
@@ -152,11 +143,11 @@ differences" model (Model 2)?
 
 **ANS:** [WRITE YOUR ANSWER HERE]
 
-11. Which of the two models would you select and why?
+9. Which of the two models would you select and why?
 
 **ANS:** [WRITE YOUR ANSWER HERE]
 
-12. What does the Model that you selected tell us about our research question?
+10. What does the Model that you selected tell us about our research question?
 
 **ANS:** [WRITE YOUR ANSWER HERE]
 
@@ -192,11 +183,7 @@ the second time (after participants have undergone the training).
 # chunks BEFORE submitting your homework.
 ```
 
-13. Write Model 1 (**no improvement**) in mathematical notation.
-
-**ANS:** [WRITE YOUR ANSWER HERE]
-
-14. Make a density graph for Model 1 (**no improvement**). To make the plot, 
+11. Make a density graph for Model 1 (**no improvement**). To make the plot, 
 assume that the model variance is equal to 2.
 
 ```{r density-m1-s2, echo = TRUE, fig.align = 'center'}
@@ -206,8 +193,8 @@ assume that the model variance is equal to 2.
 # for model 1.
 ```
 
-15. What are the predictions made by Model 1 (**no improvement**)? Again, make 
-sure to test them by adding the corresponding variable (column) to our data base.
+12. What are the predictions made by Model 1 (**no improvement**)? Again, make 
+sure to add the corresponding values as a new variable (column) to our data base.
 
 ```{r pred-m1-s2, echo = TRUE}
 # Code 12: Testing the predictions made by Model 1
@@ -219,7 +206,7 @@ sure to test them by adding the corresponding variable (column) to our data base
 
 **ANS:** [WRITE YOUR ANSWER HERE]
 
-16. Calculate the squared error (SE) of each observation for Model 1 and
+13. Calculate the squared error (SE) of each observation for Model 1 and
 add them to the data set as a new variable. What is the mean Sum of Squared 
 Errors (m-SSE) of the "no improvement" model (Model 1)?
 
@@ -232,7 +219,7 @@ Errors (m-SSE) of the "no improvement" model (Model 1)?
 ```
 **ANS:** [WRITE YOUR ANSWER HERE]
 
-17. What is the value of the Bayesian Information Criterion for Model 1?
+14. What is the value of the Bayesian Information Criterion for Model 1?
 
 ```{r bic-m1-s2, echo = TRUE}
 # Code 14: Calculating the BIC for Model 1
@@ -244,11 +231,7 @@ Errors (m-SSE) of the "no improvement" model (Model 1)?
 
 **ANS:** [WRITE YOUR ANSWER HERE]
 
-18. Write Model 2 (**improvement**) in mathematical notation.
-
-**ANS:** [WRITE YOUR ANSWER HERE]
-
-19. Make a density graph for Model 2 (**improvement**). Remember that at 
+15. Make a density graph for Model 2 (**improvement**). Remember that at 
 this point, the units (values of x) don't matter. We are only interested in what 
 the model expects the data to look like.
 
@@ -260,9 +243,9 @@ the model expects the data to look like.
 # look at is what the model expects the data to look like.
 ```
 
-20. Calculate the predictions of the second model and add them as a new variable 
+16. Obtain the predictions of the second model and add them as a new variable 
 (column) to the data set (remember to give the variable a DIFFERENT name!). What 
-are the predictions of the second model?
+are the predictions of Model 2?
 
 ```{r pred-m2-s2, echo = TRUE}
 # Code 16: Testing the predictions of Model 2
@@ -274,7 +257,7 @@ are the predictions of the second model?
 
 **ANS:** [WRITE YOUR ANSWER HERE]
 
-21. Calculate the squared error (SE) of each observation for the second model 
+17. Calculate the squared error (SE) of each observation for the second model 
 and add them to the data set as a new variable. What is the mean Sum of Squared 
 Errors (m-SSE) of the "improvement" model (model 2)?
 
@@ -288,7 +271,7 @@ Errors (m-SSE) of the "improvement" model (model 2)?
 
 **ANS:** [WRITE YOUR ANSWER HERE]
 
-22. What is the value of the Bayesian Information Criterion for model 2?
+18. What is the value of the Bayesian Information Criterion for model 2?
 
 ```{r bic-m2-s2, echo = TRUE}
 # Code 18: Calculating the BIC for Model 2
@@ -300,12 +283,12 @@ Errors (m-SSE) of the "improvement" model (model 2)?
 
 **ANS:** [WRITE YOUR ANSWER HERE]
 
-23. Which of the two models would you select and why?
+19. Which of the two models would you select and why?
 
 **ANS:** [WRITE YOUR ANSWER HERE]
 
 
-24. What does the Model that you selected tell us about our research question?
+20. What does the Model that you selected tell us about our research question?
 
 **ANS:** [WRITE YOUR ANSWER HERE]
 
