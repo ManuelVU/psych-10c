@@ -70,8 +70,8 @@ the average of the participants lung capacity regardless of smoking status.
 
 --
 
-- And $\hat{\sigma}^2_0$ which is the error or variability of our observations 
-when we use $\hat{\mu}$ as a prediction of each observation.
+- And $\hat{\sigma}^2_0$ which is the average error or variability of our 
+observations when we use $\hat{\mu}$ as a prediction of each observation.
 
 --
 
@@ -120,16 +120,20 @@ squared error of each observation to our data.
 ```{r predictions}
 # total sample size
 n_total <- nrow(smokers)
+# get predictions for the null model 
+null_pred <- smokers %>% 
+  summarise("pred" = mean(lung_capacity)) %>% 
+  pull(pred)
 # get the predictions of effects model (\hat{\mu}_j)
 eff_pred <- smokers %>% 
   group_by(smoke_status) %>% 
   summarise("prediction" = mean(lung_capacity))
 # add predictions to data
 smokers <- smokers %>% 
-  mutate("pred_null" = rep(x = mean(lung_capacity), times = n_total),
-         "pred_eff" = ifelse(test = smoke_status == "smoker",
-                             yes = eff_pred$prediction[2], 
-                             no = eff_pred$prediction[1]))
+  mutate("pred_null" = rep(x = null_pred, times = n_total),
+         "pred_eff" = ifelse(test = smoke_status == "non_smoker",
+                             yes = eff_pred$prediction[1], 
+                             no = eff_pred$prediction[2]))
 ```
 
 ---
@@ -524,7 +528,7 @@ $$BIC_0 = 8\ ln \left(31.54\right)\ +\ ln\left(8 \right) = 29.69$$
 --
 
 - For the Effects model the BIC was equal to:
-$$BIC_0 = 8\ ln \left(5.79\right)\ +\ 2\ ln\left(8 \right) = 18.20$$
+$$BIC_e = 8\ ln \left(5.79\right)\ +\ 2\ ln\left(8 \right) = 18.20$$
 
 --
 
