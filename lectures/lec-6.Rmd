@@ -136,8 +136,8 @@ smokers <- smokers %>%
 
 ## Adding errors
 
-- Now to add the squared errors we can use the difference between prediction and
-observation squared:
+- Now to add the squared errors we can use the difference between observation and
+prediction and square it:
 
 ```{r add-error}
 smokers <- smokers %>% 
@@ -214,14 +214,14 @@ it mean for a model to be nested?
 
 --
 
-- We say that one model is nested on another when the values that the parameters
-of the nested model are a special case of the second.
+- We say that one model is nested on another when the values of the parameters
+of the **nested** model are a special case of the **general** model.
 
 --
 
 - For example, in our effects model there is nothing that makes it impossible 
 for $\mu_1$ to be equal to $\mu_2$, which would be the same as saying that the
-expectation of each group was the same...
+expectation of each group are the same...
 
 --
 
@@ -229,41 +229,41 @@ expectation of each group was the same...
 
 --
 
-- This means that the Null model is nested in the Effects Model, in other words, 
-the **Null Model** is a special case of the **Effects Model**.
+- This means that the Null model is nested in the Effects model, in other words, 
+the **Null model** is a special case of the **Effects model**.
 
 ---
 
-## Model Evaluation: $R^2$
+## model Evaluation: $R^2$
 
-- What does it mean for our results for the Null Model to be nested on the 
-Effects Model?
-
---
-
-- Well this means that, in terms of error or variability, the Effects Model 
-will always have a lower than or equal error than the Null Model.
+- What does it mean for our results for the Null model to be nested on the 
+Effects model?
 
 --
 
-- In other words, the worse that the Effects Model can do is to be equal to the 
-Null Model, everything else will make the Effects Model better.
+- Well this means that, in terms of error or variability, the Effects model 
+will always have a lower than or equal error than the Null model.
 
 --
 
-- We can express this new information formally using the following equation:
+- In other words, the worse that the Effects model can do is to be equal to the 
+Null model, everything else will make the Effects model better.
+
+--
+
+- We can express this with the following equation:
 $$SSE_0 = SSE_a + SSE_e$$
 
 --
 
 - Where the new variable $SSE_a$ represents the error or variation that is 
-reduced or accounted for when we use the Effects Model In comparison to the 
+reduced or accounted for when we use the Effects model In comparison to the 
 Null.
 
 --
 
-- Given that we know that $SSE_e$ will always be **equal or slower** than $SSE_0$
-we can express the error accounted for by the Effects Model as:
+- Given that the $SSE_e$ is always **lower or equal** than the $SSE_0$
+we can express the error accounted for by the Effects model as:
 $$SSE_a = SSE_0 - SSE_e$$
 
 ---
@@ -287,11 +287,13 @@ $$R^2 = \frac{SSE_a}{SSE_0} = \frac{SSE_0 - SSE_e}{SSE_0}$$
 
 ## Model Evaluation: $R^2$
 
-- When $R^2 = 0$ there is no difference in the error (variance) of the models.
+- When $R^2 = 0$ there is no difference between the error (variance) of the 
+models.
   
 --
 
-- When $R^2 = 1$ it means that the error (variance) of the Effects model is 0 (which will can't happen unless that our observations have no variability).
+- When $R^2 = 1$ it means that the error (variance) of the Effects model is 0 
+(which can't happen unless that our observations have no variability).
 
 --
 
@@ -317,7 +319,7 @@ proportion of error accounted for by the effects model.
 
 --
 
-- Go back to slide 6 and using the values there calculate the proportion of 
+- Go back to slide 6 and using the values there, calculate the proportion of 
 error accounted for by the effects model in the smokers data set.
 
 --
@@ -351,15 +353,186 @@ flexibility.
 
 --
 
-- In other words, we can always do better using two normal distributions than usin 
+- In other words, we can always do better using two normal distributions than 
 a single one as in the Null model.
+
+---
+
+class: inverse, middle, center
+
+# Model fit and Model complexity
+
+---
+
+## Model fit vs Model complexity
+
+- If the error of the effects model is always lower, do we always want to 
+conclude that the null model is inappropriate?
 
 --
 
-- 
+- This is an **essential** problem for the model comparison approach (and for
+Statistics) in general.
 
+--
 
+- How should we balance the reduction of error (AKA: **Model fit**) and the 
+flexibility of our models or hypothesis (AKA: **Model complexity**).
 
+--
 
+- The concept of **Model fit** is widely used in statistics, intuitively, it 
+refers to any "measure" of the error in the predictions of our models.
 
+--
+
+- For example, the Sum of Squared Errors (both for the null and effects model) 
+can be considered a "measure" of **Model fit**, as it summarizes, in a single 
+number, the amount of error between our observations and the predictions.
+
+---
+
+## SSE as a measure of Model fit
+
+- We know that by definition, the SSE associated to the Null model
+will always be greater than (or equal) to the SSE of the Effects model.
+
+--
+
+- In other words, the Effects model will always **fit** the data better.
+
+--
+
+- However, we know that one of the reasons why this is the case (Effects model 
+fits the data better) is because the model is more flexible.
+
+--
+
+- We refer to this flexibility as **Model complexity**, and in general, we would 
+like to have a way to assign a number to it, similar to how the SSE does with 
+model fit.
+
+--
+
+- If we can assign numbers to both concepts, then we will be able to decide 
+which model is more appropriate taking into account how well the model fits 
+the data (comparing SSE) and how flexible the model is (model complexity).
+
+---
+
+class: inverse, middle, center
+
+# Model Evaluation
+
+## Bayesian Information Criterion (BIC)
+
+---
+
+## Model fit
+
+- The Bayesian Information Criterion is a general approach that allows us to 
+weight a models' fit and its complexity.
+ 
+--
+
+- It uses the natural logarithm of the Mean Squared error ( $\hat{\sigma}_0^2$ 
+and $\hat{\sigma}_e^2$ ) of the Null and Effects model as a measure of fit.
+
+--
+
+$$\text{fit} = n\ ln \left(\hat{\sigma}^2\right)$$
+
+--
+
+- Where $n$ represents the total number of observations.
+
+--
+
+- The use of the natural logarithm is associated with the mathematical approach 
+used to derive the BIC. However, the interpretation is similar.
+
+--
+
+- In other words, if $\hat{\sigma}^2$ increases, so does $ln(\hat{\sigma}^2)$.
+
+--
+
+- So we can interpret the number as "how bad does the model fit the data"
+
+---
+
+## Model complexity
+
+- Model complexity is measured as a function of the number of parameters of a 
+model associated with its predictions.
+
+--
+
+- For example, the Null model uses a single prediction $\hat{\mu}$ so we 
+will count it as only one parameter. 
+
+--
+
+- The Effects model has two predictions, one for each group 
+$\hat{\mu}_1$ and $\hat{\mu}_2$, so we say that it has two parameters.
+
+--
+
+$$\text{complexity} = k\ ln\left(n \right)$$
+
+--
+
+- Where $k$ represents the number of parameters (1 for the Null or 2 for the 
+Effects model) and $n$ is the number of observations (participants).
+
+--
+
+- The value of complexity will increase as the number of parameters increases.
+
+--
+
+- In other words, this function will always give a larger value of complexity
+to the Effects model in comparison to the Null model.
+
+---
+
+## BIC
+
+- The Bayesian Information Criterion (**BIC**) is defined as the sum of the 
+"badness of fit" and the model complexity.
+
+--
+
+$$BIC = \text{fit } + \text{ complexity} = n\ ln \left(\hat{\sigma}^2\right)\ +\ k\ ln\left(n \right)$$
+
+--
+
+- Therefore, the BIC of the Null model is equal to: $$BIC_0 = n\ ln \left(\hat{\sigma}_0^2\right)\ +\ ln\left(n \right)$$
+
+--
+
+- And the BIC of the Effects model is equal to:
+$$BIC_e = n\ ln \left(\hat{\sigma}_e^2\right)\ +\ 2\ ln\left(n \right)$$
+
+---
+
+## Example: Smoking
+
+- In our smoking example, the BIC value for the Null model was:
+$$BIC_0 = 8\ ln \left(31.54\right)\ +\ ln\left(8 \right) = 29.69$$
+
+--
+
+- For the Effects model the BIC was equal to:
+$$BIC_0 = 8\ ln \left(5.79\right)\ +\ 2\ ln\left(8 \right) = 18.20$$
+
+--
+
+- This means that the added flexibility of the Effects model (remember that it 
+uses two normal distributions instead of one), is not enough to offset how much
+it improves our predictions of lung capacity.
+
+--
+
+- In general, we should always choose the model with the lowest **BIC**!
 
