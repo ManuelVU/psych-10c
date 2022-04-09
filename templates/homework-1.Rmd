@@ -4,15 +4,6 @@ author: "Write your name here"
 date: "`r format(Sys.time(), '%d %B, %Y')`"
 output: pdf_document
 ---
-
-```{r prep_tinytex, include=FALSE, eval=FALSE}
-# Run this code chunk to install the 'tinytex' package you'll need 
-# to knit this homework as a PDF (which you can then submit)
-
-install.packages('tinytex')
-tinytex::install_tinytex()
-```
-
 ## Section 1
 
 **Background:** This first data set comes from an experiment designed to test whether  drinking coffee makes people smarter. Participants were divided into two groups. All participants took an IQ test, but participants in **group 1** drank water 5 minutes before the test, while participants in **group 2** drank coffee.

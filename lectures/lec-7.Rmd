@@ -1,0 +1,127 @@
+---
+title: "Lecture 7"
+subtitle: "Paired Samples"
+author: "Psych 10 C"
+institute: "University of California, Irvine"
+date: "04/13/2022"
+output:
+  xaringan::moon_reader:
+    self_contained: true
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+```
+
+```{r xaringan-extra, echo = FALSE}
+xaringanExtra::use_tile_view()
+
+xaringanExtra::use_fit_screen()
+
+xaringanExtra::use_editable(expires = 1)
+
+xaringanExtra::use_extra_styles(
+  hover_code_line = TRUE,         #<<
+  mute_unhighlighted_code = TRUE  #<<
+)
+
+htmltools::tagList(
+  xaringanExtra::use_clipboard(
+    button_text = "<i class=\"fa fa-clipboard\"></i>",
+    success_text = "<i class=\"fa fa-check\" style=\"color: #90BE6D\"></i>",
+    error_text = "<i class=\"fa fa-times-circle\" style=\"color: #F94144\"></i>"
+  ),
+  rmarkdown::html_dependency_font_awesome()
+)
+```
+
+```{r load-tidy, echo = FALSE, message = FALSE, warning = FALSE}
+library(tidyverse)
+
+library(flipbookr)
+
+knitr::opts_chunk$set(fig.width = 6, message = FALSE, 
+                      warning = FALSE, comment = "", 
+                      cache = F)
+link <- "https://raw.githubusercontent.com/ManuelVU/psych-10c-data/main/example-smoke.csv"
+smokers <- read_csv(file = link)
+```
+
+## Paired samples
+
+- Until now we have been working with an experimental design known as
+**between subjects** design.
+
+--
+
+- This means that each participant in our sample can only be included in one 
+group at a time.
+
+--
+
+- For example, in the smokers data, participant can be either on the smokers 
+group or on the non-smokers group but they can't be in two.
+
+--
+
+- We call this a **between subjects** design because the data of one group 
+ of participants is compared with data from a different group of participants
+
+--
+
+- However, we could have a design where each participant can respond in our 
+two groups. 
+
+---
+
+# Example
+
+- **Problem:** We are at the end of the semester at a university and we want to
+know if our students have improved their grades. 
+
+--
+
+- There is variability in grades but we wold like to make a generalization, and
+say that either they improved during the semester or that they didn't 
+(as a group).
+
+--
+
+- To solve this problem we can use the students' scores on the midterm and their
+scores on the final.
+
+--
+
+- However, notice that the observations between the groups will be correlated. 
+This is a problem for our approach, as we stated in our model that the 
+observations that we had where independent!
+
+--
+
+- The correlation in our observations comes from the fact that we are measuring
+the same participant twice. The student 1 midterm and final score will have some
+degree of correlation because they come from the same person.
+
+--
+
+- In order to avoid the problem of correlations between our two observations we
+need to get reed of the "redundant" information.
+
+---
+
+## Example
+
+- A simple way to get rid of the correlation is by just taking the difference 
+between the two scores (this will only work when the correlation comes from 
+us having two observations of the same participant).
+
+--
+
+- 
+
+
