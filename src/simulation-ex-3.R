@@ -12,9 +12,9 @@ tau_ind <- rnorm(n = 100, mean = 0, sd = 5)
 midterm <- round(x = rnorm(n = 100, mean = mu_midterm + tau_ind, sd = 2), digits = 1)
 final <- round(x = rnorm(n = 100, mean = mu_final + tau_ind, sd = 2), digits = 1)
 
-exams <- tibble("id" = as.character(seq(1,100)),
-                midterm,
-                final)
+exams <- tibble("id" = rep(as.character(seq(1,100)), times = 2),
+                "scores" = c(midterm, final),
+                "exam" = rep(c("midterm","final"), each = 100))
 
 write_csv(x = exams, file = "data/week-3/exams-example.csv")
 

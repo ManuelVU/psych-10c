@@ -48,8 +48,8 @@ library(flipbookr)
 knitr::opts_chunk$set(fig.width = 6, message = FALSE, 
                       warning = FALSE, comment = "", 
                       cache = F)
-link <- "https://raw.githubusercontent.com/ManuelVU/psych-10c-data/main/example-smoke.csv"
-smokers <- read_csv(file = link)
+link <- "https://raw.githubusercontent.com/ManuelVU/psych-10c-data/main/exams-example.csv"
+exams <- read_csv(file = link)
 ```
 
 ## Paired samples

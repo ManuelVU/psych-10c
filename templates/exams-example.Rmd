@@ -5,6 +5,12 @@ date: "4/13/2022"
 output: pdf_document
 ---
 
+```{r load-tidy, echo = FALSE, warning = FALSE, message = FALSE}
+# This first code chink will not show on the pdf but it will load 
+# the tidyverse functions that we need
+library(tidyverse)
+```
+
 This file will be used as an example in Lecture 7.
 
 We want to know if there are any differences between the scores in the midterm 
@@ -15,9 +21,110 @@ model assumes that the difference between scores has an expectation of $\mu$,
 in other words, that the difference in scores will be centered at some value.
 
 ```{r data-loading}
-link <- ""
-
+# This code will be printed into the pdf and it is used to load the data
+# file that we will work with 
+link <- "https://raw.githubusercontent.com/ManuelVU/psych-10c-data/main/exams-example.csv"
+exams <- read_csv(file = link)
 ```
 
 ## Part 1: Data visualization:
 
+1. Plot a histogram of the exam scores. Make sure to use different colors for 
+each exam type. What can you say about the scores on each test by looking at 
+their histograms?
+
+```{r hist-scores, fig.align = 'center'}
+# use this code-chunk to insert the code needed for the histogram of 
+# the exam scores. Remember to use a different color for each type of exam.
+```
+
+**ANS:** (TYPE YOUR ANSWER HERE)
+
+
+
+To calculate the difference between scores it is easier to work with a data 
+format known as **wide**. In a wide format each row contains more than one 
+dependent variable, in our case, we want to have the midterm and final 
+scores of each participant in two variables. To transform our data we use the 
+following code:
+
+```{r exmas-wide}
+exams <- exams %>% 
+  pivot_wider(names_from = exam, values_from = scores)
+```
+
+This will return a data file that has 3 columns, the participants *id*, a 
+midterm score and a final score.
+
+2. Calculate the difference between the final and the midterm scores 
+(final - midterm).
+
+```{r calculate-diff}
+# Use this code-chunk to calculate the difference between final and midterm 
+# scores.
+```
+
+
+
+3. Make a box plot of the difference between final and midterm scores, what
+can you say about the difference in scores by looking at the box plot?
+
+```{r box-plot, fig.align = 'center'}
+# Use this code-chunk to draw a box plot of the difference between scores 
+```
+
+**ANS:** (TYPE YOUR ANSWER HERE)
+
+
+
+4. Add the predictions of the Null and Effects model to the `exams` data. 
+
+```{r predictions}
+# Use this code-chunk to calculate the predictions of each model and then 
+# add them as a new column to the original data.
+```
+
+
+
+5. Using the new variables that you created calculate the SSE of each model and 
+the mean SSE ($\sigma^2$) for each.
+
+```{r sse}
+# Use this code-chunk to calculate the Sum of Squared Errors and the
+# mean Sum of Squared Errors of each model.
+```
+
+
+
+6. Using the SSE of each model calculate in (5) obtain the proportion of 
+variance accounted for by the Effects model ($R^2$).
+
+```{r r2}
+# Use this code-chunk to calculate the proportion of variance accounted for by
+# the Effects model. 
+```
+
+
+
+7. What percentage of the total variation can be accounted for by the Effects 
+model?
+
+**ANS:** (TYPE YOUR ANSWER HERE)
+
+
+
+8. What is the BIC for each model?
+
+```{r bic}
+# Use this code-chunk to calculate the BIC associated with each model, remember
+# that this time, the Null model has 0 parameters associated to its predictions
+# and that the effects model has only one.
+```
+
+
+
+9. What can we conclude about the difference between final and midterm scores 
+from our current analysis? Does our evidence indicate that the students have 
+improved?
+
+**ANS:** (TYPE YOUR ANSWER HERE)
