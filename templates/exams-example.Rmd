@@ -1,0 +1,23 @@
+---
+title: "Lecture 7: Exam scores"
+author: "student-name"
+date: "4/13/2022"
+output: pdf_document
+---
+
+This file will be used as an example in Lecture 7.
+
+We want to know if there are any differences between the scores in the midterm 
+and final scores for 100 students in a statistics course. We want to compare
+two models, the first one formalizes the assumption that there are no 
+differences between the final and midterm scores of the students. The Effects 
+model assumes that the difference between scores has an expectation of $\mu$, 
+in other words, that the difference in scores will be centered at some value.
+
+```{r data-loading}
+link <- ""
+
+```
+
+## Part 1: Data visualization:
+

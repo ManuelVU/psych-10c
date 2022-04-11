@@ -203,11 +203,11 @@ class: inverse, center, middle
 
 ## Variables and data visualization
 
-- First, let's start by visualizing our data,  
+- First, let's start by visualizing our data of the midterm and final scores,
+using a histogram.
 
+- In groups of 3 use the file "lec-7-exams.rmd" file on canvas to load the 
+data and plot a histogram of the scores divided by 
 
-
-
-
-
+--
 

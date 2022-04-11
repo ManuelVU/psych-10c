@@ -3,8 +3,14 @@ library(tidyverse)
 
 set.seed(198612)
 
-midterm <- round(x = rnorm(n = 100, mean = 68.5, sd = 6), digits = 1)
-final <- round(x = rnorm(n = 100, mean = 71.2, sd = 5.2), digits = 1)
+mu_midterm <- 68.5
+
+mu_final <- 69.6
+
+tau_ind <- rnorm(n = 100, mean = 0, sd = 5)
+
+midterm <- round(x = rnorm(n = 100, mean = mu_midterm + tau_ind, sd = 2), digits = 1)
+final <- round(x = rnorm(n = 100, mean = mu_final + tau_ind, sd = 2), digits = 1)
 
 exams <- tibble("id" = as.character(seq(1,100)),
                 midterm,
