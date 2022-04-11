@@ -204,8 +204,69 @@ class: inverse, center, middle
 - First, let's start by visualizing our data of the midterm and final scores,
 using a histogram.
 
-- In groups of 3 use the file "lec-7-exams.rmd" file on canvas to load the 
-data and plot a histogram of the scores divided by 
+--
+
+- Use the file "exams-example.Rmd" on the examples directory on canvas to write 
+your answer.
+
+---
+
+## Removing dependency between observations
+
+- Now create a new variable (question 2 of the "exams-example.Rmd" file) using the 
+difference between final scores and midterm.
 
 --
+
+- Make a box plot using the new difference variable (question 3).
+
+---
+
+## Models' predictions
+
+- Add the predictions of the Null and Effects model to the exams data 
+(question 4).
+
+--
+
+- Using the predictions of each model add a new variable with the squared error
+of each observation (question 5).
+
+--
+
+- Calculate the SSE and mean Squared Error using the last two variables you 
+added (question 6).
+
+---
+
+## Model Evaluation
+
+- Now we want to evaluate our models, we have to start by calculating the 
+proportion of error (variance) accounted for by the Effects model $(R^2)$ 
+(question 7).
+
+--
+
+- What proportion of the error (variance) is accounted by the Effects model? 
+(question 8)
+
+--
+
+- What are the BIC values of the Null and Effects models? (question 9)
+
+---
+
+## Conclussion 
+
+- Now we need to draw a conclusion and interpret it based on our original 
+problem.
+
+--
+
+- Which model would you choose based on the BIC values calculated on part 9?
+
+--
+
+- What does our choice tell us about the improvement of the class from the 
+midterm to the final?
 

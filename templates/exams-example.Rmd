@@ -50,7 +50,8 @@ following code:
 
 ```{r exmas-wide}
 exams <- exams %>% 
-  pivot_wider(names_from = exam, values_from = scores)
+  pivot_wider(names_from = exam, 
+              values_from = scores)
 ```
 
 This will return a data file that has 3 columns, the participants *id*, a 
@@ -86,8 +87,8 @@ can you say about the difference in scores by looking at the box plot?
 
 
 
-5. Using the new variables that you created calculate the SSE of each model and 
-the mean SSE ($\sigma^2$) for each.
+5. Using the new variables that you created, calculate the SSE and the mean SSE
+($\sigma^2$) of each model.
 
 ```{r sse}
 # Use this code-chunk to calculate the Sum of Squared Errors and the
