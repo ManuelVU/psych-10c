@@ -68,7 +68,7 @@ group or on the non-smokers group but they can't be in both.
 --
 
 - We call this a **between subjects** design because we want to compare two 
-groups that made out of the responses of different participants.
+groups that are made out of the responses of different participants.
 
 --
 
@@ -76,7 +76,7 @@ groups that made out of the responses of different participants.
 
 ---
 
-# Example
+## Example
 
 - **Problem:** We are at the end of the semester at a university and we want to
 know if our students have improved their grades. 
@@ -89,8 +89,8 @@ say that either they improved during the semester or that they didn't
 
 --
 
-- To solve this problem we can use the students' scores on the midterm and their
-scores on the final.
+- To solve this problem we have access to the students' scores on the midterm 
+and final exams.
 
 --
 
@@ -106,8 +106,9 @@ degree of correlation because they come from the same person.
 
 --
 
-- In order to avoid the problem of correlations between our two observations we
-need to get rid of the "redundant" information.
+- In order to avoid the problem of correlated observations in this sort of 
+context (observations are correlated because they come from the same participant)
+we need to get rid of the "redundant" information.
 
 ---
 
@@ -120,8 +121,7 @@ us having two observations of the same participant).
 --
 
 - In this case by taking the difference between midterm and final scores we are 
-trying to remove some amount of redundant information, in other words, that there
-are students that have higher scores in general. 
+trying to remove some amount of redundant information. 
 
 --
 
@@ -144,8 +144,8 @@ the differences between scores.
 --
 
 - We denote the *i-th* observation of the midterm score as $y_{i1}$ and the 
-first observation of our final score as $y_{i2}$, then the difference between
-final and midterm as: $$d_{i} = y_{i2} - y_{i1}$$
+first observation of our final score as $y_{i2}$, then we define the difference 
+between final and midterm as: $$d_{i} = y_{i2} - y_{i1}$$
 
 --
 
@@ -160,8 +160,8 @@ final scores: $$d_i \sim \text{Normal}(0,\sigma_0^2)$$
 --
 
 - Notice that we still assume that there will be variability in our 
-observations $(\sigma_0^2 > 0)$, however, we expect the difference between score
-to be around $0$.
+observations $(\sigma_0^2 > 0)$, however, we expect the difference between 
+final and midterm scores to be around $0$.
 
 ---
 
@@ -184,8 +184,8 @@ centered around some value $\mu$. With a variance of $\sigma_e^2$.
 
 --
 
-- As in the previous examples, we have two models that we can use in order to 
-answer our research question.
+- As in the previous examples, we have two models that we want to use in order 
+to answer our research question.
 
 --
 
@@ -256,7 +256,7 @@ proportion of error (variance) accounted for by the Effects model $(R^2)$
 
 ---
 
-## Conclussion 
+## Conclusion 
 
 - Now we need to draw a conclusion and interpret it based on our original 
 problem.

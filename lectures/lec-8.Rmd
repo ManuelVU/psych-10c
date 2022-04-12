@@ -1,0 +1,105 @@
+---
+title: "Lecture 8"
+subtitle: "Multiple Groups"
+author: "Psych 10 C"
+institute: "University of California, Irvine"
+date: "04/15/2022"
+output:
+  xaringan::moon_reader:
+    self_contained: true
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+```
+
+```{r xaringan-extra, echo = FALSE}
+xaringanExtra::use_tile_view()
+
+xaringanExtra::use_fit_screen()
+
+xaringanExtra::use_editable(expires = 1)
+
+xaringanExtra::use_extra_styles(
+  hover_code_line = TRUE,         #<<
+  mute_unhighlighted_code = TRUE  #<<
+)
+
+htmltools::tagList(
+  xaringanExtra::use_clipboard(
+    button_text = "<i class=\"fa fa-clipboard\"></i>",
+    success_text = "<i class=\"fa fa-check\" style=\"color: #90BE6D\"></i>",
+    error_text = "<i class=\"fa fa-times-circle\" style=\"color: #F94144\"></i>"
+  ),
+  rmarkdown::html_dependency_font_awesome()
+)
+```
+
+```{r load-tidy, echo = FALSE, message = FALSE, warning = FALSE}
+library(tidyverse)
+
+library(flipbookr)
+
+knitr::opts_chunk$set(fig.width = 6, message = FALSE, 
+                      warning = FALSE, comment = "", 
+                      cache = F)
+```
+
+## Comparisons between two groups
+
+- Let's look at another example of comparisons between two populations.
+
+--
+
+- First we need a research problem or question. 
+
+--
+
+- We are interested in studying the levels of anxiety in first year students at 
+a university in two different cohorts, the first one started in 2018 and the 
+second one in 2019.
+
+--
+
+- The University makes all students take a survey during the first week which 
+includes a scale design to measure anxiety on a scale that goes from 0 to 20.
+
+--
+
+- We have been granted access to the data of 30 students of each cohort to 
+analize if there are any differences between the levels of anxiety.
+
+--
+
+- Is this a paired samples (within subjects) design or an independent samples
+(between subjects) design?
+
+---
+
+## First year anxiety
+
+- Before we get the results, we want to formalize our models.
+
+--
+
+- **Null model:** There are no difference in axiety levels between students in 
+the 2018 cohort and students in the 2019 cohort. In other words, the axiety 
+level of each student is an independent sample of the distribution: 
+$$y_{ij} \sim \text{Normal}(\mu,\sigma_0^2)$$ 
+for $i=1,\dots,30$ students and $j = 1, 2$ where 1 represents that the student
+belongs to the 2018 cohort and 2 represents students of the 2019 cohort.
+
+--
+
+- **Effects model:** The anxiety levels of students in the 2018 cohort are 
+different from the levels of the 2019 cohort. In other words, the anxiety level
+of a student in group $j=1,2$ where 1 denotes the 2018 cohort and 2 denotes 2019
+are an independent sample of the distributions:
+$$y_{ij} \sim \text{Normal}(\mu_j, \sigma_e^2)$$
+for $i = 1,\dots,30$ students. 
+
