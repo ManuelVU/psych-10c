@@ -43,11 +43,13 @@ htmltools::tagList(
 ```{r load-tidy, echo = FALSE, message = FALSE, warning = FALSE}
 library(tidyverse)
 
-library(flipbookr)
-
 knitr::opts_chunk$set(fig.width = 6, message = FALSE, 
                       warning = FALSE, comment = "", 
                       cache = F)
+anxiety <- read_csv(file = "~/Documents/git_projects/psych-10c/data/week-3/anxiety-1-ex.csv") %>% 
+  mutate("id" = as.character(id),
+         "anxiety" = as.integer(anxiety),
+         "cohort" = as.character(cohort))
 ```
 
 ## Comparisons between two groups
@@ -87,8 +89,8 @@ analize if there are any differences between the levels of anxiety.
 
 --
 
-- **Null model:** There are no difference in axiety levels between students in 
-the 2018 cohort and students in the 2019 cohort. In other words, the axiety 
+- **Null model:** There are no difference in anxiety levels between students in 
+the 2018 cohort and students in the 2019 cohort. In other words, the anxiety 
 level of each student is an independent sample of the distribution: 
 $$y_{ij} \sim \text{Normal}(\mu,\sigma_0^2)$$ 
 for $i=1,\dots,30$ students and $j = 1, 2$ where 1 represents that the student
@@ -102,4 +104,258 @@ of a student in group $j=1,2$ where 1 denotes the 2018 cohort and 2 denotes 2019
 are an independent sample of the distributions:
 $$y_{ij} \sim \text{Normal}(\mu_j, \sigma_e^2)$$
 for $i = 1,\dots,30$ students. 
+
+---
+
+## Data.
+
+- Before we do any analysis, we ca look at our data:
+
+```{r look-data-1, echo = FALSE}
+DT::datatable(data = anxiety,
+  fillContainer = FALSE, options = list(pageLength = 7))
+```
+
+---
+
+## Visualizing data
+
+- Now we can look at the distribution of anxiety scores by cohort using a 
+histogram:
+
+.pull-left[
+```{r hist-anxiety, eval = FALSE}
+ggplot(data = anxiety) + 
+  aes(x = anxiety) + 
+  aes(fill = cohort, color = cohort) + 
+  geom_histogram(position="identity", 
+                 binwidth = 1,  
+                 alpha = 0.3) + 
+  theme_classic() + 
+  xlab("Anxiety score") + 
+  ylab("Frequency") + 
+  guides(fill = guide_legend("Cohort"), color = "none") + 
+  theme(axis.title.x = element_text(size = 20),
+        axis.title.y = element_text(size = 20))  
+```
+]
+.pull-right[
+```{r hist-anxiety-out, ref.label = "hist-anxiety", fig.align = 'center', echo = FALSE, fig.width = 5.7, fig.height = 5.3}
+
+```
+]
+
+---
+
+## Infering parameter values from observations
+
+- Histogram doesn't show any systematic differences, however, to reach a 
+conclusion we need to compare our two models:
+
+--
+
+**Null model:**
+.pull-left[
+```{r null-model}
+anxiety <- anxiety %>% 
+  mutate("null_pred" = round(mean(anxiety),3),
+         "null_error" = round((anxiety - null_pred)^2,3))
+```
+]
+.pull-right[
+Prediction = `r anxiety$null_pred[1]`
+
+SSE = `r round(sum(anxiety$null_error),3)`
+
+Mean SE = `r round(1/nrow(anxiety) * sum(anxiety$null_error),3)`
+]
+
+--
+
+**Effects model:**
+.pull-left[
+```{r eff-model}
+group_means <- anxiety %>% 
+  group_by(cohort) %>% 
+  summarise("pred" = round(mean(anxiety),3))
+anxiety <- anxiety %>% 
+  mutate("eff_pred" = ifelse(test = cohort == "2018", yes = group_means$pred[1],
+                             no = group_means$pred[2]),
+         "eff_error" = round((anxiety - eff_pred)^2, 3))
+```
+]
+.pull-right[
+Prediction: 
+- 2018 = `r group_means[1,2]`, 
+- 2019 = `r group_means[2,2]` 
+
+SSE = `r round(sum(anxiety$eff_error),3)`
+
+Mean SE = `r round(1/nrow(anxiety) * sum(anxiety$eff_error),3)`
+]
+
+---
+
+## Model evaluation
+
+```{r errors, echo = FALSE}
+sse_0 <- sum(anxiety$null_error)
+sse_e <- sum(anxiety$eff_error)
+mse_0 <- 1/nrow(anxiety) * sse_0
+mse_e<- 1/nrow(anxiety) * sse_e
+```
+
+- The proportion of error accounted for by the Effects model was:
+
+  - $R^2 = 1.5 \times 10^{-4}$ 
+  
+--
+
+- In other words, the model that assumes that anxiety levels are different 
+between the two cohorts explains `r 100*round((sse_0 - sse_e)/sse_0, 5)`% of the 
+variability on anxiety levels.
+
+--
+
+- In comparison to previous examples, this is a small percentage of error that 
+the effects model is accounting for.
+
+---
+
+## BIC
+
+- The BIC associated to the Null model was equal to
+
+$BIC_0 =$ `r round(nrow(anxiety) * log(mse_0) + log(nrow(anxiety)),3)`
+
+--
+
+- The BIC associated to the Effects model was:
+
+$BIC_e =$ `r round(nrow(anxiety) * log(mse_e) + 2 * log(nrow(anxiety)),3)`
+
+--
+
+- Given that the BIC value for the Null model is lower than the BIC of the 
+Effects model, we can conclude that:
+
+  - The evidence suggests that there are no differences on anxiety levels 
+  between First year students of the 2018 and 2019 cohorts.
+  
+---
+
+class: inverse, middle, center
+
+# Multiple Groups
+
+---
+
+## Comparing multiple groups
+
+- On the previous example we saw that the evidence we had, suggested that there 
+were no difference on anxiety levels between the two cohorts. However, what 
+would happen if we took into account the 2020 cohort?
+
+--
+
+- When our independent variable takes more than two categorical values 
+(e.g. multiple cohorts, multiple tests, etc.) we have to make some changes to 
+our models.
+
+--
+
+- The **Null model** will remain the same, and again it formalizes the 
+assumption that there are no differences between the groups.
+
+--
+
+- However, the **Effects model** now has to take into account the fact that
+there are now more than 2 groups.
+
+---
+
+class: inverse, center, middle
+
+# Effects Model
+
+---
+
+## Effects model
+
+- Our new effects model will now formalize the assumption that **at least one**
+of the groups is different.
+
+--
+
+- The problem now will be that we don't exactly now which one of the groups is 
+different than the others, but for now, this is the best that we can do with
+the two models that we have.
+
+--
+
+**Effects model:** Let $y_{ij}$ be the anxiety level of the *i-th* student from 
+the *j-th* cohort, with $i = 1, \dots, 30$ and $j = 1, 2, 3$; where 1 represents
+the 2018, 2 represents 2019 and 3 represents the 2020 cohort. Then, each 
+observation is assumed to be an independent sample from one of 3 distributions:
+
+$$y_{ij}\sim\text{Normal}(\mu_j,\sigma_e^2)$$
+
+---
+
+## Multiple groups: Predictions
+
+- Now we have 4 parameters in total for the model, 3 expectations $(\mu_j)$ and 
+1 error $\sigma_e^2$.
+
+--
+
+- Something that doesn't change is what our best guess for $\mu_j$ is. The 
+estimator for the parameter $\mu_j$ will be the average of each group, except 
+that now we have 3 groups for which to calculate the average.
+
+--
+
+- In our example the prediction for each cohort *j* can be written as:
+$$\hat{\mu}_j = \frac{1}{n_j}\sum_{i=1}^{30}y_{ij}$$
+
+--
+
+- Where $n_j$ represents the total number of students in each cohort (in our 
+example this number is the same for all cohorts, 30 students).
+
+--
+
+- In other words, our prediction about the anxiety levels $\hat{\mu}_j$ of 
+students that belong to the *j-th* cohort will be the average of the *j-th* 
+cohort.
+
+---
+
+## Multiple groups: Mean Squared Error
+
+- Our best "guess" or estimator for the error of the Effects model will be 
+similar to the one we had for the two groups case. 
+
+--
+
+- Again the only difference is that this time we have more than two groups or 
+predictions.
+
+--
+
+- In our example about anxiety levels in 3 cohorts of First year students we 
+have that:
+$$\hat{\sigma}_e^2=\frac{1}{n}\sum_{j=1}^{3}\sum_{i=1}^{30}\left(y_{ij}-\hat{\mu}_j\right)^2$$
+
+--
+
+- Where this time $n$ represents the total number of students in our data, 
+given that we have 3 cohorts each with 30 students, the total would be equal to 
+$90$.
+
+---
+
+## Multiple groups: SSE, $R^2$ and BIC
+
+
 
