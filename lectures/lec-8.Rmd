@@ -46,7 +46,8 @@ library(tidyverse)
 knitr::opts_chunk$set(fig.width = 6, message = FALSE, 
                       warning = FALSE, comment = "", 
                       cache = F)
-anxiety <- read_csv(file = "~/Documents/git_projects/psych-10c/data/week-3/anxiety-1-ex.csv") %>% 
+link <- "https://raw.githubusercontent.com/ManuelVU/psych-10c-data/main/anxiety-1-ex.csv"
+anxiety <- read_csv(file = link) %>% 
   mutate("id" = as.character(id),
          "anxiety" = as.integer(anxiety),
          "cohort" = as.character(cohort))
@@ -109,7 +110,7 @@ for $i = 1,\dots,30$ students.
 
 ## Data.
 
-- Before we do any analysis, we ca look at our data:
+- Before we do any analysis, we can look at our data:
 
 ```{r look-data-1, echo = FALSE}
 DT::datatable(data = anxiety,
@@ -122,6 +123,8 @@ DT::datatable(data = anxiety,
 
 - Now we can look at the distribution of anxiety scores by cohort using a 
 histogram:
+
+--
 
 .pull-left[
 ```{r hist-anxiety, eval = FALSE}
@@ -149,7 +152,7 @@ ggplot(data = anxiety) +
 
 ## Infering parameter values from observations
 
-- Histogram doesn't show any systematic differences, however, to reach a 
+- Histogram doesn't show any systematic differences. However, to reach a 
 conclusion we need to compare our two models:
 
 --
@@ -169,8 +172,6 @@ SSE = `r round(sum(anxiety$null_error),3)`
 
 Mean SE = `r round(1/nrow(anxiety) * sum(anxiety$null_error),3)`
 ]
-
---
 
 **Effects model:**
 .pull-left[
@@ -287,15 +288,15 @@ of the groups is different.
 
 --
 
-- The problem now will be that we don't exactly now which one of the groups is 
-different than the others, but for now, this is the best that we can do with
+- The problem now will be that we don't exactly know which one of the groups is 
+different from the others. But for now, this is the best that we can do with
 the two models that we have.
 
 --
 
 **Effects model:** Let $y_{ij}$ be the anxiety level of the *i-th* student from 
-the *j-th* cohort, with $i = 1, \dots, 30$ and $j = 1, 2, 3$; where 1 represents
-the 2018, 2 represents 2019 and 3 represents the 2020 cohort. Then, each 
+the *j-th* cohort, with $i = 1, \dots, 30$ and $j = 1, 2, 3$; the value 1 
+represents 2018, 2 represents 2019 and 3 represents the 2020 cohort. Then, each 
 observation is assumed to be an independent sample from one of 3 distributions:
 
 $$y_{ij}\sim\text{Normal}(\mu_j,\sigma_e^2)$$
@@ -309,9 +310,9 @@ $$y_{ij}\sim\text{Normal}(\mu_j,\sigma_e^2)$$
 
 --
 
-- Something that doesn't change is what our best guess for $\mu_j$ is. The 
-estimator for the parameter $\mu_j$ will be the average of each group, except 
-that now we have 3 groups for which to calculate the average.
+- Something that doesn't change is our best guess for $\mu_j$. The estimator for 
+the parameter $\mu_j$ will be the average of each group, except that now we have 
+3 groups.
 
 --
 
@@ -326,8 +327,8 @@ example this number is the same for all cohorts, 30 students).
 --
 
 - In other words, our prediction about the anxiety levels $\hat{\mu}_j$ of 
-students that belong to the *j-th* cohort will be the average of the *j-th* 
-cohort.
+students that belong to the *j-th* cohort will be the average anxiety level of 
+the *j-th* cohort.
 
 ---
 
@@ -355,7 +356,153 @@ $90$.
 
 ---
 
-## Multiple groups: SSE, $R^2$ and BIC
+## Multiple groups: SSE and $R^2$ 
 
+- The Sum of Squared Errors (SSE) is again equal to the sum of the errors of
+our predictions: $$SSE_e = \sum_{j=1}^{3}\sum_{i=1}^{30}\left(y_{ij}-\hat{\mu}_j\right)^2$$
 
+--
+
+- Once again, using the SSE of both models ($SSE_0$ for the Null and $SSE_e$ 
+for the Effects model) we can calculate the proportion of variability accounted 
+for by the effects model: $$R^2 = \frac{SSE_0 - SSE_e}{SSE_0}$$
+
+---
+
+## Multiple groups: BIC
+
+- Finally, this time we have 3 parameters ( $\mu_1$, $\mu_2$ and $\mu_3$) 
+associated to the predictions of our model, so this new Effects model will be 
+more complicated than the previous one. The BIC associated with the effects 
+model will now be equal to: $$BIC_e = n\ ln\left(\hat{\sigma}_e^2\right) + k\ ln\left(n\right)$$
+
+--
+
+- In our example that has 3 groups we have that $k=3$.
+
+---
+
+class: inverse, center, middle
+
+# Example:
+
+## Three cohorts
+
+---
+
+## Multiple groups: Problem
+
+- The university has given us access to a sample of 90 students' anxiety scores. 
+The first 30 belong to First year students in the 2018 cohort, the next 30
+belong to First year students in the 2019 cohort, and finally, the remaining 30 
+belong to students in the 2020 cohort.
+
+--
+
+- We want to know if the anxiety levels of students differ by cohort or not.
+
+--
+
+- Our Null model assumes that there are no differences in anxiety levels between 
+the 3 cohorts. $$y_{ij}\sim\text{Normal}(\mu, \sigma_0^2)$$
+
+--
+
+- Our Effects model assumes that at least one of the cohorts is different, 
+although we can't say which one. $$y_{ij}\sim\text{Normal}(\mu_j,\sigma_e^2)$$
+
+---
+
+## Multiple groups: Inference
+```{r read-new-data, echo = FALSE, message = FALSE, warning = FALSE}
+link <- "https://raw.githubusercontent.com/ManuelVU/psych-10c-data/main/anxiety-2-ex.csv"
+anxiety <- read_csv(file = link)
+```
+
+**Null model**
+
+.pull-left[
+```{r null-groups}
+n_total <- nrow(anxiety)
+anxiety <- anxiety %>% 
+  mutate("null_pred" = mean(anxiety),
+         "null_error" = (anxiety - null_pred)^2)
+sse_0 <- sum(anxiety$null_error)
+mse_0 <- 1/n_total * sse_0
+```
+]
+.pull-right[
+Prediction: `r round(mean(anxiety$anxiety), 2)`
+
+SSE: `r round(sse_0, 2)`
+
+Mean SE: `r round(mse_0, 2)`
+]
+
+---
+
+## Multiple groups: Inference
+
+**Effects model**
+.pull-left[
+```{r eff-groups}
+mean_groups <- anxiety %>% 
+  group_by(cohort) %>% 
+  summarise("pred" = mean(anxiety))
+anxiety <- anxiety %>% 
+  mutate("eff_pred" = case_when(cohort == "2018" ~ mean_groups$pred[1],
+                                cohort == "2019" ~ mean_groups$pred[2],
+                                cohort == "2020" ~ mean_groups$pred[3]),
+         "eff_error" = (anxiety - eff_pred)^2)
+sse_e <- sum(anxiety$eff_error)
+mse_e <- 1/n_total * sse_e
+```
+]
+.pull-right[
+Prediction: 
+  - 2018: `r round(mean_groups$pred[1], 2)`
+  - 2019: `r round(mean_groups$pred[2], 2)`
+  - 2020: `r round(mean_groups$pred[3], 2)`
+  
+SSE: `r round(sse_e, 2)`
+
+Mean SE: `r round(mse_e, 2)`
+]
+
+---
+
+## Multiple groups: Model evaluation
+
+- The proportion of variance accounted for by the effects model was $R^2$ = `r round((sse_0-sse_e) / sse_0, 3)`. In other words, the effects model accounts for 
+`r 100*round((sse_0-sse_e) / sse_0, 3)`% of the total variation of anxiety scores
+of the students on the 3 different cohorts.
+
+--
+
+- The BIC of the Null model was equal to `r round(n_total * log(mse_0) + log(n_total),2)`, while the BIC of the effects model was `r round(n_total * log(mse_e) + 3 * log(n_total),2)`.
+
+--
+
+- According to the BIC values, we should select the effects model. This means, 
+that at least one of the 3 groups is different from the others.
+
+--
+
+- Notice that this is not the conclusion that we where looking for. We want to
+know if the anxiety levels of First year students differ by cohort. However, 
+from our Effects model we can only conclude that at least one of the groups is 
+different.
+
+---
+
+## Multiple groups: other models
+
+- Remember that in our first analysis we saw that there where no difference 
+between the cohorts of 2018 and 2019. Nevertheless, once we add the students 
+from the 2020 cohort something changes and now the best model is the one 
+that assumes that there are differences.
+
+- Next week we will see that we need to evaluate other models in order to be
+able to answer our original question about the differences in anxiety scores 
+between First year students of different cohorts.
 
