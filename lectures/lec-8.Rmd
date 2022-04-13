@@ -70,12 +70,12 @@ second one in 2019.
 --
 
 - The University makes all students take a survey during the first week which 
-includes a scale design to measure anxiety on a scale that goes from 0 to 20.
+includes a scale designed to measure anxiety on a scale that goes from 0 to 20.
 
 --
 
 - We have been granted access to the data of 30 students of each cohort to 
-analize if there are any differences between the levels of anxiety.
+analyze if there are any differences between the levels of anxiety.
 
 --
 
@@ -90,7 +90,7 @@ analize if there are any differences between the levels of anxiety.
 
 --
 
-- **Null model:** There are no difference in anxiety levels between students in 
+- **Null model:** There are no differences in anxiety levels between students in 
 the 2018 cohort and students in the 2019 cohort. In other words, the anxiety 
 level of each student is an independent sample of the distribution: 
 $$y_{ij} \sim \text{Normal}(\mu,\sigma_0^2)$$ 

@@ -1,4 +1,4 @@
-# Example of axiety levels on students from cohorts 2018 and 2019
+# Example of anxiety levels on students from cohorts 2018 and 2019
 
 library(tidyverse)
 
