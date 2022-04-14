@@ -461,7 +461,7 @@ average anxiety level of all students on the 2019 and 2020 cohorts.
 
 ---
 
-## Adding the predictions of the 2018 model
+## 2018 model: Predictions
 
 - An easy way to calculate and add the predictions of this new model to our data 
 is by first creating an "indicator" variable. This is a variable that takes one
@@ -470,7 +470,8 @@ belongs to one of the others.
 
 ```{r id-var}
 anxiety <- anxiety %>% 
-  mutate("id_2018" = ifelse(test = cohort == "2018", yes = "2018", no = "other"))
+  mutate("id_2018" = ifelse(test = cohort == "2018", yes = "2018", 
+                            no = "other"))
 ```
 
 --
@@ -492,10 +493,27 @@ pred_2018 <- anxiety %>%
 `r round(pred_2018$pred[1],2)` and for students in the 2019 and 2020 cohorts it was 
 `r round(pred_2018$pred[2],2)`.
 
-- Using those two estimators as the predictions of the anxiety levels we can 
-calculate the error of the model. Again, we start by calculating the error for 
-each observation by taking the observation and subtracting the prediction ( $\mu_1$ and $\mu$, respectively) and then squaring that difference.  
+---
 
+## 2018 model: Error
+
+- Using the predictions of the anxiety levels we can calculate the error of the 
+model. Again, we start by calculating the error for each observation by taking the difference between the observation and the model prediction ( $\hat{\mu}_1$ and $\hat{\mu}$, respectively) and then squaring that difference.
+
+```{r error}
+anxiety <- anxiety %>% 
+  mutate("prediction_2018" = ifelse(test = id_2018 == "2018", 
+                                    yes = pred_2018$pred[1],
+                                    no = pred_2018$pred[2]),
+         "error_2018" = (anxiety - prediction_2018)^2)
+```
+
+--
+
+- Once again we can get the SSE for the model by adding all of the values in 
+the `error_2018` column. We can also use those values to calculate the 
+proportion of variance accounted for by the model that assumes that only 
+students from the 2018 cohort have different aciety levels.
 
 
 
