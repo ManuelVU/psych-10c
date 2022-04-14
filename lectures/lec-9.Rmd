@@ -1,0 +1,187 @@
+---
+title: "Lecture 9"
+subtitle: "Multiple Groups: Additional models"
+author: "Psych 10 C"
+institute: "University of California, Irvine"
+date: "04/15/2022"
+output:
+  xaringan::moon_reader:
+    self_contained: true
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+```
+
+```{r xaringan-extra, echo = FALSE}
+xaringanExtra::use_tile_view()
+
+xaringanExtra::use_fit_screen()
+
+xaringanExtra::use_editable(expires = 1)
+
+xaringanExtra::use_extra_styles(
+  hover_code_line = TRUE,         #<<
+  mute_unhighlighted_code = TRUE  #<<
+)
+
+htmltools::tagList(
+  xaringanExtra::use_clipboard(
+    button_text = "<i class=\"fa fa-clipboard\"></i>",
+    success_text = "<i class=\"fa fa-check\" style=\"color: #90BE6D\"></i>",
+    error_text = "<i class=\"fa fa-times-circle\" style=\"color: #F94144\"></i>"
+  ),
+  rmarkdown::html_dependency_font_awesome()
+)
+```
+
+```{r load-tidy, echo = FALSE, message = FALSE, warning = FALSE}
+library(tidyverse)
+
+knitr::opts_chunk$set(fig.width = 6, message = FALSE, 
+                      warning = FALSE, comment = "", 
+                      cache = F)  
+link <- "https://raw.githubusercontent.com/ManuelVU/psych-10c-data/main/anxiety-2-ex.csv"
+anxiety <- read_csv(file = link)
+```
+
+## Final Project
+
+- As you already know, we will have a final project for this class instead of a 
+final exam.
+
+--
+
+- This final project is worth 50% of your total grade and it should be done in 
+groups of between 3 and 4 students.
+
+--
+
+- The objective is to have you write a short version of what a scientific paper 
+should look like. Including the data analysis section.
+
+--
+
+- To make things "easier" for you, we have selected 3 problems with their 
+corresponding data sets that you can choose from for your final project.
+
+--
+
+- To answer the research question of each project you will need a different 
+approach, not all problems can be solved the same way. Therefore, before we 
+look at the data we want you to choose one of the three problems.
+
+---
+
+### Problem 1:
+
+- We want to know if people that have had a brain curgical procedure known as 
+split brain, have problems identifing obhects presented at either side of their 
+visual field.
+
+--
+
+### Problem 2:
+
+- We want to know if the cognitive decline of a person from one year to the next 
+is associated with their level of social interaction, physical activity and the 
+fact that they used the app Luminosity during that year.
+
+--
+
+### Problem 3:
+
+- We want to know how the asking price for an IKEA chair changes as a function
+of the total cost of the matrials, if the person build the chaitr themselves and
+the difficulty of building it.
+
+---
+
+## Final project
+
+The paper must have the following points:
+
+- Introduction: 4 to 5 sentences that summarize the problem, and why it's 
+important. The idea is to convince your reader that what you are doing matters
+you can use references to previous work (1 or 2 max).
+
+--
+  
+- Methods: In one paragraph, explain what is in the data set and where it came 
+from (how it was collected).
+
+--
+  
+- Data: provide a summary of your data, you can use summary statistics like
+the median, mean or variance. You can also use this section to highlight some
+properties of the data that you are working on by using graphs.
+  
+---
+
+## Final project
+
+- Model comparison: Describe the models that you will be comparing using your 
+current data and their main assumptions (does the model assume that groups are
+equal?).
+  
+  - You should provide a summary of your analysis, a good way to do so can be
+  to have a table that has the SSE of each model that you tested and the BIC
+  associated to this model.
+
+--
+
+- Discussion: 
+
+  - One paragraph on: What conclusions can you draw from the model comparisons
+  about the experimental question.
+  
+--
+  
+  - One paragraph on: What might be the broader implications of this finding?
+  
+--
+  
+  - One paragraph on: What are the limitations of this study and/or what are the 
+  gaps left by this study? Be sure to explain why the limitation could impact 
+  the results.
+  
+---
+
+class: inverse, center, middle
+
+# Review of BIC's
+
+---
+
+## BIC
+
+- Last week we mentioned that regardless of what data we have, a model that 
+assumes that there is more that one distribution will always be better in 
+terms of the error it produces in comparison to a simpler model.
+
+--
+
+- We can try to understand this intuitively by looking a graph that uses 
+a single mean as a prediction. To do this we will use our smokers data:
+
+--
+
+```{r, echo = FALSE, fig.align='center', fig.height = 6}
+link <- "https://raw.githubusercontent.com/ManuelVU/psych-10c-data/main/example-smoke.csv"
+smokers <- read_csv(file = link)
+par(mai = c(0.6,0.6,0.6,0.6))
+par(oma = c(3, 3, 0.2, 0.2))
+plot(x = seq(1,nrow(smokers)), y = sort(smokers$lung_capacity, decreasing = FALSE),
+     axes = FALSE, ann = FALSE, col = rep(c("#c80064","#54bebe"), each = 4),
+     pch = rep(c(15,19), each = 4), cex = 1.6)
+box(bty = "l", lwd = 1.3)
+axis(2, las = 2)
+mtext(text = "Lung capacity", line = 2.3, cex = 1.6, side = 2)
+mtext(text = "Smokers", line = 1, cex = 1.8, side = 1, at = 2.5)
+mtext(text = "Non-smokers", line = 1, cex = 1.8, side = 1, at = 6.5)
+```
