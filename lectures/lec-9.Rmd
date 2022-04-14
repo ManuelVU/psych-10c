@@ -171,7 +171,7 @@ a single mean as a prediction. To do this we will use our smokers data:
 
 --
 
-```{r, echo = FALSE, fig.align='center', fig.height = 6}
+```{r, echo = FALSE, fig.align='center', fig.height = 6, fig.width = 7}
 link <- "https://raw.githubusercontent.com/ManuelVU/psych-10c-data/main/example-smoke.csv"
 smokers <- read_csv(file = link)
 par(mai = c(0.6,0.6,0.6,0.6))
@@ -179,9 +179,325 @@ par(oma = c(3, 3, 0.2, 0.2))
 plot(x = seq(1,nrow(smokers)), y = sort(smokers$lung_capacity, decreasing = FALSE),
      axes = FALSE, ann = FALSE, col = rep(c("#c80064","#54bebe"), each = 4),
      pch = rep(c(15,19), each = 4), cex = 1.6)
+abline(h = mean(smokers$lung_capacity), lwd = 3, col = "#003f5c")
 box(bty = "l", lwd = 1.3)
 axis(2, las = 2)
 mtext(text = "Lung capacity", line = 2.3, cex = 1.6, side = 2)
 mtext(text = "Smokers", line = 1, cex = 1.8, side = 1, at = 2.5)
 mtext(text = "Non-smokers", line = 1, cex = 1.8, side = 1, at = 6.5)
 ```
+
+
+---
+
+## BIC
+
+- If we use two predictions instead of one (as in the effects model) the error
+will be reduced.
+
+--
+
+```{r, echo = FALSE, fig.align='center', fig.height = 6, fig.width = 7}
+link <- "https://raw.githubusercontent.com/ManuelVU/psych-10c-data/main/example-smoke.csv"
+smokers <- read_csv(file = link)
+par(mai = c(0.6,0.6,0.6,0.6))
+par(oma = c(3, 3, 0.2, 0.2))
+plot(x = seq(1,nrow(smokers)), y = sort(smokers$lung_capacity, decreasing = FALSE),
+     axes = FALSE, ann = FALSE, col = rep(c("#c80064","#54bebe"), each = 4),
+     pch = rep(c(15,19), each = 4), cex = 1.6)
+abline(h = mean(smokers$lung_capacity), lwd = 1.5, col = "#003f5c", lty = 2)
+segments(x0 = 0,y0 = mean(smokers$lung_capacity[smokers$smoke_status=="smoker"]),
+         x1 = 4.5, y1 = mean(smokers$lung_capacity[smokers$smoke_status=="smoker"]),
+         col = "#c80064", lwd = 3)
+segments(x0 = 4.5,y0 = mean(smokers$lung_capacity[smokers$smoke_status=="non_smoker"]),
+         x1 = 9, y1 = mean(smokers$lung_capacity[smokers$smoke_status=="non_smoker"]),
+         col = "#54bebe", lwd = 3)
+box(bty = "l", lwd = 1.3)
+axis(2, las = 2)
+mtext(text = "Lung capacity", line = 2.3, cex = 1.6, side = 2)
+mtext(text = "Smokers", line = 1, cex = 1.8, side = 1, at = 2.5)
+mtext(text = "Non-smokers", line = 1, cex = 1.8, side = 1, at = 6.5)
+```
+
+---
+
+## BIC
+
+- In general, we know that the more parameters (lines in the previous example)
+our models have, the more they will resemble the values in our data (less 
+error).
+
+--
+
+- This is known as "fit", and for linear models adding more parameters or 
+unknowns (like adding more values of $\mu$) to our models will always improve 
+their fit (how close our predictions are to our observations).
+
+--
+
+- If we only use "fit" or error as a criterion of which theory is better, then 
+we could always add more an more lines to the graph until we get a single line 
+for each point.
+
+--
+
+- However, this is not be useful as it tells us that in order to make a 
+prediction we need to know the value that we want to predict. This doesn't make
+sense.
+
+---
+
+## BIC
+
+- To avoid this problem we would like to take into account two things:
+
+--
+
+1. How many parameters (unknown values) we use to make predictions (model
+complexity).
+
+--
+
+2. How close those predictions are to those values (model fit).
+
+--
+
+- BIC is one of the methods (there are more) that can accomplish this objective, 
+and it does so by assigning a value to how bad the predictions of the model are 
+(how large is the total error) and how many parameters (unknown values) the 
+model uses to make it's predictions.
+
+--
+
+- The BIC will assign higher values to models that make larger errors or that 
+need more parameters (unknown values) to make a prediction.
+
+--
+
+- If we select the model with the lowest BIC from the ones that we are using 
+then we are making a decision that weights both things, the complexity of the 
+model and the accuracy of the model (fit).
+
+---
+
+class: inverse, center, middle
+
+# Multiple Groups
+
+---
+
+## Comparison between multiple groups
+
+- Last class we started looking at an example where we had the level of anxiety 
+of 3 cohorts of students at a university. The 2018, 2019 and 2020 cohorts.
+
+--
+
+- We formalized a model that assumed that there are no difference on the levels 
+of anxiety of First year students on the 3 cohorts (Null model) that states: $$y_{ij}\sim\text{Normal}(\mu,\sigma_0^2)$$
+for $i=1, \dots,30$ students in each of the $j=1,2,3$ cohorts (2018 to 2020).
+
+--
+
+- The second model assumes that the levels of anxiety of First year students in
+one of the three cohorts is different from the rest. Formally, this model is 
+expressed as: $$y_{ij}\sim\text{Normal}(\mu_j,\sigma_e^2)$$ 
+
+--
+
+- We also mentioned that this model does not address our original question, as 
+the conclusion that we can draw from it is that there is at least one of the 
+groups is different from the rest.
+
+---
+
+## Results: review
+
+- The estimations for the Null model are:
+
+.pull-left[
+```{r null-groups}
+n_total <- nrow(anxiety)
+anxiety <- anxiety %>% 
+  mutate("null_pred" = mean(anxiety),
+         "null_error" = (anxiety - null_pred)^2)
+sse_0 <- sum(anxiety$null_error)
+mse_0 <- 1/n_total * sse_0
+```
+]
+.pull-right[
+Prediction: `r round(mean(anxiety$anxiety), 2)`
+
+SSE: `r round(sse_0, 2)`
+
+Mean SE: `r round(mse_0, 2)`
+]
+
+---
+
+## Results: review
+
+- The estimations from the Effects model are:
+
+.pull-left[
+```{r eff-groups}
+mean_groups <- anxiety %>% 
+  group_by(cohort) %>% 
+  summarise("pred" = mean(anxiety))
+anxiety <- anxiety %>% 
+  mutate("eff_pred" = case_when(cohort == "2018" ~ mean_groups$pred[1],
+                                cohort == "2019" ~ mean_groups$pred[2],
+                                cohort == "2020" ~ mean_groups$pred[3]),
+         "eff_error" = (anxiety - eff_pred)^2)
+sse_e <- sum(anxiety$eff_error)
+mse_e <- 1/n_total * sse_e
+```
+]
+.pull-right[
+Prediction: 
+  - 2018: `r round(mean_groups$pred[1], 2)`
+  - 2019: `r round(mean_groups$pred[2], 2)`
+  - 2020: `r round(mean_groups$pred[3], 2)`
+  
+SSE: `r round(sse_e, 2)`
+
+Mean SE: `r round(mse_e, 2)`
+]
+
+---
+
+## Results: review
+
+- The conclusion that we draw from those estimations was that:
+
+--
+
+  1. The effects model accounted for `r 100*round((sse_0-sse_e) / sse_0, 3)`% 
+  of the total variation in anxiety scores of the students on the 3 different 
+  cohorts.
+  
+--
+  
+  2. According to the BIC values, we should select the Effects model 
+  (`r round(n_total * log(mse_e) + 3 * log(n_total),2)`) over the Null 
+  (`r round(n_total * log(mse_0) + log(n_total),2)`). This means, that at least 
+  one of the 3 groups is different from the others.
+  
+--
+
+- However, our original problem stated that we wanted to know if there where any
+differences between the cohorts, and not that there was at least one cohort that
+was different.
+
+--
+
+- To solve this problem we have to look at three additional models.
+
+---
+
+## Group models
+
+- From the results of the comparison between the Null and Effects model we know 
+that there is at least one cohort of students that has a different anxiety level
+in comparison to the others.
+
+--
+
+- In order to find out which group is different, we can build three new 
+models that assume that a single cohort is different for the rest.
+
+--
+
+- Notice that making the comparison between Null and Effects model at the start
+will save us a lot of work if it turns out that the best model is the Null. 
+
+---
+
+## Three models
+
+- We need 3 models that formalize 3 assumptions: 
+
+--
+1. Students in the 2018 cohort are different from students in the 2019 and 2020 
+cohorts.
+
+--
+
+2. Students in the 2019 cohort are different from students in the 2018 and 2020 cohorts.
+
+--
+
+3. Students in the 2020 cohort are different from students in the 2018 and 2019 
+cohorts.
+
+--
+
+- To make this easy to remember we will refer to each model using the year 
+associated with the cohort that is **different** from the rest. (e.g the "2018 
+model" is the one that assumes that students in the 2018 cohort are different 
+from students in the other 2).
+
+---
+
+## 2018 model
+
+- We can formalize our "2018 model" using the following notation:
+$$y_{i1} \sim \text{Normal}(\mu_1,\sigma_1^2)$$ $$y_{i2},y_{i3} \sim \text{Normal}(\mu,\sigma_1^2)$$
+--
+
+- Notice that only the expected value of the anxiety level of students in the 
+2018 cohort $(\mu_1)$ is different from the other two $(\mu)$. 
+
+--
+
+- Our estimators for $\mu_1$, $\mu$ and $\sigma_1^2$ will be similar to the ones
+we had before.
+
+--
+
+- First the estimator $\hat{\mu}_1$ will be the average anxiety level in the 2018 
+cohort, while the estimator for the other 2 cohorts $\hat{\mu}$ will be the 
+average anxiety level of all students on the 2019 and 2020 cohorts.
+
+---
+
+## Adding the predictions of the 2018 model
+
+- An easy way to calculate and add the predictions of this new model to our data 
+is by first creating an "indicator" variable. This is a variable that takes one
+value if the observation belongs to the 2018 cohort and another value if it 
+belongs to one of the others.
+
+```{r id-var}
+anxiety <- anxiety %>% 
+  mutate("id_2018" = ifelse(test = cohort == "2018", yes = "2018", no = "other"))
+```
+
+--
+
+- Then we can use that variable to group our data and get the averages that we
+need.
+
+--
+
+```{r 2018-pred}
+pred_2018 <- anxiety %>% 
+  group_by(id_2018) %>% 
+  summarise("pred" = mean(anxiety))
+```
+
+--
+
+- The predicted anxiety level for First year students in the 2018 cohort was
+`r round(pred_2018$pred[1],2)` and for students in the 2019 and 2020 cohorts it was 
+`r round(pred_2018$pred[2],2)`.
+
+- Using those two estimators as the predictions of the anxiety levels we can 
+calculate the error of the model. Again, we start by calculating the error for 
+each observation by taking the observation and subtracting the prediction ( $\mu_1$ and $\mu$, respectively) and then squaring that difference.  
+
+
+
+
+
+
