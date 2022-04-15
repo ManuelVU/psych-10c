@@ -25,6 +25,8 @@ xaringanExtra::use_fit_screen()
 
 xaringanExtra::use_editable(expires = 1)
 
+xaringanExtra::use_panelset()
+
 xaringanExtra::use_extra_styles(
   hover_code_line = TRUE,         #<<
   mute_unhighlighted_code = TRUE  #<<
@@ -154,134 +156,6 @@ equal?).
 
 class: inverse, center, middle
 
-# Review of BIC's
-
----
-
-## BIC
-
-- Last week we mentioned that regardless of what data we have, a model that 
-assumes that there is more that one distribution will always be better in 
-terms of the error it produces in comparison to a simpler model.
-
---
-
-- We can try to understand this intuitively by looking a graph that uses 
-a single mean as a prediction. To do this we will use our smokers data:
-
---
-
-```{r, echo = FALSE, fig.align='center', fig.height = 6, fig.width = 7}
-link <- "https://raw.githubusercontent.com/ManuelVU/psych-10c-data/main/example-smoke.csv"
-smokers <- read_csv(file = link)
-par(mai = c(0.6,0.6,0.6,0.6))
-par(oma = c(3, 3, 0.2, 0.2))
-plot(x = seq(1,nrow(smokers)), y = sort(smokers$lung_capacity, decreasing = FALSE),
-     axes = FALSE, ann = FALSE, col = rep(c("#c80064","#54bebe"), each = 4),
-     pch = rep(c(15,19), each = 4), cex = 1.6)
-abline(h = mean(smokers$lung_capacity), lwd = 3, col = "#003f5c")
-box(bty = "l", lwd = 1.3)
-axis(2, las = 2)
-mtext(text = "Lung capacity", line = 2.3, cex = 1.6, side = 2)
-mtext(text = "Smokers", line = 1, cex = 1.8, side = 1, at = 2.5)
-mtext(text = "Non-smokers", line = 1, cex = 1.8, side = 1, at = 6.5)
-```
-
-
----
-
-## BIC
-
-- If we use two predictions instead of one (as in the effects model) the error
-will be reduced.
-
---
-
-```{r, echo = FALSE, fig.align='center', fig.height = 6, fig.width = 7}
-link <- "https://raw.githubusercontent.com/ManuelVU/psych-10c-data/main/example-smoke.csv"
-smokers <- read_csv(file = link)
-par(mai = c(0.6,0.6,0.6,0.6))
-par(oma = c(3, 3, 0.2, 0.2))
-plot(x = seq(1,nrow(smokers)), y = sort(smokers$lung_capacity, decreasing = FALSE),
-     axes = FALSE, ann = FALSE, col = rep(c("#c80064","#54bebe"), each = 4),
-     pch = rep(c(15,19), each = 4), cex = 1.6)
-abline(h = mean(smokers$lung_capacity), lwd = 1.5, col = "#003f5c", lty = 2)
-segments(x0 = 0,y0 = mean(smokers$lung_capacity[smokers$smoke_status=="smoker"]),
-         x1 = 4.5, y1 = mean(smokers$lung_capacity[smokers$smoke_status=="smoker"]),
-         col = "#c80064", lwd = 3)
-segments(x0 = 4.5,y0 = mean(smokers$lung_capacity[smokers$smoke_status=="non_smoker"]),
-         x1 = 9, y1 = mean(smokers$lung_capacity[smokers$smoke_status=="non_smoker"]),
-         col = "#54bebe", lwd = 3)
-box(bty = "l", lwd = 1.3)
-axis(2, las = 2)
-mtext(text = "Lung capacity", line = 2.3, cex = 1.6, side = 2)
-mtext(text = "Smokers", line = 1, cex = 1.8, side = 1, at = 2.5)
-mtext(text = "Non-smokers", line = 1, cex = 1.8, side = 1, at = 6.5)
-```
-
----
-
-## BIC
-
-- In general, we know that the more parameters (lines in the previous example)
-our models have, the more they will resemble the values in our data (less 
-error).
-
---
-
-- This is known as "fit", and for linear models adding more parameters or 
-unknowns (like adding more values of $\mu$) to our models will always improve 
-their fit (how close our predictions are to our observations).
-
---
-
-- If we only use "fit" or error as a criterion of which theory is better, then 
-we could always add more an more lines to the graph until we get a single line 
-for each point.
-
---
-
-- However, this is not be useful as it tells us that in order to make a 
-prediction we need to know the value that we want to predict. This doesn't make
-sense.
-
----
-
-## BIC
-
-- To avoid this problem we would like to take into account two things:
-
---
-
-1. How many parameters (unknown values) we use to make predictions (model
-complexity).
-
---
-
-2. How close those predictions are to those values (model fit).
-
---
-
-- BIC is one of the methods (there are more) that can accomplish this objective, 
-and it does so by assigning a value to how bad the predictions of the model are 
-(how large is the total error) and how many parameters (unknown values) the 
-model uses to make it's predictions.
-
---
-
-- The BIC will assign higher values to models that make larger errors or that 
-need more parameters (unknown values) to make a prediction.
-
---
-
-- If we select the model with the lowest BIC from the ones that we are using 
-then we are making a decision that weights both things, the complexity of the 
-model and the accuracy of the model (fit).
-
----
-
-class: inverse, center, middle
-
 # Multiple Groups
 
 ---
@@ -323,6 +197,7 @@ anxiety <- anxiety %>%
          "null_error" = (anxiety - null_pred)^2)
 sse_0 <- sum(anxiety$null_error)
 mse_0 <- 1/n_total * sse_0
+bic_0 <- n_total * log(mse_0) + log(n_total)
 ```
 ]
 .pull-right[
@@ -351,6 +226,8 @@ anxiety <- anxiety %>%
          "eff_error" = (anxiety - eff_pred)^2)
 sse_e <- sum(anxiety$eff_error)
 mse_e <- 1/n_total * sse_e
+r2_e <- (sse_0 - sse_e) / sse_0
+bic_e <- n_total * log(mse_e) + 3 * log(n_total)
 ```
 ]
 .pull-right[
@@ -504,18 +381,248 @@ model. Again, we start by calculating the error for each observation by taking t
 anxiety <- anxiety %>% 
   mutate("prediction_2018" = ifelse(test = id_2018 == "2018", 
                                     yes = pred_2018$pred[1],
-                                    no = pred_2018$pred[2]),
-         "error_2018" = (anxiety - prediction_2018)^2)
+                                    no = pred_2018$pred[2]))
+anxiety <- anxiety %>% 
+  mutate("error_2018" = (anxiety - prediction_2018)^2)
 ```
 
 --
 
 - Once again we can get the SSE for the model by adding all of the values in 
 the `error_2018` column. We can also use those values to calculate the 
-proportion of variance accounted for by the model that assumes that only 
-students from the 2018 cohort have different aciety levels.
+proportion of variance accounted for and the BIC for the model.
 
+```{r sse-r2-bic}
+sse_2018 <- sum(anxiety$error_2018)
+mse_2018 <- 1/n_total * sse_2018
+r2_2018 <- (sse_0 - sse_2018)/sse_0
+bic_2018 <- n_total * log(mse_2018) + 2 * log(n_total)
+```
 
+---
+
+## 2019 and 2020 models
+
+- Similar to our 2018 model, the other two models assume that one of the 
+cohorts is different from the rest do we can write the two remaining models as:
+$$y_{i2} \sim \text{Normal}(\mu_2,\sigma_2^2)$$ $$y_{i1},y_{i3} \sim \text{Normal}(\mu,\sigma_2^2)$$
+
+--
+
+- Where $y_{i2}$ represents the anxiety level of First year students in the 2019
+cohort. 
+
+--
+
+- Again, our estimator $\hat{\mu}_2$ of $\mu_2$ will be the average of the 
+anxiety levels of students in the 2019 cohort, while the prediction for students
+on the other 2 cohorts will be the average of the anxiety levels of all students
+in 2018 and 2020.
+
+--
+
+- For 2020 we can write the model as:
+$$y_{i3} \sim \text{Normal}(\mu_3,\sigma_3^2)$$ $$y_{i1},y_{i2} \sim \text{Normal}(\mu,\sigma_3^2)$$
+
+---
+
+## Multiple groups
+
+- Notice that in all of these models we always assign one distribution to one 
+of the cohorts and then assign a single distribution to the remaining ones.
+
+--
+
+- Therefore all of these models are simpler than the general Effects model which
+uses 3 normal distributions instead of 2. 
+
+---
+
+## Inference: 2019 and 2020 models
+
+- First we can calculate and add the predictions for the 2019 model, remember 
+that we can make those calculations easier by creating an indicator variable
+that assign's one value to our observations of the 2019 cohort and a different
+value to the rest.
+
+--
+
+```{r 2019-pred}
+# add indicator variable to data file.
+anxiety <- anxiety %>% 
+  mutate("id_2019" = ifelse(test = cohort == "2019", 
+                            yes = "2019", no = "other"))
+# obtain the estimates of mu_2 and mu for the 2019 model. 
+pred_2019 <- anxiety %>% 
+  group_by(id_2019) %>% 
+  summarise("pred" = mean(anxiety))
+# add the predictions (estimates) as a new variable to make calculation of the
+# sse and mse easier.
+anxiety <- anxiety %>% 
+  mutate("pred_2019" = ifelse(test = id_2019 == "2019",
+                              yes = pred_2019$pred[1],
+                              no = pred_2019$pred[2]))
+```
+
+---
+
+## Inference: 2019 and 2020 models
+
+- Then we can get the SSE, Mean SE $(\hat{\sigma}_2^2)$, the proportion of
+error accounted for by the 2019 model and its BIC.
+
+```{r evaluation-2019}
+# add variable with the errors of each observation for 2019 model
+anxiety <- anxiety %>% 
+  mutate("error_2019" = (anxiety - pred_2019)^2)
+# calculate SSE for 2019 model
+sse_2019 <- sum(anxiety$error_2019)
+# calculate Mean se for 2019 model
+mse_2019 <- 1/n_total * sse_2019
+# calculate proportion of error accounted for by 2019 model
+r2_2019 <- (sse_0 - sse_2019) / sse_0
+# calculate BIC for 2019 model
+bic_2019 <- n_total * log(mse_2019) + 2 * log(n_total)
+```
+
+---
+
+## Inference: 2019 and 2020 models
+
+- If we do all the same calculations for the 2020 model now we will be able to 
+compare all of our models and reach a conclusion about our original problem.
+
+.panelset[
+  .panel[.panel-name[Predictions]
+```{r inf-2020}
+# add indicator variable to data file.
+anxiety <- anxiety %>% 
+  mutate("id_2020" = ifelse(test = cohort == "2020", 
+                            yes = "2020", no = "other"))
+# obtain the estimates of mu_2 and mu for the 2020 model. 
+pred_2020 <- anxiety %>% 
+  group_by(id_2020) %>% 
+  summarise("pred" = mean(anxiety))
+# add the predictions (estimates) as a new variable to make calculation of the
+# sse and mse easier.
+anxiety <- anxiety %>% 
+  mutate("pred_2020" = ifelse(test = id_2020 == "2020",
+                              yes = pred_2020$pred[1],
+                              no = pred_2020$pred[2]))
+```
+  ]
+  .panel[.panel-name[Error and Evaluation]
+```{r evaluation-2020}
+# add variable with the errors of each observation for 2020 model
+anxiety <- anxiety %>% 
+  mutate("error_2020" = (anxiety - pred_2020)^2)
+# calculate SSE for 2020 model
+sse_2020 <- sum(anxiety$error_2020)
+# calculate Mean se for 2020 model
+mse_2020 <- 1/n_total * sse_2020
+# calculate proportion of error accounted for by 2020 model
+r2_2020 <- (sse_0 - sse_2020) / sse_0
+# calculate BIC for 2020 model
+bic_2020 <- n_total * log(mse_2020) + 2 * log(n_total)
+```
+  ]
+]
+
+---
+
+## Interpretation and conclusion:
+
+- This time we have a total of 5 models that we want to compare.
+
+--
+
+- Our interpretation and conclusion have to be drawn from the results of that 
+comparison, so we want to summarize the results in a way that makes it easy for
+us to communicate it.
+
+--
+
+- In order to present the results of multiple comparisons between models we 
+often use a table. This table should include the value of the Mean Squared 
+Error (our estimator of each sigma), the proportion of variance accounted for 
+by each model and the BIC.
+
+--
+
+- For our anxiety levels example we can report the following table:
+
+---
+
+### Results
+
+| Model   | Number of Parameters | Mean-SE              | $R^2$               | BIC                  |
+|---------|:--------------------:|:--------------------:|---------------------|----------------------|
+| Null    | 1                    | `r round(mse_0,2)`   | NA                  | `r round(bic_0,2)`   |
+| 2018    | 2                    | `r round(mse_2018,2)`| `r round(r2_2018,3)`| `r round(bic_2018,2)`|
+| 2019    | 2                    | `r round(mse_2019,2)`| `r round(r2_2019,3)`| `r round(bic_2019,2)`|
+| 2020    | 2                    | `r round(mse_2020,2)`| `r round(r2_2020,3)`| `r round(bic_2020,2)`|
+| Effects | 3                    | `r round(mse_e,2)`   | `r round(r2_e,3)`   | `r round(bic_e,2)`   |
+
+--
+ 
+- The first thing that we need to notice is that all the models that look at the 
+effect of a single year have two parameters, which means that they assume that
+there are only two populations (Normal distributions). 
+
+--
+
+- Second, is that the Mean SE is always lower for models with more parameters.
+
+--
+
+- Finally, that from all the models, the BIC of the 2020 was the lowest even 
+though the Mean SE of that model is Higher than the Effects model. This is due
+to the added flexibility of the Effects model being "punished" by the BIC.
+
+---
+ 
+## Discussion
+
+- Now we can draw a conclusion based on the results of our model comparison.
+
+--
+
+- From the BIC values obtained for each model we could conclude that:
+  
+--
+
+  - Based on the BIC values obtained from the models, the one that better 
+  accounts for our observations was the model that assumes that the anxiety
+  levels of First year students in the 2020 cohort are different from the levels 
+  of students from 2018 or 2019.
+  
+---
+
+## Discussion
+  
+- Based on the estimates of $\mu_3$ and $\mu$ from the 2020 model we can say 
+that:
+
+--
+
+  - According to our model, the average anxiety level of First year students in
+  the 2020 cohort was approximately `r round(pred_2020$pred[1],2)`, in comparison
+  with the average of students in the 2018 and 2019 cohorts was 
+  `r round(pred_2020$pred[2],2)`. This suggests that anxiety levels on the 2020
+  cohort where higher.
+
+---
+
+## Discussion
+
+- Finally, based on the proportion of error accounted for by the model we could 
+add:
+
+--
+
+  - The model that assumes that only the cohort of 2020 was different from the 
+  others accounts for `r 100 * round(r2_2020,2)`% of the total variation in 
+  anxiety levels of First year students.
 
 
 
