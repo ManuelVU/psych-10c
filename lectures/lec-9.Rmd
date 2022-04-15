@@ -82,8 +82,8 @@ look at the data we want you to choose one of the three problems.
 
 ### Problem 1:
 
-- We want to know if people that have had a brain curgical procedure known as 
-split brain, have problems identifing obhects presented at either side of their 
+- We want to know if people that have had a brain surgical procedure known as 
+split brain, have problems identifying objects presented at either side of their 
 visual field.
 
 --
@@ -99,14 +99,14 @@ fact that they used the app Luminosity during that year.
 ### Problem 3:
 
 - We want to know how the asking price for an IKEA chair changes as a function
-of the total cost of the matrials, if the person build the chaitr themselves and
+of the total cost of the materials, if the person build the chair themselves and
 the difficulty of building it.
 
 ---
 
 ## Final project
 
-The paper must have the following points:
+The paper must consist of the following parts:
 
 - Introduction: 4 to 5 sentences that summarize the problem, and why it's 
 important. The idea is to convince your reader that what you are doing matters
@@ -120,8 +120,12 @@ from (how it was collected).
 --
   
 - Data: provide a summary of your data, you can use summary statistics like
-the median, mean or variance. You can also use this section to highlight some
-properties of the data that you are working on by using graphs.
+the median, mean or variance. 
+
+--
+  
+  -You can also use this section to highlight some properties of the data that 
+  you are working on by using graphs.
   
 ---
 
@@ -167,8 +171,8 @@ of 3 cohorts of students at a university. The 2018, 2019 and 2020 cohorts.
 
 --
 
-- We formalized a model that assumed that there are no difference on the levels 
-of anxiety of First year students on the 3 cohorts (Null model) that states: $$y_{ij}\sim\text{Normal}(\mu,\sigma_0^2)$$
+- We formalized a model that assumed that there are no differences on the anxiety levels of First year students between the 3 cohorts (Null model) that is 
+denoted as: $$y_{ij}\sim\text{Normal}(\mu,\sigma_0^2)$$
 for $i=1, \dots,30$ students in each of the $j=1,2,3$ cohorts (2018 to 2020).
 
 --
@@ -179,9 +183,9 @@ expressed as: $$y_{ij}\sim\text{Normal}(\mu_j,\sigma_e^2)$$
 
 --
 
-- We also mentioned that this model does not address our original question, as 
-the conclusion that we can draw from it is that there is at least one of the 
-groups is different from the rest.
+- This model does not address our original question, as the only conclusion that 
+we can draw from it is that at least one of the groups is different from the 
+rest.
 
 ---
 
@@ -245,11 +249,11 @@ Mean SE: `r round(mse_e, 2)`
 
 ## Results: review
 
-- The conclusion that we draw from those estimations was that:
+- The conclusion we can draw from these results is that:
 
 --
 
-  1. The effects model accounted for `r 100*round((sse_0-sse_e) / sse_0, 3)`% 
+  1. The effects model accounts for `r 100*round((sse_0-sse_e) / sse_0, 3)`% 
   of the total variation in anxiety scores of the students on the 3 different 
   cohorts.
   
@@ -403,8 +407,8 @@ bic_2018 <- n_total * log(mse_2018) + 2 * log(n_total)
 
 ## 2019 and 2020 models
 
-- Similar to our 2018 model, the other two models assume that one of the 
-cohorts is different from the rest do we can write the two remaining models as:
+- Similar to our 2018 model, the other two assume that one of the cohorts is 
+different from the rest. We can write the two remaining models as:
 $$y_{i2} \sim \text{Normal}(\mu_2,\sigma_2^2)$$ $$y_{i1},y_{i3} \sim \text{Normal}(\mu,\sigma_2^2)$$
 
 --
@@ -428,7 +432,7 @@ $$y_{i3} \sim \text{Normal}(\mu_3,\sigma_3^2)$$ $$y_{i1},y_{i2} \sim \text{Norma
 
 ## Multiple groups
 
-- Notice that in all of these models we always assign one distribution to one 
+- Notice that, in all of these models, we always assign one distribution to one 
 of the cohorts and then assign a single distribution to the remaining ones.
 
 --
@@ -553,7 +557,7 @@ by each model and the BIC.
 
 ---
 
-### Results
+## Results
 
 | Model   | Number of Parameters | Mean-SE              | $R^2$               | BIC                  |
 |---------|:--------------------:|:--------------------:|---------------------|----------------------|
@@ -576,12 +580,21 @@ there are only two populations (Normal distributions).
 --
 
 - Finally, that from all the models, the BIC of the 2020 was the lowest even 
-though the Mean SE of that model is Higher than the Effects model. This is due
+though the Mean SE of that model is higher than the Effects model. This is due
 to the added flexibility of the Effects model being "punished" by the BIC.
 
 ---
  
 ## Discussion
+
+| Model   | Number of Parameters | Mean-SE              | $R^2$               | BIC                  |
+|---------|:--------------------:|:--------------------:|---------------------|----------------------|
+| Null    | 1                    | `r round(mse_0,2)`   | NA                  | `r round(bic_0,2)`   |
+| 2018    | 2                    | `r round(mse_2018,2)`| `r round(r2_2018,3)`| `r round(bic_2018,2)`|
+| 2019    | 2                    | `r round(mse_2019,2)`| `r round(r2_2019,3)`| `r round(bic_2019,2)`|
+| 2020    | 2                    | `r round(mse_2020,2)`| `r round(r2_2020,3)`| `r round(bic_2020,2)`|
+| Effects | 3                    | `r round(mse_e,2)`   | `r round(r2_e,3)`   | `r round(bic_e,2)`   |
+
 
 - Now we can draw a conclusion based on the results of our model comparison.
 
@@ -599,6 +612,15 @@ to the added flexibility of the Effects model being "punished" by the BIC.
 ---
 
 ## Discussion
+
+| Model   | Number of Parameters | Mean-SE              | $R^2$               | BIC                  |
+|---------|:--------------------:|:--------------------:|---------------------|----------------------|
+| Null    | 1                    | `r round(mse_0,2)`   | NA                  | `r round(bic_0,2)`   |
+| 2018    | 2                    | `r round(mse_2018,2)`| `r round(r2_2018,3)`| `r round(bic_2018,2)`|
+| 2019    | 2                    | `r round(mse_2019,2)`| `r round(r2_2019,3)`| `r round(bic_2019,2)`|
+| 2020    | 2                    | `r round(mse_2020,2)`| `r round(r2_2020,3)`| `r round(bic_2020,2)`|
+| Effects | 3                    | `r round(mse_e,2)`   | `r round(r2_e,3)`   | `r round(bic_e,2)`   |
+
   
 - Based on the estimates of $\mu_3$ and $\mu$ from the 2020 model we can say 
 that:
@@ -614,6 +636,15 @@ that:
 ---
 
 ## Discussion
+
+| Model   | Number of Parameters | Mean-SE              | $R^2$               | BIC                  |
+|---------|:--------------------:|:--------------------:|---------------------|----------------------|
+| Null    | 1                    | `r round(mse_0,2)`   | NA                  | `r round(bic_0,2)`   |
+| 2018    | 2                    | `r round(mse_2018,2)`| `r round(r2_2018,3)`| `r round(bic_2018,2)`|
+| 2019    | 2                    | `r round(mse_2019,2)`| `r round(r2_2019,3)`| `r round(bic_2019,2)`|
+| 2020    | 2                    | `r round(mse_2020,2)`| `r round(r2_2020,3)`| `r round(bic_2020,2)`|
+| Effects | 3                    | `r round(mse_e,2)`   | `r round(r2_e,3)`   | `r round(bic_e,2)`   |
+
 
 - Finally, based on the proportion of error accounted for by the model we could 
 add:
