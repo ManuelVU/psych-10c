@@ -171,7 +171,8 @@ of 3 cohorts of students at a university. The 2018, 2019 and 2020 cohorts.
 
 --
 
-- We formalized a model that assumed that there are no differences on the anxiety levels of First year students between the 3 cohorts (Null model) that is 
+- We formalized a model that assumed that there are no differences on the 
+anxiety levels of First year students between the 3 cohorts (Null model) that is 
 denoted as: $$y_{ij}\sim\text{Normal}(\mu,\sigma_0^2)$$
 for $i=1, \dots,30$ students in each of the $j=1,2,3$ cohorts (2018 to 2020).
 
@@ -304,7 +305,8 @@ cohorts.
 
 --
 
-2. Students in the 2019 cohort are different from students in the 2018 and 2020 cohorts.
+2. Students in the 2019 cohort are different from students in the 2018 and 2020 
+cohorts.
 
 --
 
@@ -336,8 +338,8 @@ we had before.
 
 --
 
-- First the estimator $\hat{\mu}_1$ will be the average anxiety level in the 2018 
-cohort, while the estimator for the other 2 cohorts $\hat{\mu}$ will be the 
+- First the estimator $\hat{\mu}_1$ will be the average anxiety level in the 
+2018 cohort, while the estimator for the other 2 cohorts $\hat{\mu}$ will be the 
 average anxiety level of all students on the 2019 and 2020 cohorts.
 
 ---
@@ -371,15 +373,17 @@ pred_2018 <- anxiety %>%
 --
 
 - The predicted anxiety level for First year students in the 2018 cohort was
-`r round(pred_2018$pred[1],2)` and for students in the 2019 and 2020 cohorts it was 
-`r round(pred_2018$pred[2],2)`.
+`r round(pred_2018$pred[1],2)` and for students in the 2019 and 2020 cohorts it 
+was `r round(pred_2018$pred[2],2)`.
 
 ---
 
 ## 2018 model: Error
 
 - Using the predictions of the anxiety levels we can calculate the error of the 
-model. Again, we start by calculating the error for each observation by taking the difference between the observation and the model prediction ( $\hat{\mu}_1$ and $\hat{\mu}$, respectively) and then squaring that difference.
+model. Again, we start by calculating the error for each observation by taking 
+the difference between the observation and the model prediction ( $\hat{\mu}_1$ 
+and $\hat{\mu}$, respectively) and then squaring that difference.
 
 ```{r error}
 anxiety <- anxiety %>% 
@@ -654,6 +658,20 @@ add:
   - The model that assumes that only the cohort of 2020 was different from the 
   others accounts for `r 100 * round(r2_2020,2)`% of the total variation in 
   anxiety levels of First year students.
+  
+---
+
+## Multiple groups
+
+- The approach that we have taken here is a "brute force" approach, as we looked
+at all the combinations between the cohorts to find the best model. We don't 
+have to do this every time we have multiple groups.
+
+--
+
+- Next class we will see that, if we have a hypothesis about how our 
+observations will behave, then we only need to look at the Null, Effects and
+a specific model in order to answer our scientific question.
 
 
 
