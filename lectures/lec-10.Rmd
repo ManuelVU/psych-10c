@@ -53,14 +53,14 @@ drug_trial <- read_csv(file = link) %>%
 
 ## Hypotheses as models
 
-- When we have one independent variable that can take more than 2 values 
+- When we have one independent variable that can take more than 2 values, 
 comparing a Null model which assumes that every group has the same expected value
-with the effects model which assumes that every group has a different expected 
+with the Effects model which assumes that every group has a different expected 
 value is not enough to answer our research question.
 
 --
 
-- This is because the Effects model can be the better than the null in multiple
+- This is because the Effects model can be better than the Null in multiple
 ways.
 
 --
@@ -69,9 +69,9 @@ ways.
 that:
 
 --
-  1. If every group is different $\mu_1 \neq \mu_2 \neq \mu_3$.
+  1. Every group is different $\mu_1 \neq \mu_2 \neq \mu_3$.
   
-  2. If at least one group is different $\mu_1 = \mu_2 \neq \mu_3$.
+  2. At least one group is different $\mu_1 = \mu_2 \neq \mu_3$.
   
 --
 
@@ -84,7 +84,7 @@ group is different.
 ## Hypothesis as models
 
 - As we showed with the anxiety example, we can reach an answer to our research
-question by comparing multiple model, which assume that one group is different 
+question by comparing multiple models, which assume that one group is different 
 from the rest. We do this with each group one at a time.
 
 --
@@ -94,25 +94,24 @@ in us having to look at the predictions and errors of 5 different models.
 
 --
 
-- If we increase the number of goups (or values of our independent variable) 
+- If we increase the number of groups (or values of our independent variable) 
 this number will increase rapidly. For example, if we have 4 groups the number 
 of models that we could compare is 9, and for 5 it grows to 17.
 
 --
 
-- We would prefer not to have to look at so many models every time we have more
-than two groups.
+- It is always better if we can reduce the number of models that we have to 
+compare in order to answer a scientific question.
 
 --
 
-- One way to reduce the number of models that we look at is by making our 
-research question more precise.
+- One way to achieve this goal is by making our research question more precise.
 
 ---
 
 ## A better approach to comparing anxiety levels
 
-- Going back to wour anxiety levels example, instead of asking the question: 
+- Going back to our anxiety levels example, instead of asking the question: 
 
 --
 
@@ -154,10 +153,10 @@ comparisons that we have to make.
 
 --
 
-- In the previous example our second question makes more sense as there is no 
+- In the previous example our second question makes more sense, as there is no 
 real reason to assume that 2018 and 2019 should be different, however, due 
 to the pandemic, we would expect First year students from the 2020 cohort 
-to be more anxious than others.
+to be more anxious (on average) than others.
 
 --
 
@@ -188,7 +187,7 @@ class: inverse, center, middle
 
 # Research problem:
 
-- A pharmaceutical company is about to launch a new drug as a treatment for high 
+- A pharmaceutical company is about to launch a new drug treatment for high 
 blood pressure
 
 --
@@ -223,9 +222,8 @@ Model 5:
 
 ## Experiment
 
-- For each participant the experimenters have recorded the blood pressure of 
-each participant after 2 weeks of treatment. They have obtained the following 
-data:
+- Experimenters have recorded the blood pressure of each participant after 2 
+weeks of treatment, and obtained the following data:
 
 ```{r show-data, echo = FALSE}
 DT::datatable(data = drug_trial,
@@ -238,6 +236,8 @@ DT::datatable(data = drug_trial,
 
 - Another way in which we can visualize our data is by constructing a 
 combination between a box-plot and a histogram:
+
+--
 
 .pull-left[
 ```{r hist-score, eval = FALSE}
@@ -272,7 +272,7 @@ ggplot(data = drug_trial) +
 --
 
 - **Null model:** There are no differences in blood pressure levels between 
-participants regardless of treatment. $$y_{ij}\sim\text{Normal}(\mu,\sigma_0^2)$$
+participants regardless of treatment condition. $$y_{ij}\sim\text{Normal}(\mu,\sigma_0^2)$$
 
 --
 
@@ -285,6 +285,8 @@ expected blood pressure level than the others. $$y_{ij}\sim\text{Normal}(\mu_j,\
 
 - As in previous examples first we want to calculate the predictions of the 
 model, the Sum of Squared Errors (SSE) and the Mean Squared Error of the Null.
+
+--
 
 .pull-left[
 ```{r null-model}
@@ -366,7 +368,10 @@ bic_effects <- n_total * log(mse_effects) + 3 * log(n_total)
 ## New drug model
 
 - For this model we assume that only the expectation of the new drug is 
-different from the rest. We can express the model as: $$y_{i3}\sim\text{Normal}(\mu_3,\sigma_3^2)$$
+different from the rest. We can express the model as: $$y_{i3}\sim\text{Normal}(\mu_3,\sigma_3^2)$$ 
+$$y_{i1},y_{i2}\sim\text{Normal}(\mu,\sigma_3^2)$$
+
+where $j=3$ if the observation was in the **new drug** condition. 
 
 --
 
@@ -374,7 +379,8 @@ different from the rest. We can express the model as: $$y_{i3}\sim\text{Normal}(
 
 --
 
-- We evaluate this model as the others, by calculating its predictions and error.
+- As we have done with other models, we evaluate this model by calculating its
+predictions and error.
 
 ---
 
@@ -426,7 +432,7 @@ bic_newdrug <- n_total * log(mse_newdrug) + 2 * log(n_total)
 
 ## Results
 
-- From our results we can see that the best model was the Effects mode, 
+- From our results we can see that the best model was the Effects, 
 furthermore, the **new drug** model was also better at accounting for our 
 observations than the Null model was.
 
@@ -456,7 +462,7 @@ drug are different from the control and at least equal to the standard of care.
 
 --
 
-- Participants that used the new drug for a week had an average blood pressure 
+- Participants that used the new drug for 2 weeks had an average blood pressure 
 of `r round(effects$pred[2],2)`, while participants using the standard of care 
 drug and a control substance had blood pressures of `r round(effects$pred[3],2)` 
 and `r round(effects$pred[1],2)` respectively.
@@ -496,7 +502,7 @@ distribution.
 
 --
 
-- Our estimators for the expected value of each group distribution (the average 
+- Our estimators for the expected value of each group (the average 
 of each group) are statistics, and therefore, they follow their own probability
 distribution.
 
@@ -509,7 +515,7 @@ follow a Normal distribution) the distribution of our estimator is also Normal!
 
 ## Adding error bars to model predictions
 
-- To know add error bars to our estimators (AKA confidence intervals) we have
+- To add error bars to our estimators (AKA confidence intervals) we have
 to take into account their distribution.
 
 --
@@ -520,16 +526,17 @@ following equation: $$\hat{\mu}_j \pm 1.96 \times \sqrt{\frac{\hat{\sigma}^2}{n_
 
 --
 
-- Where the value $1.96$ comes from the normal distribution and it's the value
+- Where the value $1.96$ comes from the normal distribution, and it's the value
 at which the normal accumulates $0.975$ of its probability. $\hat{\mu}_j$ is the 
-prediction for group $j$ and SSE is the sum of squared error of the model.
+prediction for group $j$ and $\hat{\sigma}^2$ is the Mean Squared eror of the 
+best model.
 
 --
 
 - The value of $n_j$ is equal to the number of observations that we use to 
 calculate each prediction. For example, with the Effects model we used 25 
 observations to calculate each $\hat{\mu}_j$ which means that we would use 
-$n_j = 25$ and we have 3 predictions so $k=3$.
+$n_j = 25$.
 
 ---
 
@@ -537,7 +544,7 @@ $n_j = 25$ and we have 3 predictions so $k=3$.
 
 - In comparison, with the new drug model we used only 2 predictions, so 
 $n_{new}=25$ for the new drug condition and $n_{other} = 50$ for other 
-condition. Therefore, we need to calculate the sample size according to the 
+conditions. Therefore, we need to calculate the sample size according to the 
 model we selected.
 
 - In order to visualize our model's predictions in R first we have to create 
@@ -586,6 +593,58 @@ ggplot(data = confint_effects) +
 
 ```
 ]
+
+---
+
+## New drug model
+
+- If we want to do the same with the new drug model then we have to take into 
+account that one of our predictions was obtained using 50 observations, which
+means that our estimate should be more precise (the more observations we have
+the more precise the estimator).
+
+```{r new-error}
+# create a new data frame with prediction by group and error
+confint_newdrug <- drug_trial %>% 
+  group_by(id_newdrug) %>% 
+  summarise("sample_size" = n(),
+            "prediction" = mean(blood_pressure),
+            "standard_error" = 1.96 * sqrt(mse_newdrug/sample_size))
+```
+
+---
+
+## Visualizing model fit: New drug model
+
+.pull-left[
+```{r new-fit, eval = FALSE}
+ggplot(data = confint_newdrug) + 
+  aes(x = id_newdrug) + 
+  aes(y = prediction) +
+  aes(color = id_newdrug) + 
+  geom_pointrange(
+    aes(ymin = prediction - standard_error, 
+        ymax = prediction + standard_error, 
+        color = id_newdrug),
+    position = position_dodge(0.3), fatten = 2, size = 2.8) +
+  geom_dotplot(data = drug_trial, binaxis = 'y', stackdir='center', 
+               dotsize = 0.5, method = "histodot", col = "#555555",
+               fill = "#555555", alpha = 0.3, binwidth = 2,
+               mapping = aes(x = id_newdrug, y = blood_pressure)) +
+  theme_classic() + 
+  xlab("Condition") + 
+  ylab("Blood pressure") + 
+  guides(fill = guide_legend("Exam"), color = "none") + 
+  theme(axis.title.x = element_text(size = 25),
+        axis.title.y = element_text(size = 25))  
+```
+]
+.pull-right[
+```{r new-fit-out, ref.label = "new-fit", fig.align = 'center', echo = FALSE, fig.width = 8, fig.height = 8}
+
+```
+]
+
 
 ---
 
