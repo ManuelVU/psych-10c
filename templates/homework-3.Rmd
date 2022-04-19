@@ -17,29 +17,23 @@ output: pdf_document
 ## Section 1
 
 **Background:** For this section, we will work with a new data set from an 
-experiment regarding the effects of naps in the consolidation of information in
-memory. A group of researchers is interested in understanding the effects that 
+experiment regarding the effect of naps in the consolidation of information in
+memory. A group of researchers is interested in understanding the effect that 
 taking a nap can have on memory consolidation. They designed an experiment where
-participants are assigned randomly to one of 3 conditions, a control condition 
-where participants first study a list of 100 words and, after one hour they are
+participants are assigned randomly to one of 3 conditions. In the control condition, 
+participants first study a list of 100 words and, after one hour, they are
 asked to write down all the words they can remember. In the first experimental
-condition, participants are given the same list, after study, each participant 
-takes a 15 min nap and again, they are asked to write down all the words they 
-can remember from the list after a total of 1 hour has passed since the study
-of the list. Finally, the last group is given the same list and after a study 
-time they are asked to take a 1 hour nap, once the hour has passed, participants
-are asked to write down all the words from the list that they can remember.
+condition, participants are given the same list. After studying the list, each participant takes a 15 min nap and then waits 45 min (so that a total of 1 hr has passed since they studied the list) before they are asked to write down all the words they can remember from the list. In the second experimental condition, participants are given the same list and after a study time they are asked to take a 1 hour nap. Once the hour has passed, participants are asked to write down all the words from the list that they can remember.
 
 We have access to the data of the experiment which includes an *id* assigned to 
 each participant, the number of correctly *recalled* words and the experimental
 condition that they are assigned to. Due to the nature of the experiment we are 
-interested in 4 models, the Null model which assumes that there are no 
-differences in the total number of recalled words between conditions. A 
+interested in 4 models: (1) the Null model which assumes that there are no 
+differences in the total number of recalled words between conditions, (2) a 
 "**15 minutes**" model which assumes that the total number of correctly recalled
-words is different only for participants that had the 15 nap. A "**60 minutes**"
-mode which assumes that the total number of correctly recalled words is only 
-different for participants who had a 1 hour nap. Finally, we are interested 
-in the effects model which assumes that each group is different.
+words is different only for participants that had the 15 nap, (3) a "**60 minutes**"
+model which assumes that the total number of correctly recalled words is only 
+different for participants who had a 1 hour nap, and (4) the effects model which assumes that each group is different.
 
 ```{r load_data, echo = TRUE}
 # Code 1: Load the data (Hint: Go back to Lec-10)
@@ -50,7 +44,7 @@ in the effects model which assumes that each group is different.
 
 1. Obtain the predictions of the Null model, add the required values as a 
 new variable (column) to the data set (remember to give this new variable a 
-name!). What are the total number of correctly recalled words  predicted by 
+name!). What is the total number of correctly recalled words predicted by 
 the Null model for each group?
 
 ```{r pred-m1-s1, echo = TRUE}
@@ -88,7 +82,7 @@ model?
 
 **ANS:** [WRITE YOUR ANSWER HERE]
 
-4. Obtain the predictions of the Effects model add the required values as a new 
+4. Obtain the predictions of the Effects model and add those values as a new 
 variable (column) to the data set (remember to give this new variable a 
 DIFFERENT name!). What are the total number of correctly recalled words 
 predicted by the Effects model for each group?
@@ -104,7 +98,7 @@ predicted by the Effects model for each group?
 **ANS:** [WRITE YOUR ANSWER HERE]
 
 5. Calculate the squared error (SE) for each observation under the Effects model
-by adding a new column to the data set (again, watch out the names you give to 
+by adding a new column to the data set (again, be careful with the names you give to 
 the new column!). What is the mean Sum of Squared Errors (m-SSE) of the Effects 
 model?
 
@@ -131,9 +125,9 @@ model?
 
 **ANS:** [WRITE YOUR ANSWER HERE]
 
-7. Obtain the predictions of the 15 minutes model, add the required values as a 
+7. Obtain the predictions of the 15 minutes model and add those values as a 
 new variable (column) to the data set (remember to give this new variable a 
-name!). What are the total number of correctly recalled words  predicted by 
+name!). What are the total number of correctly recalled words predicted by 
 the 15 minutes model for each group?
 
 ```{r pred-m3-s1, echo = TRUE}
@@ -146,8 +140,8 @@ the 15 minutes model for each group?
 
 **ANS:** [WRITE YOUR ANSWER HERE]
 
-8. Calculate the squared error (SE) of each observation under the 15 minutes by adding
-a new column to our data set. What is the mean Sum of Squared Errors 
+8. Calculate the squared error (SE) of each observation under the 15 minute model
+by adding a new column to our data set. What is the mean Sum of Squared Errors 
 (m-SSE) of the 15 minutes model?
 
 ```{r sse-m3-s1, echo = TRUE}
@@ -173,7 +167,7 @@ model?
 
 10. Obtain the predictions of the 60 minutes model, add the required values as a 
 new variable (column) to the data set (remember to give this new variable a 
-name!). What are the total number of correctly recalled words  predicted by 
+name!). What are the total number of correctly recalled words predicted by 
 the 60 minutes model for each group?
 
 ```{r pred-m4-s1, echo = TRUE}
@@ -188,7 +182,7 @@ the 60 minutes model for each group?
 
 11. Calculate the squared error (SE) of each observation under the 60 minutes by 
 adding a new column to our data set. What is the mean Sum of Squared 
-Errors (m-SSE) of the 60 minutes  model?
+Errors (m-SSE) of the 60 minutes model?
 
 ```{r sse-m4-s1, echo = TRUE}
 # Code 12: Add a Squared Error column and compute the m-SSE for the 60 minutes model
@@ -226,13 +220,7 @@ minutes model?
 ## Section 2
 
 **Background:** For this section, we will work with the responses to a memory 
-experiment. Researchers are interested in the effects of biological sex and 
-word frequency on the total number of words that can be correctly recalled from
-a list. For this experiment we have two factors (biological sex and word frequency)
-with two levels each (female, male and common rare). For each combination of the 
-factor levels we have 20 observations for a total of 80 participants. For this
-problem we will consider a total of 4 models, the Null, biological sex main 
-effect, word frequency main effect and the additive model. 
+experiment. Researchers are interested in the effects of biological sex at birth and word frequency (how commonly a word is used in English) on the total number of words that can be correctly recalled from a list. For this experiment we have two factors (biological sex and word frequency) with two levels each (female vs. male and common vs. rare). For each combination of the factor levels we have 20 observations for a total of 80 participants. For this problem we will consider a total of 4 models: (1) the Null, (2) biological sex main effect, (3) word frequency main effect and (4) the additive model. 
 
 ```{r load_data2, echo = TRUE}
 # Code 14: Load the data (Hint: Go back to Lec-10 and use the link)
@@ -254,10 +242,10 @@ word frequency ($\hat{\beta}$).
 
 **ANS:** [WRITE YOUR ANSWER HERE]
 
-17. Obtain the predictions of the Null model and add them to the data. After, 
+17. Obtain the predictions of the Null model and add them to the data. Next, 
 calculate the error of each observation and add it as a new variable. Use those 
 values to calculate the SSE and the Mean SE associated with the Null model. 
-Report the prediction, SSE and Mean Se of the Null model below.
+Report the prediction, SSE and Mean SE of the Null model below.
 
 ```{r null-m1-s2, echo = TRUE}
 # Code 16: adding predictions, errors and calculating the SSE and Mean SE Null
@@ -270,7 +258,7 @@ Report the prediction, SSE and Mean Se of the Null model below.
 
 **ANS:** [WRITE YOUR ANSWER HERE]
 
-18. What is the value of the Bayesian Information Criterion for the Null model?
+18. What is the value of the Bayesian Information Criterion (BIC) for the Null model?
 
 ```{r bic-null-s2, echo = TRUE}
 # Code 17: Calculating the BIC for the Null model
@@ -283,9 +271,7 @@ Report the prediction, SSE and Mean Se of the Null model below.
 **ANS:** [WRITE YOUR ANSWER HERE]
 
 19. Using the values you obtained in question 16 obtain the predictions of the 
-biological sex model, add the predictions to the data, calculate the squared
-error of each observation. Then obtain the SSE and the Mean SE associated to 
-the biological sex model. Report the prediction, SSE and Mean Se of the Null model below.
+biological sex model, add a new column with the predictions, and calculate the squared error of each observation. Then obtain the SSE and the Mean SE associated with the biological sex model. Report the prediction, SSE and Mean SE of the Null model below.
 
 ```{r bio-m2-s2, echo = TRUE, fig.align = 'center'}
 # Code 18: adding predictions, errors and calculating the SSE and Mean SE
@@ -296,24 +282,21 @@ the biological sex model. Report the prediction, SSE and Mean Se of the Null mod
 # data. Calculate the SSE and the Mean SE from the new variables.
 ```
 
-20. What is the value of the Bayesian Information Criterion (bic) for the 
+20. What is the value of the Bayesian Information Criterion (BIC) for the 
 biological sex model?
 
 ```{r bic-bio-s2, echo = TRUE}
 # Code 19: Calculating the BIC for the biological sex model
 #
 # In this code chunk you can write the functions that you need in order to 
-# calculate the BIC associated to the biological sex model. Save it as a new 
+# calculate the BIC associated with the biological sex model. Save it as a new 
 # variable and report the value as text below.
 ```
 
 **ANS:** [WRITE YOUR ANSWER HERE]
 
-21. Using the values you obtained in question 16 obtain the predictions of the 
-word frequency model, add the predictions to the data, calculate the squared
-error of each observation. Then obtain the SSE and the Mean SE associated to 
-the word frequency model. Report the prediction, SSE and Mean Se of the Null 
-model below.
+21. Using the values you obtained in question 16, obtain the predictions of the 
+word frequency model, add a new column with the predictions, and calculate the squared error of each observation. Then obtain the SSE and the Mean SE associated with the word frequency model. Report the prediction, SSE and Mean Se of the Null model below.
 
 ```{r freq-m2-s2, echo = TRUE, fig.align = 'center'}
 # Code 18: adding predictions, errors and calculating the SSE and Mean SE
@@ -324,23 +307,23 @@ model below.
 # data. Calculate the SSE and the Mean SE from the new variables.
 ```
 
-22. What is the value of the Bayesian Information Criterion (bic) for the 
+22. What is the value of the Bayesian Information Criterion (BIC) for the 
 word frequency model?
 
 ```{r bic-bio-s2, echo = TRUE}
 # Code 19: Calculating the BIC for the word frequency model
 #
 # In this code chunk you can write the functions that you need in order to 
-# calculate the BIC associated to the word frequency model. Save it as a new  
+# calculate the BIC associated with the word frequency model. Save it as a new  
 # variable and report the value as text below.
 ```
 
 **ANS:** [WRITE YOUR ANSWER HERE]
 
 23. Using the values you obtained in question 16 obtain the predictions of the 
-additive model, add the predictions to the data, calculate the squared
-error of each observation. Then obtain the SSE and the Mean SE associated to 
-the word frequency model. Report the prediction, SSE and Mean Se of the Null 
+additive model, add a new column with the predictions, and calculate the squared
+error of each observation. Then obtain the SSE and the Mean SE associated with 
+the word frequency model. Report the prediction, SSE and Mean SE of the Null 
 model below.
 
 ```{r freq-m2-s2, echo = TRUE, fig.align = 'center'}
@@ -352,14 +335,14 @@ model below.
 # data. Calculate the SSE and the Mean SE from the new variables.
 ```
 
-24. What is the value of the Bayesian Information Criterion (bic) for the 
+24. What is the value of the Bayesian Information Criterion (BIC) for the 
 additive model?
 
 ```{r bic-bio-s2, echo = TRUE}
 # Code 19: Calculating the BIC for the additive model
 #
 # In this code chunk you can write the functions that you need in order to 
-# calculate the BIC associated to the additive model. Save it as a new  
+# calculate the BIC associated with the additive model. Save it as a new  
 # variable and report the value as text below.
 ```
 
