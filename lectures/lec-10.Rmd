@@ -1,9 +1,9 @@
 ---
-title: "Lecture 8"
+title: "Lecture 10"
 subtitle: "Hipothesis guided model comparison"
 author: "Psych 10 C"
 institute: "University of California, Irvine"
-date: "04/15/2022"
+date: "04/20/2022"
 output:
   xaringan::moon_reader:
     self_contained: true
@@ -193,9 +193,9 @@ blood pressure
 
 --
 
-- Before that, they have to show that their treatment works better than both a 
-control substance (placebo) and the current standard of care (standard) 
-treatment.
+- Before that, they have to show that their treatment works better than a 
+control substance (placebo) and is at least as good as the current standard of 
+care (standard) treatment.
 
 --
 
@@ -234,11 +234,364 @@ DT::datatable(data = drug_trial,
 
 ---
 
+## Visualizing data
+
+- Another way in which we can visualize our data is by constructing a 
+combination between a box-plot and a histogram:
+
+.pull-left[
+```{r hist-score, eval = FALSE}
+ggplot(data = drug_trial) + 
+  aes(x = condition) + 
+  aes(y = blood_pressure) +
+  aes(color = condition) + 
+  geom_boxplot() + 
+  geom_dotplot(binaxis='y', stackdir='center', dotsize = 0.7,
+               method = "histodot",col = "#55555555",fill = "#55555555",
+               binwidth = 2) +
+  theme_classic() + 
+  xlab("Condition") + 
+  ylab("Blood pressure") + 
+  guides(fill = guide_legend("Exam"), color = "none") + 
+  theme(axis.title.x = element_text(size = 25),
+        axis.title.y = element_text(size = 25))  
+```
+]
+.pull-right[
+```{r hist-score-out, ref.label = "hist-score", fig.align = 'center', echo = FALSE, fig.width = 8, fig.height = 8}
+
+```
+]
+
+---
+
 ## Models
 
-- 
+- We will start by evaluating our two usual models, the Null and Effects model.
 
+--
 
+- **Null model:** There are no differences in blood pressure levels between 
+participants regardless of treatment. $$y_{ij}\sim\text{Normal}(\mu,\sigma_0^2)$$
 
+--
 
+- **Effects model:** At least one of the three conditions has a different 
+expected blood pressure level than the others. $$y_{ij}\sim\text{Normal}(\mu_j,\sigma_e^2)$$
+
+---
+
+## Null model
+
+- As in previous examples first we want to calculate the predictions of the 
+model, the Sum of Squared Errors (SSE) and the Mean Squared Error of the Null.
+
+.pull-left[
+```{r null-model}
+# sample size
+n_total <- nrow(drug_trial)
+# add null prediction and error
+drug_trial <- drug_trial %>% 
+  mutate("prediction_null" = mean(blood_pressure),
+         "error_null" = (blood_pressure - prediction_null)^2)
+# calculate sum of squared error
+sse_null <- sum(drug_trial$error_null)
+# calculate mean squared error
+mse_null <- 1/n_total * sse_null
+# calculate bic
+bic_null <- n_total * log(mse_null) + 1 * log(n_total)
+```
+]
+.pull-right[
+- Prediction = `r round(mean(drug_trial$blood_pressure),2)`
+
+- SSE = `r round(sse_null, 2)`
+
+- MSE = `r round(mse_null, 2)`
+
+- BIC = `r round(bic_null, 2)` 
+]
+
+---
+
+## Effects model
+
+- Now we have to calculate the predictions, SSE and MSE associated with the 
+Effects model. Remember that the Effects model assumes that each group follows
+its own normal distribution:
+
+--
+
+.pull-left[
+```{r effects-model}
+# predictions by group
+effects <- drug_trial %>% 
+  group_by(condition) %>% 
+  summarise("pred" = mean(blood_pressure))
+# add null prediction and error
+drug_trial <- drug_trial %>% 
+  mutate("prediction_effects" = 
+           case_when(condition == "control" ~ effects$pred[1],
+                     condition == "standard" ~ effects$pred[3],
+                     condition == "new_drug" ~ effects$pred[2]),
+         "error_effects" = (blood_pressure - prediction_effects)^2)
+# calculate sum of squared error
+sse_effects <- sum(drug_trial$error_effects)
+# calculate mean squared error
+mse_effects <- 1/n_total * sse_effects
+# calculate bic
+bic_effects <- n_total * log(mse_effects) + 3 * log(n_total)
+```
+]
+.pull-right[
+- Prediction:
+
+  - control = `r round(effects$pred[1],2)`
+  
+  - standard = `r round(effects$pred[3],2)`
+  
+  - new drug = `r round(effects$pred[2],2)`
+
+- SSE = `r round(sse_effects, 2)`
+
+- MSE = `r round(mse_effects, 2)`
+
+- $R^2$ = `r round((sse_null - sse_effects)/sse_null,2)`
+
+- BIC = `r round(bic_effects, 2)` 
+]
+
+---
+
+## New drug model
+
+- For this model we assume that only the expectation of the new drug is 
+different from the rest. We can express the model as: $$y_{i3}\sim\text{Normal}(\mu_3,\sigma_3^2)$$
+
+--
+
+- This is the model that we are interested in!
+
+--
+
+- We evaluate this model as the others, by calculating its predictions and error.
+
+---
+
+## New drug model
+
+.pull-left[
+```{r newdrug-model}
+# create an indicator variable
+drug_trial <- drug_trial %>% 
+  mutate("id_newdrug" = ifelse(test = condition == "new_drug",
+                               yes = "new", no = "other"))
+# predictions by group
+new_drug <- drug_trial %>% 
+  group_by(id_newdrug) %>% 
+  summarise("pred" = mean(blood_pressure))
+# add null prediction and error
+drug_trial <- drug_trial %>% 
+  mutate("prediction_newdrug" = 
+           case_when(id_newdrug == "other" ~ new_drug$pred[2],
+                     id_newdrug == "new" ~ new_drug$pred[1]),
+         "error_newdrug" = (blood_pressure - prediction_newdrug)^2)
+# calculate sum of squared error
+sse_newdrug <- sum(drug_trial$error_newdrug)
+# calculate mean squared error
+mse_newdrug <- 1/n_total * sse_newdrug
+# calculate bic
+bic_newdrug <- n_total * log(mse_newdrug) + 2 * log(n_total)
+```
+]
+.pull-right[
+- Prediction:
+
+  - control = `r round(new_drug$pred[2],2)`
+  
+  - standard = `r round(new_drug$pred[2],2)`
+  
+  - new drug = `r round(new_drug$pred[1],2)`
+
+- SSE = `r round(sse_newdrug, 2)`
+
+- MSE = `r round(mse_newdrug, 2)`
+
+- $R^2$ = `r round((sse_null - sse_newdrug)/sse_null,2)`
+
+- BIC = `r round(bic_newdrug, 2)` 
+]
+
+---
+
+## Results
+
+- From our results we can see that the best model was the Effects mode, 
+furthermore, the **new drug** model was also better at accounting for our 
+observations than the Null model was.
+
+--
+
+- From these comparisons we can safely answer the question that we had:
+Is the new drug better than a control substance and at least as good as the 
+standard of care? 
+
+--
+
+- The results of our model comparisons show that the there is at least one
+group that had a different expected level of blood pressure, and at the same 
+time, that assuming that the new drug is different from the standard of care
+and the control is better than assuming that the 3 groups are equal. 
+
+--
+
+- This suggest that the blood pressure levels of participants that used the new
+drug are different from the control and at least equal to the standard of care.
+
+---
+
+## Results
+
+- From our model comparisons we could conclude that:
+
+--
+
+- Participants that used the new drug for a week had an average blood pressure 
+of `r round(effects$pred[2],2)`, while participants using the standard of care 
+drug and a control substance had blood pressures of `r round(effects$pred[3],2)` 
+and `r round(effects$pred[1],2)` respectively.
+
+--
+
+- Given that the model that assumes that at least one group is different and 
+the one that assumes that blood pressure in the group that use the new drug
+are both better than the Null model, we can conclude that the new drug is better
+than the control group and at least as good as the standard of care.
+
+--
+
+- The Effects model accounted for 
+`r 100*round((sse_null - sse_effects)/sse_null,2)`% of the total variation in 
+our observations.
+
+---
+
+## Visualizing model fit
+
+- Once we have selected a model we can visualize how close its predictions
+are to our observations. This is considered a visualization of the accuracy or
+fit of the model. 
+
+--
+
+- Although we can't use this as a method for model comparison, it gives the 
+reader information regarding how good the model predictions are in the 
+context of the experiment.
+
+--
+
+- As we said at the beginning of the course, statistics are functions of random 
+variables (our experimental outcomes) and as such they follow a probability 
+distribution.
+
+--
+
+- Our estimators for the expected value of each group distribution (the average 
+of each group) are statistics, and therefore, they follow their own probability
+distribution.
+
+--
+
+- The good thing is that given the assumptions in our models (observations 
+follow a Normal distribution) the distribution of our estimator is also Normal!
+
+---
+
+## Adding error bars to model predictions
+
+- To know add error bars to our estimators (AKA confidence intervals) we have
+to take into account their distribution.
+
+--
+
+- For the model that we selected using our model comparison approach, we will 
+build an approximate confidence interval for prediction of each group using the
+following equation: $$\hat{\mu}_j \pm 1.96 \times \sqrt{\frac{\hat{\sigma}^2}{n_j}}$$
+
+--
+
+- Where the value $1.96$ comes from the normal distribution and it's the value
+at which the normal accumulates $0.975$ of its probability. $\hat{\mu}_j$ is the 
+prediction for group $j$ and SSE is the sum of squared error of the model.
+
+--
+
+- The value of $n_j$ is equal to the number of observations that we use to 
+calculate each prediction. For example, with the Effects model we used 25 
+observations to calculate each $\hat{\mu}_j$ which means that we would use 
+$n_j = 25$ and we have 3 predictions so $k=3$.
+
+---
+
+## Adding error bars to model predictions
+
+- In comparison, with the new drug model we used only 2 predictions, so 
+$n_{new}=25$ for the new drug condition and $n_{other} = 50$ for other 
+condition. Therefore, we need to calculate the sample size according to the 
+model we selected.
+
+- In order to visualize our model's predictions in R first we have to create 
+a new data with the variables that we need.
+
+--
+
+```{r pred-error}
+# create a new data frame with prediction by group and error
+confint_effects <- drug_trial %>% 
+  group_by(condition) %>% 
+  summarise("sample_size" = n(),
+            "prediction" = mean(blood_pressure),
+            "standard_error" = 1.96 * sqrt(mse_effects/sample_size))
+```
+
+---
+
+## Visualizing model fit:
+
+.pull-left[
+```{r eff-fit, eval = FALSE}
+ggplot(data = confint_effects) + 
+  aes(x = condition) + 
+  aes(y = prediction) +
+  aes(color = condition) + 
+  geom_pointrange(
+    aes(ymin = prediction - standard_error, 
+        ymax = prediction + standard_error, 
+        color = condition),
+    position = position_dodge(0.3), fatten = 2, size = 2.8) +
+  geom_dotplot(data = drug_trial, binaxis = 'y', stackdir='center', 
+               dotsize = 0.5, method = "histodot", col = "#555555",
+               fill = "#555555", alpha = 0.3, binwidth = 2,
+               mapping = aes(x = condition, y = blood_pressure)) +
+  theme_classic() + 
+  xlab("Condition") + 
+  ylab("Blood pressure") + 
+  guides(fill = guide_legend("Exam"), color = "none") + 
+  theme(axis.title.x = element_text(size = 25),
+        axis.title.y = element_text(size = 25))  
+```
+]
+.pull-right[
+```{r eff-fit-out, ref.label = "eff-fit", fig.align = 'center', echo = FALSE, fig.width = 8, fig.height = 8}
+
+```
+]
+
+---
+
+## Homework data link:
+
+```{r hw-link}
+link <- "https://raw.githubusercontent.com/ManuelVU/psych-10c-data/main/homework3-p1.csv"
+```
 
