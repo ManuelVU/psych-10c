@@ -1,6 +1,6 @@
 ---
 title: "Lecture 10"
-subtitle: "Hipothesis guided model comparison"
+subtitle: "Multiple Groups"
 author: "Psych 10 C"
 institute: "University of California, Irvine"
 date: "04/20/2022"
@@ -51,7 +51,7 @@ drug_trial <- read_csv(file = link) %>%
   mutate("id" = as.character(id))
 ```
 
-## Hypothesis as models
+## Hypotheses as models
 
 - When we have one independent variable that can take more than 2 values 
 comparing a Null model which assumes that every group has the same expected value
