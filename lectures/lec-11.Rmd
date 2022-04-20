@@ -335,9 +335,179 @@ How many combinations of the factors levels does each group see?
 ## Between subjects factorial designs
 
 - Within subjects and mixed designs require more "sophisticated" methods to be 
-analyzed than what we can cover in a 6 weeks. Therefore, we will focus on 
-between subjects factorial designs.
+analyzed. Therefore, we will only cover between subjects factorial designs this 
+quarter.
 
+--
 
+- To make it easier for us to talk about factorial designs, we have to introduce 
+some new notation. First because we now have more than one independent variable
+and second because we would like to study the effect of each variable or 
+factor independently.
 
+--
+
+- We will now denote our observations as $y_{ijk}$, note that we have only 
+added a subscript to our observations. 
+
+--
+  - $j$ denotes the level of our first factor (independent variable).
+  
+--
+
+  - $k$ denotes the level of our second factor (independent variable).
+  
+--
+
+  - $i$ denotes the observation number.
+  
+---
+
+## Example between subjects factorial design.
+
+- We measure the levels of anxiety of 30 students at the end of their first year 
+form two cohorts 2019 and 2020, and we record whether they are took a statistics 
+course during their first year or not.
+
+--
+
+- We denote the cohort as $j=1,2$ where $1$ represents students in the 2019 
+cohort and $2$ represents students in the 2020 cohort.
+
+--
+
+- We denote with $k=1$ students that did not take a statistics class during 
+their first year and with $k=2$ students that did. Then:
+
+--
+
+  - $y_{2,1,1}$ would represent the anxiety level at the end of the first year
+  of the second student in the 2019 cohort that didn't took a statistics course 
+  in their first year.
+  
+  - $y_{9,2,1}$ would represent the anxiety level at the end of the first year
+  of the ninth student in the 2020 cohort that didn't took a statistics course 
+  in their first year.
+  
+  - $y_{1,2,2}$ would represent the anxiety level at the end of the first year
+  of the first student in the 2020 cohort that took a statistics course 
+  in their first year.
+
+---
+
+## Models for factorial designs
+
+- When we had one independent variable that could take more than one value
+we faced the problem of comparing multiple models in order to answer our 
+research question.
+
+--
+
+- When we have to deal with factorial designs we will have a similar problem. 
+However, in factorial designs we will typically be interested in what we call
+**main effects**, **additive effects** and **interactions**.
+
+--
+
+- A **main effect** refers to how the expected value of our dependent variable 
+changes given the levels of a single factor (independent variable).
+
+--
+
+  - If we have two factors (independent variables in our design) we will have 
+  two main effects models (one for each factor).
+  
+--
+
+- An **additive effects** model formalizes the assumption that the effects of
+each of our factors are independent, in other words that the value of 
+one factor will not change the effect that second factor has on the expected 
+value of our dependent variable.
+
+--
+
+  - If we only have 2 factors in our design we will only have one 
+  **additive model**. This model will be a combination of the two main effects 
+  models.
+  
+---
+
+## Models for factorial designs
+
+- From the models that we need to compare in factorial designs the most 
+complicated one is the **interaction**.
+
+--
+
+- An **interaction** model formalizes the assumption that the effect that one of
+our factors has on the expected value of our dependent variable depends on the 
+value of the second factor.
+
+--
+
+- **Interaction** models are easy to implement (they are very similar to the 
+Effects models that we have used to this point), however, thy are hard to 
+interpret.
+
+---
+
+## Models for factorial designs
+
+- As with the rest of the models in the class, the key part of the model will 
+be the predictions that it makes and how we can derive those predictions.
+
+--
+
+- Once we have the predictions of each of our models, then everything else will
+follow as before.
+
+--
+
+- In other words, the steps that we need to carry out with any model for a 
+factorial design will be:
+
+--
+
+  1. Find the predictions of the corresponding model for each combination
+  of the levels of the factors $\hat{\mu}_{jk}$.
+  
+--
+
+  2. Calculate the squared difference between each observation and the 
+  prediction that the model makes for it $(y_{ijk}-\hat{\mu}_{jk})^2$
+  
+--
+
+  3. Add all those squared differences to get the Sum of Squared Error of the 
+  model (SSE).
+  
+--
+
+  4. Using the SSE we can compute the Mean Squared Error (mse), the proportion
+  of variance accounted for by the model $(R^2)$ and the BIC.
+  
+---
+
+## Models for factorial designs
+
+- Next week we will define each of the models that we need when we have a 
+$2\times 2$ between subjects factorial design.
+
+--
+
+- We will need to make some changes to how we express our models, however, this
+will not change how we arrive to the predictions of our models (we will still
+use averages).
+
+--
+
+- Note that if you remember the steps that we have taken to solve the previous 
+problems that we have seen in class, then this more complicated experimental
+design will be easier to follow. Given that the steps we will take are the same
+as with previous problems.
+
+--
+
+- This is because all of these methods belong to the same family known as 
+linear models.
 
