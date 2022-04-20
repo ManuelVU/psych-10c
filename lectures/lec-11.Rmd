@@ -1,0 +1,343 @@
+---
+title: "Lecture 11"
+subtitle: "Factorial Designs"
+author: "Psych 10 C"
+institute: "University of California, Irvine"
+date: "04/22/2022"
+output:
+  xaringan::moon_reader:
+    self_contained: true
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+```
+
+```{r xaringan-extra, echo = FALSE}
+xaringanExtra::use_tile_view()
+
+xaringanExtra::use_fit_screen()
+
+xaringanExtra::use_editable(expires = 1)
+
+xaringanExtra::use_extra_styles(
+  hover_code_line = TRUE,         #<<
+  mute_unhighlighted_code = TRUE  #<<
+)
+
+htmltools::tagList(
+  xaringanExtra::use_clipboard(
+    button_text = "<i class=\"fa fa-clipboard\"></i>",
+    success_text = "<i class=\"fa fa-check\" style=\"color: #90BE6D\"></i>",
+    error_text = "<i class=\"fa fa-times-circle\" style=\"color: #F94144\"></i>"
+  ),
+  rmarkdown::html_dependency_font_awesome()
+)
+```
+
+```{r load-tidy, echo = FALSE, message = FALSE, warning = FALSE}
+library(tidyverse)
+
+knitr::opts_chunk$set(fig.width = 6, message = FALSE, 
+                      warning = FALSE, comment = "", 
+                      cache = F)
+link <- "https://raw.githubusercontent.com/ManuelVU/psych-10c-data/main/anxiety-1-ex.csv"
+anxiety <- read_csv(file = link) %>% 
+  mutate("id" = as.character(id),
+         "anxiety" = as.integer(anxiety),
+         "cohort" = as.character(cohort))
+```
+
+## Factorial designs
+
+- To this day we have talked abnout comparisons between groups difined by the 
+values of single variable.
+
+--
+
+- We had comparisons between two groups when our independent variable could take
+two values and participants where assigned at random to either of those values.
+
+--
+
+- We also had comparisons when we had two measures of the same participant, 
+these designs are known as paired samples and our objective was to test the 
+differences between the two measures.
+
+--
+
+- A third problem was when we had multiple values for an independent variable, 
+for example, when we have students that belong to multiple cohorts or when 
+we have multiple conditions in an experiment.
+
+--
+
+- One importat thing to note is that, even when our independen variable can take 
+more than two values we are still talking about a single independent variable.
+
+---
+
+## Factorial designs
+
+- In contrast to the methods that we have talked about in class, there are 
+problems that will require us to look at the effects of more than one variable
+at a time. 
+
+--
+
+- For example, when we test a new drug designed as a treatment to reduce blood 
+pressure, it might be important to consider if the participant is male or female.
+
+--
+
+- The key point is that sometimes in our experiments we would like to consider 
+effects of more than one variable at a time, and how those effecs migh interact 
+to give rise to our observations.
+
+--
+
+- When we have more than one independent variable in an experiment which can 
+take 2 or more categorical values (like smoking status, cohort, treatment, etc.)
+we say call the experiment a **Factorial design**.
+
+---
+
+## Factorial designs 
+
+- Whenever we have two or more independent variables that can take 2 or more 
+categorical values we refer to them as **factors**. For example: 
+
+--
+
+ - In our study about the relation between smoking status and lung capacity we 
+  can refer to smoking status as:  "the factor smoking".
+  
+--
+
+  - In our study about the effects of a new drug on blood preassure we can refer
+  to the treatment condition as: "the factor treatment".
+  
+--
+
+- In order to describe our experimental designs we use a type of notation 
+designed specifically for these kind of problems.
+
+---
+
+## Factorial designs
+
+- For example, we are interested in comparing the performance of participants
+in a recognition memory task versus a free recall task using high frequency
+words and low frequency words.
+
+--
+
+- In this example, we have two factors, the firs one is the task factor, 
+the second one is the word frequency factor.
+
+--
+
+- Furthermore, each factor can take two different values, the task factor
+can be recognition or free recall and the word frequency factor can be high or 
+low frequency.
+
+--
+
+- Then we would call this experimental design a $2\times 2$ **factorial design**, 
+where the first number refers to the number of levels (values) of the first 
+factor and the second refers to the levels (values) of the second factor.
+
+---
+
+## Factorial designs and participant assignment
+
+- If participants are assigned to a single combination of the values of the 
+factors, for example, one group of participants only responds to the free recall 
+tests with high frequency words and a different group responds to the free recall
+test with low frequency words, and so on. We refer to the design as a $2\times 2$ 
+**between subjects factorial design**.
+
+--
+
+- If all participants respond to **all** combinations of the factors, we refer 
+to it as a $2\times 2$ **within subjects factorial design**.
+
+--
+
+- This is very similar to what we had in the case of a single independent 
+variable. 
+
+--
+
+  - A between subjects design is when different groups of participants are 
+assigned to different values of the independent variable. 
+
+--
+
+  - A within subjects design was when participants responded to both levels of 
+  our independent variable (like the before and after training problem in HW 2).
+
+---
+
+## Factorial designs and participant assignment.
+
+- Now that we have more than one independent variable, we can have a new 
+experimental design, **Mixed designs**.
+
+--
+
+- A **Mixed design** refers to an experiment where one of our factors 
+(independent variables) is treated as between subjects and another is treated as
+within subjects.
+
+--
+
+- For example, if we have the same group of participants responding to our free
+recall test with both low and high frequency words and we have a **different** 
+group of participants responding to the recognition memory task with both 
+low and high frequency words.
+
+- We will call this a $2\times2$ **mixed factorial design**.
+
+---
+
+## Mixed designs
+
+- Whenever we have a mixed design, we have to specify which factors are treated
+as between and which factors are treated as within subjects.
+
+--
+
+- From our previous example, an accurate description of the design would be:
+
+--
+
+  - This is a $2\times2$ **mixed factorial design** where the test factor was 
+  implemented between subjects (different groups do different tasks) and the 
+  word frequency factor was implemented within subjects (every participant 
+  responded to the task with both high and low frequency words).
+  
+--
+
+- An important thing to notice is that each type of design will have a different
+number of independent groups, and that the number of levels that each group
+would look at during the experiment will also be different.
+
+---
+
+## Factorial designs
+
+- Using our memory experiment with 2 levels of each factor (independent 
+variables).
+
+--
+
+  - If we had a $2\times2$ **between subjects factorial design**, that means 
+  that we will have 4 groups and that each group will look at a single 
+  combination of the levels of the factors (*e.g.* free recall - high frequency,
+  free recall - low frequency, recognition - high frequency, 
+  recognition - low frequency).
+  
+--
+
+  - If we had a $2\times2$ **within subjects factorial design**, that means that
+  we have a single group and that all participants in that group look at every
+  combination of the levels of our two factors.
+  
+--
+
+  - Finally, ff we had a $2\times2$ **mixed factorial design** with task 
+  manipulated between subjects and word frequency manipulated within subjects. 
+  We would have 2 groups (one performing a free recall tasks and the other a
+  recognition tasks) and each group would see two values of our second
+  factor (each group would do the task with low and high frequency words 
+  independently).
+  
+---
+
+## Factorial designs 
+
+We have a $3\times 2$ between subjects design,
+
+.can-edit.key-likes[
+How many factors do we have in the experiment?
+
+- **ANS:**
+
+How many levels does each factor have?
+
+- **ANS:**
+
+How many independent groups do we have on the experiment?
+
+- **ANS:**
+
+How many combinations of the factors levels does each group see?
+
+- **ANS:**
+
+]
+
+---
+
+## Factorial designs 
+
+We have a $2\times 2\times 3$ within subjects design,
+
+.can-edit.key-likes[
+How many factors do we have in the experiment?
+
+- **ANS:**
+
+How many levels does each factor have?
+
+- **ANS:**
+
+How many independent groups do we have on the experiment?
+
+- **ANS:**
+
+How many combinations of the factors levels does each group see?
+
+- **ANS:**
+
+]
+
+---
+
+## Factorial designs 
+
+We have a $4\times 2$ mixed design, with the first factor manipulated between 
+subjects and the second factor manipulated within subjects:
+
+.can-edit.key-likes[
+How many levels does each factor have?
+
+- **ANS:**
+
+How many independent groups do we have on the experiment?
+
+- **ANS:**
+
+How many combinations of the factors levels does each group see?
+
+- **ANS:**
+
+]
+
+---
+
+## Between subjects factorial designs
+
+- Within subjects and mixed designs require more "sophisticated" methods to be 
+analyzed than what we can cover in a 6 weeks. Therefore, we will focus on 
+between subjects factorial designs.
+
+
+
+
