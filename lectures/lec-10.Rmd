@@ -71,11 +71,12 @@ that:
 --
   1. Every group is different $\mu_1 \neq \mu_2 \neq \mu_3$.
   
-  2. At least one group is different $\mu_1 = \mu_2 \neq \mu_3$.
+  2. At least one group is different $\mu_1 = \mu_2 \neq \mu_3$ (like in our
+  students anxiety example).
   
 --
 
-- Both of the previous statements are consistent whit the main assumption of 
+- Both of the previous statements are consistent with the main assumption of 
 the Effects model, which in isolation can only tell us that at least one 
 group is different.
 
@@ -153,9 +154,9 @@ comparisons that we have to make.
 
 --
 
-- In the previous example our second question makes more sense, as there is no 
-real reason to assume that 2018 and 2019 should be different, however, due 
-to the pandemic, we would expect First year students from the 2020 cohort 
+- In the previous example, the second question makes more sense, as there is no 
+real reason to believe that 2018 and 2019 cohorts should be different. However, 
+due to the pandemic, we would expect First year students from the 2020 cohort 
 to be more anxious (on average) than others.
 
 --
@@ -169,11 +170,6 @@ always come first.
 - In other words, we perform an experiment because we have a hypothesis 
 regarding the outcomes of an experiment. This hypothesis will also inform our
 model comparisons.
-
---
-
-- As we mention before, this only becomes a problem when we have multiple groups
-and not when there are only two.
 
 ---
 
@@ -365,13 +361,14 @@ bic_effects <- n_total * log(mse_effects) + 3 * log(n_total)
 
 ---
 
-## New drug model
+## Treatment model
 
-- For this model we assume that only the expectation of the new drug is 
-different from the rest. We can express the model as: $$y_{i3}\sim\text{Normal}(\mu_3,\sigma_3^2)$$ 
-$$y_{i1},y_{i2}\sim\text{Normal}(\mu,\sigma_3^2)$$
+- For this model we assume that the expectation of the treatment groups (not 
+control) are different from the control group. We can express the model as: $$y_{i2},y_{i3}\sim\text{Normal}(\mu,\sigma_2^2)$$ 
+$$y_{i1}\sim\text{Normal}(\mu_1,\sigma_2^2)$$
 
-where $j=3$ if the observation was in the **new drug** condition. 
+where $j=2$ if the participant was in the **standard of care** condition and 
+$j=3$ if the participant was in the **new drug** condition. 
 
 --
 
@@ -379,53 +376,53 @@ where $j=3$ if the observation was in the **new drug** condition.
 
 --
 
-- As we have done with other models, we evaluate this model by calculating its
+- As we have done with other models, we evaluate this one by calculating its
 predictions and error.
 
 ---
 
-## New drug model
+## Treatment model
 
 .pull-left[
-```{r newdrug-model}
+```{r treatment-model}
 # create an indicator variable
 drug_trial <- drug_trial %>% 
-  mutate("id_newdrug" = ifelse(test = condition == "new_drug",
-                               yes = "new", no = "other"))
+  mutate("id_treatment" = ifelse(test = condition == "control",
+                               yes = "control", no = "treatment"))
 # predictions by group
-new_drug <- drug_trial %>% 
-  group_by(id_newdrug) %>% 
+treatment <- drug_trial %>% 
+  group_by(id_treatment) %>% 
   summarise("pred" = mean(blood_pressure))
-# add null prediction and error
+# add treatment prediction and error
 drug_trial <- drug_trial %>% 
-  mutate("prediction_newdrug" = 
-           case_when(id_newdrug == "other" ~ new_drug$pred[2],
-                     id_newdrug == "new" ~ new_drug$pred[1]),
-         "error_newdrug" = (blood_pressure - prediction_newdrug)^2)
+  mutate("prediction_treatment" = 
+           case_when(id_treatment == "control" ~ treatment$pred[1],
+                     id_treatment == "treatment" ~ treatment$pred[2]),
+         "error_treatment" = (blood_pressure - prediction_treatment)^2)
 # calculate sum of squared error
-sse_newdrug <- sum(drug_trial$error_newdrug)
+sse_treatment <- sum(drug_trial$error_treatment)
 # calculate mean squared error
-mse_newdrug <- 1/n_total * sse_newdrug
+mse_treatment <- 1/n_total * sse_treatment
 # calculate bic
-bic_newdrug <- n_total * log(mse_newdrug) + 2 * log(n_total)
+bic_treatment <- n_total * log(mse_treatment) + 2 * log(n_total)
 ```
 ]
 .pull-right[
 - Prediction:
 
-  - control = `r round(new_drug$pred[2],2)`
+  - control = `r round(treatment$pred[1],2)`
   
-  - standard = `r round(new_drug$pred[2],2)`
+  - standard = `r round(treatment$pred[2],2)`
   
-  - new drug = `r round(new_drug$pred[1],2)`
+  - new drug = `r round(treatment$pred[2],2)`
 
-- SSE = `r round(sse_newdrug, 2)`
+- SSE = `r round(sse_treatment, 2)`
 
-- MSE = `r round(mse_newdrug, 2)`
+- MSE = `r round(mse_treatment, 2)`
 
-- $R^2$ = `r round((sse_null - sse_newdrug)/sse_null,2)`
+- $R^2$ = `r round((sse_null - sse_treatment)/sse_null,2)`
 
-- BIC = `r round(bic_newdrug, 2)` 
+- BIC = `r round(bic_treatment, 2)` 
 ]
 
 ---
@@ -433,7 +430,7 @@ bic_newdrug <- n_total * log(mse_newdrug) + 2 * log(n_total)
 ## Results
 
 - From our results we can see that the best model was the Effects, 
-furthermore, the **new drug** model was also better at accounting for our 
+furthermore, the **treatment** model was also better at accounting for our 
 observations than the Null model was.
 
 --
@@ -444,15 +441,23 @@ standard of care?
 
 --
 
-- The results of our model comparisons show that the there is at least one
-group that had a different expected level of blood pressure, and at the same 
-time, that assuming that the new drug is different from the standard of care
-and the control is better than assuming that the 3 groups are equal. 
+- The comparison between the Null model and the Effects model shows that there 
+is at least one group whose expectation is different from the rest.
 
 --
 
-- This suggest that the blood pressure levels of participants that used the new
-drug are different from the control and at least equal to the standard of care.
+- From the comparison between treatment groups and control groups we know that
+treatments and the control condition are different (they have different means).
+
+--
+
+- Finally, the comparison between the treatment and effects model shows us that
+it is better to assume that the 3 groups are different than assuming that the 
+treatments are equally better than the control group.
+
+--
+
+- Taken together, these results indicate that the 3 groups are different.
 
 ---
 
@@ -465,14 +470,16 @@ drug are different from the control and at least equal to the standard of care.
 - Participants that used the new drug for 2 weeks had an average blood pressure 
 of `r round(effects$pred[2],2)`, while participants using the standard of care 
 drug and a control substance had blood pressures of `r round(effects$pred[3],2)` 
-and `r round(effects$pred[1],2)` respectively.
+and `r round(effects$pred[1],2)` respectively. This suggests that the new drug
+has an effect on the average blood pressure of people under treatment.
 
 --
 
-- Given that the model that assumes that at least one group is different and 
-the one that assumes that blood pressure in the group that use the new drug
-are both better than the Null model, we can conclude that the new drug is better
-than the control group and at least as good as the standard of care.
+- Given that the model that assumes that treatment conditions are different 
+from the control is better than the Null and that the model that assumes that 
+every group is different is better than the other two models, we can conclude 
+that the new drug is better than the control group and better than the standard 
+of care.
 
 --
 
@@ -606,10 +613,10 @@ the more precise the estimator).
 ```{r new-error}
 # create a new data frame with prediction by group and error
 confint_newdrug <- drug_trial %>% 
-  group_by(id_newdrug) %>% 
+  group_by(id_treatment) %>% 
   summarise("sample_size" = n(),
             "prediction" = mean(blood_pressure),
-            "standard_error" = 1.96 * sqrt(mse_newdrug/sample_size))
+            "standard_error" = 1.96 * sqrt(mse_treatment/sample_size))
 ```
 
 ---
@@ -619,22 +626,22 @@ confint_newdrug <- drug_trial %>%
 .pull-left[
 ```{r new-fit, eval = FALSE}
 ggplot(data = confint_newdrug) + 
-  aes(x = id_newdrug) + 
+  aes(x = id_treatment) + 
   aes(y = prediction) +
-  aes(color = id_newdrug) + 
+  aes(color = id_treatment) + 
   geom_pointrange(
     aes(ymin = prediction - standard_error, 
         ymax = prediction + standard_error, 
-        color = id_newdrug),
+        color = id_treatment),
     position = position_dodge(0.3), fatten = 2, size = 2.8) +
   geom_dotplot(data = drug_trial, binaxis = 'y', stackdir='center', 
                dotsize = 0.5, method = "histodot", col = "#555555",
                fill = "#555555", alpha = 0.3, binwidth = 2,
-               mapping = aes(x = id_newdrug, y = blood_pressure)) +
+               mapping = aes(x = id_treatment, y = blood_pressure)) +
   theme_classic() + 
   xlab("Condition") + 
   ylab("Blood pressure") + 
-  guides(fill = guide_legend("Exam"), color = "none") + 
+  guides(fill = "none", color = "none") + 
   theme(axis.title.x = element_text(size = 25),
         axis.title.y = element_text(size = 25))  
 ```
