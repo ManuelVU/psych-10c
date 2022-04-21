@@ -1,0 +1,420 @@
+---
+title: "Lecture 12"
+subtitle: "Models for Factorial Designs"
+author: "Psych 10 C"
+institute: "University of California, Irvine"
+date: "04/25/2022"
+output:
+  xaringan::moon_reader:
+    self_contained: true
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+```
+
+```{r xaringan-extra, echo = FALSE}
+xaringanExtra::use_tile_view()
+
+xaringanExtra::use_fit_screen()
+
+xaringanExtra::use_editable(expires = 1)
+
+xaringanExtra::use_extra_styles(
+  hover_code_line = TRUE,         #<<
+  mute_unhighlighted_code = TRUE  #<<
+)
+
+htmltools::tagList(
+  xaringanExtra::use_clipboard(
+    button_text = "<i class=\"fa fa-clipboard\"></i>",
+    success_text = "<i class=\"fa fa-check\" style=\"color: #90BE6D\"></i>",
+    error_text = "<i class=\"fa fa-times-circle\" style=\"color: #F94144\"></i>"
+  ),
+  rmarkdown::html_dependency_font_awesome()
+)
+```
+
+```{r load-tidy, echo = FALSE, message = FALSE, warning = FALSE}
+library(tidyverse)
+
+knitr::opts_chunk$set(fig.width = 6, message = FALSE, 
+                      warning = FALSE, comment = "", 
+                      cache = F)
+link <- "https://raw.githubusercontent.com/ManuelVU/psych-10c-data/main/anxiety-1-ex.csv"
+anxiety <- read_csv(file = link) %>% 
+  mutate("id" = as.character(id),
+         "anxiety" = as.integer(anxiety),
+         "cohort" = as.character(cohort))
+```
+
+## Models for factorial designs
+
+- Last week we talk about factorial designs. A factorial design is a study where 
+we have a single dependent variable (observation) denoted as $y_{ijk}$.
+
+--
+
+- In factorial designs we also have more than one independent variable which can 
+take categorical values. For example, the cohort that a student belongs to, 
+a type of task, whether they smoke or not, etc.
+
+--
+
+- We introduced notation for factorial designs which conveys information about 
+the number of independent variables or factors, the number of levels (values) 
+of each factor, and whether the factors where manipulated between subjects, 
+within subjects or in a combination of the two known as mixed designs.
+
+--
+
+- We will only focus on between subjects factorial designs as they are easier to 
+analyze with the tools that we have already learned during the course.
+
+---
+
+## Models for factorial designs
+
+- Let's start with an example using a $2\times2$ between subjects factorial 
+design.
+
+--
+
+- We want to know if the anxiety levels at the end of a year are different 
+between students in the 2019 cohort and the 2020 cohort and between students
+that took an introductory statistics course or not.
+
+--
+
+.can-edit.key-likes[
+What is our dependent variable in this problem?
+
+**ANS:**
+
+What is our first factor and how many levels does it have?
+
+**ANS:**
+
+What is our second factor and how many levels does it have?
+
+**ANS:**
+
+How many groups in total do we have in this problem?
+
+**ANS:**
+
+]
+
+---
+
+## Models for factorial designs
+
+- The first model that we need to consider is the Null model (as in previous 
+problems).
+
+--
+
+- The Null model formalizes the assumption that all our observations follow
+the same distribution. In other words, that there are no differences between 
+the combinations of our factor levels.
+
+--
+
+- Formally the Null model is defined as: $$y_{ijk}\sim\text{Normal}(\mu,\sigma_0^2)$$
+
+--
+
+- Where $k$ denotes the level of the second factor, $j$ denotes the level of the 
+first factor and $i$ denotes the observation number of the combination of the 
+*k-th* level of factor two and the *j-th* level of factor 1.
+
+--
+
+- From our example, $j$ indicates whether the student belongs to the 2019 cohort
+$(j=1)$ of if the student belongs to the 2020 cohort $(j=2)$, and $k$ indicates
+whether the student was enrolled in a statistics class that year $(k=1)$ or not 
+$(k=2)$.
+
+---
+
+## Visual representation of the Null model
+
+- We can visualize the predictions of the null model using R, again, this 
+representation is only theoretical and it doesn't need values, we only use it to 
+represent what the model expects the data to look like. Given that this time 
+we need more than 2 distributions, instead of using distributions we will 
+only use the model's predictions.
+
+.pull-left[
+```{r null-pred-graph, eval = FALSE}
+plot(x = 0, y = 0, axes = FALSE, ann = FALSE, type = "n",
+     xlim = c(0,1), ylim = c(0,1))
+box(bty = "l")
+segments(x0 = c(0.1,0.1), y0 = c(0.5,0.5), x1 = c(0.9,0.9), y1 = c(0.5,0.5),
+         col = c("#555555"), lwd = 3)
+axis(side = 1, at = c(0.1,0.9), labels = c("stats", "no stats"),
+     cex.axis = 1.7)
+mtext(text = "Anxiety level", side = 2, cex = 2, line = 0.5)
+text(x = c(0.1,0.1,0.9,0.9), y = c(0.54,0.46,0.54,0.46),
+     labels = c(2019,2020,2019,2020), cex = 1.4)
+```
+]
+.pull-right[
+```{r null-pred-graph-out, ref.label = "null-pred-graph", fig.align = 'center', echo = FALSE, fig.width = 8, fig.height = 8}
+
+```
+]
+
+---
+
+## The Grand Mean
+
+- The parameter that controls the expected value of our observations in the Null
+model is known as the "**grand mean**" in factorial designs, and it is the 
+expected value of a response across all groups.
+
+--
+
+- In our previous models, $(\mu)$ was always the parameter associated with the 
+Null model. However, the **grand mean** $(\mu)$ will be part of most of our 
+models in factorial designs and not just the Null.
+
+---
+
+## Estimator of the grand mean
+
+- Given that the grand mean formalizes the assumption that all our groups in a 
+between subjects factorial design have the same expected value, our estimator 
+will be the average of our observations across all groups.
+
+--
+
+- We denote the estimator of the grand mean $\hat{\mu}$ and express it as: 
+$$\hat{\mu} =\frac{1}{n} \sum_k \sum_j \sum_i y_{ijk}$$
+
+--
+
+- Where $n$ represents the total number of participants in the experiment, $k$ 
+denotes the levels (or values) of our second factor, $j$ denotes the levels 
+(values) of our first factor, and $i$ denotes the observation number for a 
+combination between the *k-th* and *j-th* levels of our factors.
+
+--
+
+- We will use the grand mean $(\mu)$ in combination with what we call an 
+**effect** to define the predictions of our other models. However, it's still 
+the only prediction that the Null model can make.
+
+---
+
+## Main effects models
+
+- A main effects model formalizes the assumption that one and **only** one of 
+the factors (independent variables) in a factorial design has an effect on the
+expected value of our dependent variable.
+
+--
+
+- It is similar to the models that we used in our multiple groups comparisons.
+
+--
+
+- In our anxiety levels example we have two main effects models. One that 
+assumes that only the cohort that a student belongs to has an effect on their 
+anxiety levels. Another that assumes that only having taken a statistics course
+during the year has an effect on a students anxiety level.
+
+--
+
+- This are two different models and have to be evaluated independently.
+
+---
+
+## Main effects model for factor 1
+
+- The main effects model for factor 1 formalizes the assumption that the 
+expected value of our dependent variable only changes as a function of the 
+values of the first factor.
+
+--
+
+- Formally, the model can be expressed as: $$y_{ijk}\sim\text{Normal}(\mu_j,\sigma_1^2)$$
+
+--
+
+- Notice that regardless of the value of $k$, observations that belong to the 
+same level of the first factor $j$ are assumed to follow the same distribution.
+
+--
+
+- In our anxiety levels example, this model would formalize the assumption that 
+the expected anxiety levels in students from the 2019 cohort $(j=1)$ are 
+different from the expected anxiety levels of students in the 2020 cohort 
+$(j=2)$, regardless of whether they took a statistics class or not.
+
+---
+
+## Main effects model for factor 1
+
+- In factorial designs we will assume that the predictions of the main effects 
+model have two parts, the  **grand mean** $(\mu)$ and the **factor effect** 
+$\alpha_j$. We express the prediction of the main effects model for factor 1 
+as: $$\mu_j = \mu + \alpha_j$$
+
+--
+
+- The key idea is that the expected value of our observation is a function of
+a general value or response on the population (the **grand mean**) and the 
+effect associated with the level (value) of the first factor $\alpha_j$.
+
+--
+
+- In other words, $\alpha_j$ is a measure of the effect of the *j-th* level of 
+factor $j$ in our expectation of the response.
+
+--
+
+- This means that we can formally express our model as:
+$$y_{ijk}\sim\text{Normal}(\mu + \alpha_j,\sigma_1^2)$$
+
+---
+
+## Main effects model
+
+- Using this version of the model has some drawbacks. There is no way for us to 
+calculate all the values of $\alpha_j$ that we need.
+
+--
+
+- In order to get an estimate of the parameter $\alpha_j$ we need to restrict 
+the values that it can take. In general, we will assume that all the effects 
+of the levels of a factor add up to 0. We express this formally as:
+$$\sum_j \alpha_j = 0$$
+
+--
+
+- This means that we can interpret the main effect $\alpha_j$ as the difference 
+between the grand mean and the average of the groups defined by factor $j$.
+
+---
+
+## Estimator of the main effects
+
+- Now we can construct an estimator of the main effects. The main effect of the 
+*j-th* level of factor $j$ is defined as: 
+$$\hat{\alpha}_j = \hat{\mu} - \hat{\mu}_j$$
+
+--
+
+- Where $\hat{\mu}$ represents the estimator of the grand mean (average across
+all participants) and $\hat{\mu}_j$ is the average of our observations for
+all participants that responded to level $j$ regardless of the values of the
+second factor.
+
+--
+
+- Given that we have restricted our values of $\alpha_j$ to sum to $0$ we can 
+only calculate the estimators of $J-1$ levels of our factor using this equation.
+The last value $J$ is derived as the negative of the sum of the remaining 
+effects.
+ 
+--
+
+- In other words, we only calculate the values of $j-1$ main effects and then 
+derive the last one as $$\hat{\alpha}_J = -\sum_{j=1}^{J-1}\hat{\alpha}_j$$
+
+--
+
+- Where $J$ represents the number of levels of factor $j$.
+
+---
+
+## Example: Anxiety levels by cohort and stats
+
+- In our example about the effects of cohort and taking a statistics class on 
+anxiety levels of students, our first main effects model would be the 
+cohort effects model.
+
+--
+
+- In this case, we have 2 cohorts, 2019 and 2020. If we let $j=1$ denote 
+students in the 2019 cohort and $j=2$ denote students in the 2020 cohort:
+
+--
+
+  - $\hat{\alpha}_1$ would be equal to the difference between the average 
+  anxiety level of all students in the experiment and the average anxiety level
+  of all students in the 2019 cohort. Therefore, it can be interpreted as the 
+  effect of being in the 2019 cohort on the anxiety levels of students.
+  
+--
+
+  - The value of $\hat{\alpha}_2$ will be equal to $-\hat{\alpha}_1$, and it can 
+  be interpreted as the effect of being in the 2020 cohort on the anxiety levels
+  of students.
+  
+--
+
+- The prediction for the 2019 cohort would be $\hat{\mu} + \hat{\alpha}_1$ and 
+the prediction for the 2020 cohort would be 
+$\hat{\mu} + \hat{\alpha}_2 = \hat{\mu} - \hat{\alpha}_1$.
+
+---
+
+## Visual representation of cohort main effects model
+
+- We can also make a visual representation of the predictions of the main 
+effects model for our anxiety levels example:
+
+--
+
+.pull-left[
+```{r main1-pred-graph, eval = FALSE}
+plot(x = 0, y = 0, axes = FALSE, ann = FALSE, type = "n",
+     xlim = c(0,1), ylim = c(0,1))
+box(bty = "l")
+segments(x0 = c(0.1,0.1), y0 = c(0.3,0.7), x1 = c(0.9,0.9), y1 = c(0.3,0.7),
+         col = c("#c80064","#54bebe"), lwd = 3)
+axis(side = 1, at = c(0.1,0.9), labels = c("stats", "no stats"),
+     cex.axis = 1.7)
+mtext(text = "Anxiety level", side = 2, cex = 2, line = 0.5)
+legend("topright", legend = c(2019,2020), col = c("#c80064","#54bebe"), 
+       lwd = 2, cex = 1.4, bty = "n")
+```
+]
+.pull-right[
+```{r main1-pred-graph-out, ref.label = "main1-pred-graph", fig.align = 'center', echo = FALSE, fig.width = 8, fig.height = 8}
+
+```
+]
+
+---
+```{r main1-2-pred-graph, echo = FALSE, fig.align = 'center', fig.width = 8}
+plot(x = 0, y = 0, axes = FALSE, ann = FALSE, type = "n",
+     xlim = c(0,1), ylim = c(0,1))
+box(bty = "l")
+segments(x0 = c(0.1,0.1), y0 = c(0.3,0.7), x1 = c(0.9,0.9), y1 = c(0.3,0.7),
+         col = c("#c80064","#54bebe"), lwd = 3)
+segments(x0 = 0.12, y0 = 0.5, x1 = 0.88, y1 = 0.5, col = "#555555",
+         lwd = 2, lty = 2)
+axis(side = 1, at = c(0.1,0.9), labels = c("stats", "no stats"),
+     cex.axis = 2)
+mtext(text = "Anxiety level", side = 2, cex = 2, line = 0.5)
+legend("topright", legend = c(2019,2020,"grand mean"), 
+       col = c("#c80064","#54bebe","#555555"), 
+       lwd = 2, cex = 1.4, bty = "n", lty = c(1,1,2))
+text(x = 0.2, y = 0.6, labels = expression(alpha[2]), cex = 2)
+text(x = 0.2, y = 0.4, labels = expression(alpha[1]), cex = 2)
+text(x = 0.07, y = 0.5, labels = expression(mu), cex = 2)
+text(x = 0.95, y = 0.3, labels = expression(mu[1]), cex = 2)
+text(x = 0.95, y = 0.7, labels = expression(mu[2]), cex = 2)
+```
+
+
+
+
