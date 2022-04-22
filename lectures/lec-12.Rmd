@@ -348,8 +348,8 @@ derive the last one as $$\hat{\alpha}_J = -\sum_{j=1}^{J-1}\hat{\alpha}_j$$
 
 ## Example: Anxiety levels by cohort and stats
 
-- In our example about the effects of cohort and taking a statistics class on 
-anxiety levels of students, our first main effects model would be the 
+- In our example about the effects of cohort and taking a statistics class on
+the anxiety levels of students, our first main effects model would be the 
 cohort effects model.
 
 --
@@ -460,7 +460,7 @@ factor.
 
 ## Estimator for the main effects of factor 2
 
-- As we did with the main effects of the levels of the first factor $(\alpha_j)$, 
+- As we did with the effects of the levels of the first factor $(\alpha_j)$, 
 we need to restrict the values that the main effects of the second factor can 
 take so that they sum to 0.
 $$\sum_k\beta_k=0$$
@@ -497,6 +497,42 @@ that they belong to.
 
 ## Anxiety example
 
-- With this new model, 
+- With this new model, the prediction about the anxiety levels of students that
+took a statistics class during their first year would be:
+$$\hat{\mu} + \hat{\beta}_1$$
 
+--
 
+- And for students that did not take a statistics class during their first year 
+the prediction would be: $$\hat{\mu} + \hat{\beta}_2 = \hat{\mu} - \hat{\beta}_1$$
+
+- We can visualize this model using the same type graphical representation as 
+before, however, it is easier to see that the models are similar by changing the 
+axis, in this case, instead of having statistics class on the *x-axis* we will
+have the cohort, that way the predictions of the model would look the same.
+
+---
+
+## Visualization of statistics class main effects
+
+.pull-left[
+```{r main2-pred-graph, eval = FALSE}
+plot(x = 0, y = 0, axes = FALSE, ann = FALSE, type = "n",
+     xlim = c(0,1), ylim = c(0,1))
+box(bty = "l")
+segments(x0 = c(0.1,0.1), y0 = c(0.3,0.7), x1 = c(0.9,0.9), y1 = c(0.3,0.7),
+         col = c("#c80064","#54bebe"), lwd = 3)
+axis(side = 1, at = c(0.1,0.9), labels = c("2019", "2020"),
+     cex.axis = 1.7)
+segments(x0 = 0.12, y0 = 0.5, x1 = 0.88, y1 = 0.5, col = "#555555",
+         lwd = 2, lty = 2)
+mtext(text = "Anxiety level", side = 2, cex = 2, line = 0.5)
+legend("topright", legend = c("No stats","Stats", "grand mean"), col = c("#c80064","#54bebe","#555555"), 
+       lwd = 2, cex = 1.4, bty = "n")
+```
+]
+.pull-right[
+```{r main2-pred-graph-out, ref.label = "main2-pred-graph", fig.align = 'center', echo = FALSE, fig.width = 8, fig.height = 8}
+
+```
+]
