@@ -55,8 +55,8 @@ anxiety <- read_csv(file = link) %>%
 
 ## Factorial designs
 
-- To this day we have talked abnout comparisons between groups difined by the 
-values of single variable.
+- So far, we have talked about comparisons between groups defined by the 
+values of a single variable.
 
 --
 
@@ -77,8 +77,9 @@ we have multiple conditions in an experiment.
 
 --
 
-- One importat thing to note is that, even when our independen variable can take 
-more than two values we are still talking about a single independent variable.
+- One important thing to note is that, even when our independent variable can 
+take more than two values we are still talking about a single independent 
+variable.
 
 ---
 
@@ -96,14 +97,14 @@ pressure, it might be important to consider if the participant is male or female
 --
 
 - The key point is that sometimes in our experiments we would like to consider 
-effects of more than one variable at a time, and how those effecs migh interact 
+effects of more than one variable at a time, and how those effects might interact 
 to give rise to our observations.
 
 --
 
 - When we have more than one independent variable in an experiment which can 
 take 2 or more categorical values (like smoking status, cohort, treatment, etc.)
-we say call the experiment a **Factorial design**.
+we call the experiment a **Factorial design**.
 
 ---
 
@@ -119,7 +120,7 @@ categorical values we refer to them as **factors**. For example:
   
 --
 
-  - In our study about the effects of a new drug on blood preassure we can refer
+  - In our study about the effects of a new drug on blood pressure we can refer
   to the treatment condition as: "the factor treatment".
   
 --
@@ -137,7 +138,7 @@ words and low frequency words.
 
 --
 
-- In this example, we have two factors, the firs one is the task factor, 
+- In this example, we have two factors, the first one is the "task" factor, 
 the second one is the word frequency factor.
 
 --
@@ -148,9 +149,10 @@ low frequency.
 
 --
 
-- Then we would call this experimental design a $2\times 2$ **factorial design**, 
-where the first number refers to the number of levels (values) of the first 
-factor and the second refers to the levels (values) of the second factor.
+- Then we would call this experimental design a $2\times 2$ 
+**factorial design**, where the first number refers to the number of levels 
+(values) of the first factor and the second refers to the levels (values) of the 
+second factor.
 
 ---
 
@@ -158,9 +160,9 @@ factor and the second refers to the levels (values) of the second factor.
 
 - If participants are assigned to a single combination of the values of the 
 factors, for example, one group of participants only responds to the free recall 
-tests with high frequency words and a different group responds to the free recall
-test with low frequency words, and so on. We refer to the design as a $2\times 2$ 
-**between subjects factorial design**.
+tests with high frequency words and a different group responds to the free 
+recall test with low frequency words, and so on. We refer to the design as a 
+$2\times 2$ **between subjects factorial design**.
 
 --
 
@@ -198,9 +200,11 @@ within subjects.
 --
 
 - For example, if we have the same group of participants responding to our free
-recall test with both low and high frequency words and we have a **different** 
+recall test with both low and high frequency words and we have another 
 group of participants responding to the recognition memory task with both 
 low and high frequency words.
+
+--
 
 - We will call this a $2\times2$ **mixed factorial design**.
 
@@ -218,9 +222,10 @@ as between and which factors are treated as within subjects.
 --
 
   - This is a $2\times2$ **mixed factorial design** where the test factor was 
-  implemented between subjects (different groups do different tasks) and the 
-  word frequency factor was implemented within subjects (every participant 
-  responded to the task with both high and low frequency words).
+  manipulated between subjects (different groups do different tasks) and the 
+  word frequency factor was manipulated within subjects (every participant 
+  responded to a task with high frequency words and another task with low 
+  frequency words).
   
 --
 
@@ -251,7 +256,7 @@ variables).
   
 --
 
-  - Finally, ff we had a $2\times2$ **mixed factorial design** with task 
+  - Finally, if we had a $2\times2$ **mixed factorial design** with task 
   manipulated between subjects and word frequency manipulated within subjects. 
   We would have 2 groups (one performing a free recall tasks and the other a
   recognition tasks) and each group would see two values of our second
@@ -366,7 +371,7 @@ added a subscript to our observations.
 ## Example between subjects factorial design.
 
 - We measure the levels of anxiety of 30 students at the end of their first year 
-form two cohorts 2019 and 2020, and we record whether they are took a statistics 
+from two cohorts 2019 and 2020, and we record whether they took a statistics 
 course during their first year or not.
 
 --
@@ -419,16 +424,53 @@ changes given the levels of a single factor (independent variable).
   
 --
 
+- In our anxiety example, one model would be the "**main effects of cohort**"
+where we assume that only the cohort that a student belongs too, contributes
+to the difference between anxiety levels (regardless of whether they took a 
+statistics class or not).
+
+--
+
+- The second model would be a "**main effects of statistics class**", where we 
+assume that only taking a statistics class during their first year contributes
+to any differences between the anxiety levels of participants (regardless of 
+cohort).
+  
+---
+
+## Models for factorial designs
+
+- Main effects models are similar to what we have studied before. However, in 
+factorial designs we will have a new class of models known as 
+**additive models**.
+
+--
+
 - An **additive effects** model formalizes the assumption that the effects of
 each of our factors are independent, in other words that the value of 
 one factor will not change the effect that second factor has on the expected 
-value of our dependent variable.
+value of our dependent variable. Nevertheless, both factors have an effect on 
+the dependent variable.
 
 --
 
   - If we only have 2 factors in our design we will only have one 
   **additive model**. This model will be a combination of the two main effects 
   models.
+  
+--
+
+- In our anxiety example, the **additive model** assumes that cohort and whether
+the student took a statistics class during their first year have an effect on 
+the average anxiety levels of students, however, the effect of cohort and the 
+class are independent, so they are calculated separately and then added together 
+to make a prediction.
+
+--
+
+- That's where the name **additive** comes from, we sum each independent effect
+of our factors in order to make a prediction about the anxiety levels of each 
+group.
   
 ---
 
@@ -449,12 +491,29 @@ value of the second factor.
 Effects models that we have used to this point), however, thy are hard to 
 interpret.
 
+--
+
+- In our anxiety example, an **interaction** model would assume that the mean
+of each group is independent and that they are not just the sum of the 
+main effects. In other words, each combination of cohort and whether 
+a student took a statistics class would have a different expected anxiety level
+that might not related to the other groups.
+
+--
+
+- An example of an interaction would be when only students in the 2020 cohort 
+that took a statistics class during their first year have a different anxiety 
+level compared to the rest of the students in the study (in other words the 
+effect of taking a stats class is different depending on the cohort the student 
+belongs to!).
+
 ---
 
 ## Models for factorial designs
 
-- As with the rest of the models in the class, the key part of the model will 
-be the predictions that it makes and how we can derive those predictions.
+- As with the rest of the models in the class, the key will be the predictions 
+that the model makes. The difference between the models is just how we can 
+calculate those predictions.
 
 --
 
@@ -483,7 +542,7 @@ factorial design will be:
   
 --
 
-  4. Using the SSE we can compute the Mean Squared Error (mse), the proportion
+  4. Use the SSE to compute the Mean Squared Error (mse), the proportion
   of variance accounted for by the model $(R^2)$ and the BIC.
   
 ---
@@ -495,16 +554,16 @@ $2\times 2$ between subjects factorial design.
 
 --
 
-- We will need to make some changes to how we express our models, however, this
-will not change how we arrive to the predictions of our models (we will still
-use averages).
+- We will need to make some changes to how we express our models, which means 
+that we will arrive to our predictions using a different approach, however, 
+this new approach will also use averages.
 
 --
 
 - Note that if you remember the steps that we have taken to solve the previous 
 problems that we have seen in class, then this more complicated experimental
-design will be easier to follow. Given that the steps we will take are the same
-as with previous problems.
+design will be easier to follow. Given that the steps we need to take are the 
+same.
 
 --
 

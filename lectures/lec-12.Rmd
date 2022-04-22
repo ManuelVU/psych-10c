@@ -55,7 +55,7 @@ anxiety <- read_csv(file = link) %>%
 
 ## Models for factorial designs
 
-- Last week we talk about factorial designs. A factorial design is a study where 
+- Last week we talked about factorial designs. A factorial design is a study where 
 we have a single dependent variable (observation) denoted as $y_{ijk}$.
 
 --
@@ -231,7 +231,7 @@ during the year has an effect on a students anxiety level.
 
 --
 
-- This are two different models and have to be evaluated independently.
+- These are two different models and have to be evaluated independently.
 
 ---
 
@@ -269,7 +269,7 @@ as: $$\mu_j = \mu + \alpha_j$$
 --
 
 - The key idea is that the expected value of our observation is a function of
-a general value or response on the population (the **grand mean**) and the 
+a general value or response at the population level (the **grand mean**) and the 
 effect associated with the level (value) of the first factor $\alpha_j$.
 
 --
@@ -320,10 +320,22 @@ second factor.
 
 - Given that we have restricted our values of $\alpha_j$ to sum to $0$ we can 
 only calculate the estimators of $J-1$ levels of our factor using this equation.
-The last value $J$ is derived as the negative of the sum of the remaining 
-effects.
- 
+
 --
+
+- For example, if our factor has 2 levels we just calculate the value of 
+$\hat{\alpha}_1$ using the equation and then set: 
+$$\hat{\alpha}_2 = - \hat{\alpha}_1$$
+
+--
+
+- If our factor has 3 levels, then we calculate the values of $\hat{\alpha}_1$
+and $\hat{\alpha}_2$ using the equation and then set 
+$$\hat{\alpha}_3 = - (\hat{\alpha}_1 + \hat{\alpha}_2)$$
+ 
+---
+
+## Estimator of the main effects
 
 - In other words, we only calculate the values of $j-1$ main effects and then 
 derive the last one as $$\hat{\alpha}_J = -\sum_{j=1}^{J-1}\hat{\alpha}_j$$
@@ -394,6 +406,9 @@ legend("topright", legend = c(2019,2020), col = c("#c80064","#54bebe"),
 ]
 
 ---
+
+## Visual representation of cohort main effects model
+
 ```{r main1-2-pred-graph, echo = FALSE, fig.align = 'center', fig.width = 8}
 plot(x = 0, y = 0, axes = FALSE, ann = FALSE, type = "n",
      xlim = c(0,1), ylim = c(0,1))
@@ -415,6 +430,73 @@ text(x = 0.95, y = 0.3, labels = expression(mu[1]), cex = 2)
 text(x = 0.95, y = 0.7, labels = expression(mu[2]), cex = 2)
 ```
 
+---
 
+## Main effects model for the second factor
+
+- The main effects model for the second factor will follow the same steps, 
+however, we will use a different variable name ( $\beta$ instead of $\alpha$) 
+to express our model because we want to save both values and use them later.
+
+--
+
+- The main effects model of the second factor will formalize the assumption that 
+the expected value of our dependent variable is different only between levels
+of the second factor (regardless of the values of the first!).
+
+--
+
+- Formally, we write the model as:
+$$y_{ijk} \sim\text{Normal}(\mu+\beta_k,\sigma_2^2)$$
+
+--
+
+- In this notation I have skipped the use of $\mu_k$ to make it clear
+that we are using a main effects model. Again, here $\mu$ represents the grand
+mean and $\beta_k$ represents the main effect of the level *k-th* of the second 
+factor. 
+
+---
+
+## Estimator for the main effects of factor 2
+
+- As we did with the main effects of the levels of the first factor $(\alpha_j)$, 
+we need to restrict the values that the main effects of the second factor can 
+take so that they sum to 0.
+$$\sum_k\beta_k=0$$
+
+--
+
+- Then we obtain our estimator by taking the difference between the average 
+response (dependent variable) across all participants (estimator of the 
+grand mean) and subtracting the average of all participants on the *k-th*
+level of the second factor regardless of the values of the first:
+$$\hat{\beta}_k = \hat{\mu} - \hat{\mu}_k$$
+
+---
+
+## Estimator for the main effects of factor 2
+
+- As with the main effects model of factor 1, we only need to calculate 1 less 
+$\hat{\beta}_k$ value than the number of levels of the factor.
+
+--
+
+- For example if we have 4 levels of factor 2 $(k=1,2,3,4)$ we only need to 
+calculate $\hat{\beta}_1$, $\hat{\beta}_2$ and $\hat{\beta}_3$ and set the last 
+one to: $$\hat{\beta}_4 = -(\hat{\beta}_1+\hat{\beta}_2+\hat{\beta}_3)$$
+
+--
+
+- In our anxiety example, the main effects model of the second factor formalizes
+the assumption that the expected anxiety levels of students are different if 
+they took a statistics class during their first year, regardless of the cohort
+that they belong to.
+
+---
+
+## Anxiety example
+
+- With this new model, 
 
 
