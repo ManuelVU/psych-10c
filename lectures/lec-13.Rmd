@@ -1,5 +1,5 @@
 ---
-title: "Lecture 12"
+title: "Lecture 13"
 subtitle: "Models for Factorial Designs"
 author: "Psych 10 C"
 institute: "University of California, Irvine"
@@ -111,14 +111,124 @@ model.
 
 --
 
-- Today, we will introduce the remaining 2 models that we use in a factorial
+- Today, we will introduce the remaining two models that we use in a factorial
 design and work on an example using data from our anxiety example with different
 cohorts of students that took either a statistics course during the year or 
 another class.
 
+---
 
+## The additive model
 
+- An additive model will formalize the assumption that two (or more depending on 
+the number of independent variables) have an effect on the expected value of 
+our dependent variable. Furthermore, this type of model assumes that those 
+effects are independent and therefore can be added together in order to make a 
+prediction.
 
+--
+
+- We express an additive model formally as:
+$$y_{ijk}\sim\text{Normal}(\mu+\alpha_j+\beta_k,\sigma_3^2)$$
+
+--
+
+- Where $\mu$ is the grand mean, $\alpha$ represents the main effect of factor
+1 and $\beta$ represents the main effect of factor 2. In this case, the 
+factors are added in order to make a prediction.
+
+--
+
+- This means that the model prediction for a participant that responds to a 
+combination of the *j-th* level of factor one and the *k-th* level of factor 2
+will be:
+$$\mu_{jk} = \mu + \alpha_j + \beta_k$$
+
+---
+
+## Example: anxiety by cohort and stats class
+
+- Problem: we want to study the effect of the cohort that student is in and 
+whether they took a statistics class during their first year on the anxiety
+levels of students at a university.
+
+--
+
+- We have a $2\times2$ between subjects factorial design where the first factor
+is cohort (2019 $j=1$ vs 2020 $j=2$) and the second factor is taking a 
+statistics class $(k=1)$ vs taking any other class $(k=2)$.
+
+--
+
+- Then, the predicted anxiety level of any student in the 2019 cohort that took 
+a statistics class would be:$$\hat{\mu} + \hat{\alpha}_1 + \hat{\beta}_1$$
+
+--
+
+- Where $\hat{\mu}$ represents the estimator of the grand mean and 
+$\hat{\alpha}_1$ and $\hat{\beta}_1$ represent the main effect of cohort and 
+statistics class respectively.
+
+--
+
+- The predicted anxiety level of any student in the 2020 cohort that took a 
+statistics class would be: $$\hat{\mu} + \hat{\alpha}_2 + \hat{\beta}_1$$
+
+---
+
+## Visualizing the predictions of additive models
+
+- As we did with main effects models, we can also make a visual representation 
+of the predictions of an additive model:
+
+--
+
+.pull-left[
+```{r add-pred-graph, eval = FALSE}
+plot(x = 0, y = 0, axes = FALSE, ann = FALSE, type = "n",
+     xlim = c(0,1), ylim = c(0,1))
+box(bty = "l")
+segments(x0 = c(0.1,0.1), y0 = c(0.1,0.6), x1 = c(0.9,0.9), y1 = c(0.4,0.9),
+         col = c("#c80064","#54bebe"), lwd = 3)
+axis(side = 1, at = c(0.1,0.9), labels = c("2019", "2020"),
+     cex.axis = 1.7)
+segments(x0 = 0.12, y0 = 0.5, x1 = 0.88, y1 = 0.5, col = "#555555",
+         lwd = 2, lty = 2)
+mtext(text = "Anxiety level", side = 2, cex = 2, line = 0.5)
+legend("topleft", legend = c("No stats","Stats", "grand mean"), col = c("#c80064","#54bebe","#555555"), 
+       lwd = 2, cex = 1.4, bty = "n")
+```
+]
+.pull-right[
+```{r add-pred-graph-out, ref.label = "add-pred-graph", fig.align = 'center', echo = FALSE, fig.width = 8, fig.height = 8}
+
+```
+]
+
+---
+
+```{r add-2-pred-graph, echo = FALSE, fig.align = 'center', fig.width = 8}
+plot(x = 0, y = 0, axes = FALSE, ann = FALSE, type = "n",
+     xlim = c(0,1), ylim = c(0,1))
+box(bty = "l")
+axis(side = 1, at = c(0.1,0.9), labels = c("2019", "2020"),
+     cex.axis = 1.7)
+segments(x0 = 0.12, y0 = 0.5, x1 = 0.88, y1 = 0.5, col = "#555555",
+         lwd = 2, lty = 2)
+segments(x0 = 0.5, y0 = 0.25, x1 = 0.5, y1 = 0.75, col = "slategray",
+         lwd = 2, lty = 3)
+segments(x0 = c(0.1,0.1), y0 = c(0.1,0.6), x1 = c(0.9,0.9), y1 = c(0.4,0.9),
+         col = c("#c80064","#54bebe"), lwd = 3)
+mtext(text = "Anxiety level", side = 2, cex = 2, line = 0.5)
+legend("topleft", legend = c("No stats","Stats", "grand mean"), 
+       col = c("#c80064","#54bebe","#555555"), 
+       lwd = 2, cex = 1.4, bty = "n")
+text(x = 0.55, y = 0.6, labels = expression(beta[2]), cex = 2)
+text(x = 0.45, y = 0.4, labels = expression(beta[1]), cex = 2)
+# text(x = 0.07, y = 0.5, labels = expression(mu), cex = 2)
+# text(x = 0.95, y = 0.3, labels = expression(mu[1]), cex = 2)
+# text(x = 0.95, y = 0.7, labels = expression(mu[2]), cex = 2)
+```
 
 
 
