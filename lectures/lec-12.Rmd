@@ -60,7 +60,7 @@ we have a single dependent variable (observation) denoted as $y_{ijk}$.
 
 --
 
-- In factorial designs we also have more than one independent variable which can 
+- We also have more than one independent variable which can 
 take categorical values. For example, the cohort that a student belongs to, 
 a type of task, whether they smoke or not, etc.
 
@@ -136,7 +136,7 @@ first factor and $i$ denotes the observation number of the combination of the
 --
 
 - From our example, $j$ indicates whether the student belongs to the 2019 cohort
-$(j=1)$ of if the student belongs to the 2020 cohort $(j=2)$, and $k$ indicates
+$(j=1)$ or if the student belongs to the 2020 cohort $(j=2)$, and $k$ indicates
 whether the student was enrolled in a statistics class that year $(k=1)$ or not 
 $(k=2)$.
 
@@ -156,12 +156,14 @@ plot(x = 0, y = 0, axes = FALSE, ann = FALSE, type = "n",
      xlim = c(0,1), ylim = c(0,1))
 box(bty = "l")
 segments(x0 = c(0.1,0.1), y0 = c(0.5,0.5), x1 = c(0.9,0.9), y1 = c(0.5,0.5),
-         col = c("#555555"), lwd = 3)
+         col = c("#c80064","#54bebe"), lwd = 3, lty = c(1,3))
 axis(side = 1, at = c(0.1,0.9), labels = c("stats", "no stats"),
      cex.axis = 1.7)
 mtext(text = "Anxiety level", side = 2, cex = 2, line = 0.5)
 text(x = c(0.1,0.1,0.9,0.9), y = c(0.54,0.46,0.54,0.46),
      labels = c(2019,2020,2019,2020), cex = 1.4)
+legend("topright", legend = c(2019,2020), col = c("#c80064","#54bebe"), 
+       lwd = 2, cex = 1.4, bty = "n", lty = c(1,3))
 ```
 ]
 .pull-right[
@@ -255,7 +257,8 @@ same level of the first factor $j$ are assumed to follow the same distribution.
 - In our anxiety levels example, this model would formalize the assumption that 
 the expected anxiety levels in students from the 2019 cohort $(j=1)$ are 
 different from the expected anxiety levels of students in the 2020 cohort 
-$(j=2)$, regardless of whether they took a statistics class or not.
+$(j=2)$, regardless of whether they took a statistics class $(k=1)$ or not 
+$(k=2)$.
 
 ---
 
@@ -300,6 +303,12 @@ $$\sum_j \alpha_j = 0$$
 
 - This means that we can interpret the main effect $\alpha_j$ as the difference 
 between the grand mean and the average of the groups defined by factor $j$.
+
+--
+
+- What we have gained is a more adequate interpretation of our parameters. For
+example, $\alpha_1$ can be interpreted as the change in the anxiety levels of 
+students associated with being in the 2019 cohort.
 
 ---
 
@@ -453,7 +462,7 @@ $$y_{ijk} \sim\text{Normal}(\mu+\beta_k,\sigma_2^2)$$
 
 - In this notation I have skipped the use of $\mu_k$ to make it clear
 that we are using a main effects model. Again, here $\mu$ represents the grand
-mean and $\beta_k$ represents the main effect of the level *k-th* of the second 
+mean and $\beta_k$ represents the main effect of the *k-th* level of the second 
 factor. 
 
 ---
@@ -505,6 +514,8 @@ $$\hat{\mu} + \hat{\beta}_1$$
 
 - And for students that did not take a statistics class during their first year 
 the prediction would be: $$\hat{\mu} + \hat{\beta}_2 = \hat{\mu} - \hat{\beta}_1$$
+
+--
 
 - We can visualize this model using the same type graphical representation as 
 before, however, it is easier to see that the models are similar by changing the 

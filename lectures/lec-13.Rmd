@@ -207,6 +207,8 @@ legend("topleft", legend = c("No stats","Stats", "grand mean"), col = c("#c80064
 
 ---
 
+## Additive model
+
 ```{r add-2-pred-graph, echo = FALSE, fig.align = 'center', fig.width = 8}
 plot(x = 0, y = 0, axes = FALSE, ann = FALSE, type = "n",
      xlim = c(0,1), ylim = c(0,1))
@@ -214,6 +216,8 @@ box(bty = "l")
 axis(side = 1, at = c(0.1,0.9), labels = c("2019", "2020"),
      cex.axis = 1.7)
 segments(x0 = 0.12, y0 = 0.5, x1 = 0.88, y1 = 0.5, col = "#555555",
+         lwd = 2, lty = 2)
+segments(x0 = 0.12, y0 = 0.25, x1 = 0.88, y1 = 0.25, col = "#aaaaaa",
          lwd = 2, lty = 2)
 segments(x0 = 0.5, y0 = 0.25, x1 = 0.5, y1 = 0.75, col = "slategray",
          lwd = 2, lty = 3)
@@ -223,15 +227,307 @@ mtext(text = "Anxiety level", side = 2, cex = 2, line = 0.5)
 legend("topleft", legend = c("No stats","Stats", "grand mean"), 
        col = c("#c80064","#54bebe","#555555"), 
        lwd = 2, cex = 1.4, bty = "n")
-text(x = 0.55, y = 0.6, labels = expression(beta[2]), cex = 2)
-text(x = 0.45, y = 0.4, labels = expression(beta[1]), cex = 2)
-# text(x = 0.07, y = 0.5, labels = expression(mu), cex = 2)
-# text(x = 0.95, y = 0.3, labels = expression(mu[1]), cex = 2)
-# text(x = 0.95, y = 0.7, labels = expression(mu[2]), cex = 2)
+text(x = 0.55, y = 0.625, labels = expression(beta[2]), cex = 2)
+text(x = 0.45, y = 0.375, labels = expression(beta[1]), cex = 2)
+text(x = 0.07, y = 0.5, labels = expression(mu), cex = 2)
+text(x = 0.12, y = 0.175, labels = expression(alpha[1]), cex = 2)
+text(x = 0.88, y = 0.315, labels = expression(alpha[2]), cex = 2)
 ```
 
+---
 
+## Additive model
 
+- Once we have obtained the values of the parameters of each of the main effects
+models, we already have everything that we need for the additive model.
 
+--
 
+- In other words, for the additive model we just need to combine the estimators 
+of each main effects model in order to derive a prediction.
 
+--
+
+- This is because each factor is assumed to affect the response variable 
+independently of the other.
+
+--
+
+- In other words, is just the sum of the main effects.
+
+--
+
+- The last model in a $2\times2$ between subjects factorial design is known as 
+**Full** model and it assumes that the levels of each factor can **interact**.
+
+---
+
+## Full model
+
+- The **Full** model in factorial designs assumes that the expected value of 
+our dependent variable is different for each combination of the levels of our 
+factors.
+
+--
+
+- Furthermore, it assumes that those expectations are independent from one 
+another and that they can't be obtained by simply adding together the 
+main effects of each factor.
+
+--
+
+- This is typically known as an **interaction**. The idea is that one of the 
+independent variables in our experiment can *modify* the effect of the other.
+
+--
+
+- In our anxiety example, one example of an interaction could be that when 
+people belong to the 2019 cohort taking a stats class has no effect on the 
+anxiety level of students, in other words, that the expected anxiety levels of 
+students is the same regardless o whether they took a statistics class or not.
+But, for students in the 2020 cohort, their anxiety levels are the same as 
+those from students in the 2019 cohort but they increase abruptly for students
+in that took a statistics class during their first year.
+
+---
+
+## Visualization of an interaction.
+
+- There are multiple ways in which we could represent a model with an 
+interaction, however, the key idea is that, instead of having parallel lines as
+in main effects or the additive model, this times the lines will not be parallel.
+
+.pull-left[
+```{r full-pred-graph, eval = FALSE}
+plot(x = 0, y = 0, axes = FALSE, ann = FALSE, type = "n",
+     xlim = c(0,1), ylim = c(0,1))
+box(bty = "l")
+segments(x0 = c(0.1,0.1), y0 = c(0.4,0.4), x1 = c(0.9,0.9), y1 = c(0.4,0.9),
+         col = c("#c80064","#54bebe"), lwd = 3)
+axis(side = 1, at = c(0.1,0.9), labels = c("2019", "2020"),
+     cex.axis = 1.7)
+mtext(text = "Anxiety level", side = 2, cex = 2, line = 0.5)
+legend("topleft", legend = c("No stats","Stats"), 
+       col = c("#c80064","#54bebe"), lwd = 2, cex = 1.4, bty = "n")
+```
+]
+.pull-right[
+```{r full-pred-graph-out, ref.label = "full-pred-graph", fig.align = 'center', echo = FALSE, fig.width = 8, fig.height = 8}
+
+```
+]
+
+---
+
+## Example: Interaction
+
+- Another example of an interaction is: the anxiety level of students in the 
+2019 cohort is high for students that took a statistics class and is low for
+students that did not. However, the anxiety levels of students from the 2020
+cohort is low for students that took a statistics class and it's high for
+students that did not.
+
+--
+
+.pull-left[
+```{r full2-pred-graph, eval = FALSE}
+plot(x = 0, y = 0, axes = FALSE, ann = FALSE, type = "n",
+     xlim = c(0,1), ylim = c(0,1))
+box(bty = "l")
+segments(x0 = c(0.1,0.1), y0 = c(0.1,0.9), x1 = c(0.9,0.9), y1 = c(0.9,0.1),
+         col = c("#c80064","#54bebe"), lwd = 3)
+axis(side = 1, at = c(0.1,0.9), labels = c("2019", "2020"),
+     cex.axis = 1.7)
+mtext(text = "Anxiety level", side = 2, cex = 2, line = 0.5)
+legend("top", legend = c("No stats","Stats"), 
+       col = c("#c80064","#54bebe"), lwd = 2, cex = 1.4, bty = "n")
+```
+]
+.pull-right[
+```{r full2-pred-graph-out, ref.label = "full2-pred-graph", fig.align = 'center', echo = FALSE, fig.width = 8, fig.height = 8}
+
+```
+]
+
+---
+
+## Full model
+
+- The key part of a **Full** model is that it predicts that the effect of a 
+factor changes depending on the values of another.
+
+--
+
+- In our first example, the effect of taking a statistics class on the anxiety
+levels of students was different for students in the 2019 cohort in comparison 
+to students in the 2020 cohort. 
+
+--
+
+- In other words, taking a statistics class had no effect on anxiety levels for 
+students in the 2019 cohort, but it had the effect of increasing anxiety
+levels for students in the 2020 cohort.
+
+--
+
+- In the second example, for students in the 2019 cohort having taken a 
+statistics class increased their anxiety levels. On the other hand, students
+from the 2020 cohort had a lower anxiety level if they had taken a statistics
+class in comparison to students that did not.
+
+--
+
+- In other words, the effect of taking a statistics class on the anxiety levels
+of students was different for students in the 2019 cohort in comparison to
+students in the 2020 cohort.
+
+---
+
+## Full model
+
+- The full model formalizes the assumption that the expectation of the dependent
+variable depends on the combinations of factor levels, and it is not the 
+sum of the independent effects.
+
+--
+
+- Formally, we can express the full model as: $$y_{ijk}\sim\text{Normal}(\mu_{jk},\sigma_4^2)$$
+
+--
+
+- Notice that in the Full model, each combination of the levels of our factors
+$j$ and $k$ has a different expectation $\mu_{jk}$, however, this expectation
+can no longer be express as the addition of a grand mean and main effects.
+
+--
+
+- This model is similar to the effects models that we have talked about before,
+as it assumes that the prediction of each group (in a between subjects factorial
+design) is different.
+
+---
+
+## Estimators for the full model
+
+- As we talked about the previous week, the full model is simple to estimate but
+hard to interpret.
+
+--
+
+- The estimator of $\mu_{jk}$ is equal to the average of the group that was 
+exposed to the *j-th* and *k-th* levels of our first and second factor 
+respectively. IN other words, it is equal to:
+$$\hat{\mu}_{jk} = \frac{1}{n_{jk}} \sum_i y_{ijk}$$
+
+--
+
+- Where $n_{jk}$ represents the number of participants in that where exposed to 
+the *j-th* level of factor $j$ and the *k-th* level of factor $k$.
+
+--
+
+- In our anxiety example, $\hat{\mu}_{11}$ would be the average anxiety level
+of students in the 2019 cohort that took a statistics class during their first
+year.
+
+--
+
+- While $\hat{\mu}_{21}$ would be the average anxiety level of students in the 
+2020 cohort that took a statistics class during their first year.
+
+---
+
+## Number of models to compare on each design
+
+- As we have seen with the anxiety example, when we have a $2\times2$ between 
+subjects factorial design, we will have:
+
+--
+
+  - One **Null** model that assumes all groups have the same expected value of 
+  an dependent variable.
+
+--
+
+  - Two **Main effects** models, each assumes that one and **only one** of the 
+  factors has an effect on the expected value of our dependent variable.
+  
+--
+
+  - One **Additive** model that assumes that the expected value of our dependent
+  variable is equal to the sum of the independent effects of the levels of 
+  each factor.
+  
+--
+
+  - One **Full** model that assumes that the expected value of our independent 
+  variable is different for each combination of the levels of our factors and 
+  that it can't be express as the sum of independent effects.
+  
+--
+
+- This means that in a $2\times2$ between subjects factorial design we will have
+to calculate the predictions and errors of 5 different models.
+
+---
+
+## Number of models in designs with 3 factors
+
+- The number of models that we need to compare increases rapidly with the number 
+of factors (independent variables) in the experiment, for example, if we have a 
+$2\times 2 \times 2$ between subjects factorial design, we will have:
+
+--
+
+- One **Null** model, three **Main effects** models (one for each factor)
+
+--
+
+- Four **Additive** models, three of them will use only two factors at a time,
+factor 1 with factor 2, or factor 1 with factor 3, or factor 2 with factor 3. 
+The last one will be the additive model of the 3 factors at the same time.
+
+--
+
+- Finally, there will be a single **Full** model. However, this model will be 
+even more complicated to interpret. 
+
+--
+
+- Because the **Full** model in designs with 3 factors can be so difficult to 
+interpret we usually don't take it into account.
+
+--
+
+- Again, when we increase the number of factors on an experiment, it is better 
+to have hypothesis which can inform us as to what models it would be relevant to
+look at instead of testing every model.
+
+---
+
+## Factorial designs
+
+- The equations that we have talked about the last two classes will work for 
+every between subjects factorial design (adding the relevant models). The 
+estimators that we have seen can always be obtained in order to derive the 
+model's predictions and their errors and perform our comparisons.
+
+--
+
+- However, there is a "shorter" way to obtain all of the values that we need.
+
+--
+
+- This method is known as **Cell means**.
+
+--
+
+- This method will allow us to get the **grand mean** $\mu$ the main effects 
+$\alpha_j$ and $\beta_j$ and the means of the groups for the full model 
+$\mu_{jk}$.
+
+--
+
+- We will use the cell means method next class in order to derive the 
+predictions of the models in the anxiety example with two cohorts and a 
+statistics class.
