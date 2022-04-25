@@ -3,7 +3,7 @@ title: "Lecture 13"
 subtitle: "Models for Factorial Designs"
 author: "Psych 10 C"
 institute: "University of California, Irvine"
-date: "04/25/2022"
+date: "04/27/2022"
 output:
   xaringan::moon_reader:
     self_contained: true
