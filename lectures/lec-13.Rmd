@@ -112,19 +112,17 @@ model.
 --
 
 - Today, we will introduce the remaining two models that we use in a factorial
-design and work on an example using data from our anxiety example with different
-cohorts of students that took either a statistics course during the year or 
-another class.
+design.
 
 ---
 
 ## The additive model
 
 - An additive model will formalize the assumption that two (or more depending on 
-the number of independent variables) have an effect on the expected value of 
-our dependent variable. Furthermore, this type of model assumes that those 
-effects are independent and therefore can be added together in order to make a 
-prediction.
+the number of independent variables) factors have an effect on the expected 
+value of our dependent variable. Furthermore, this type of model assumes that 
+those effects are independent and therefore can be added together in order to 
+make a prediction.
 
 --
 
@@ -148,9 +146,9 @@ $$\mu_{jk} = \mu + \alpha_j + \beta_k$$
 
 ## Example: anxiety by cohort and stats class
 
-- Problem: we want to study the effect of the cohort that student is in and 
-whether they took a statistics class during their first year on the anxiety
-levels of students at a university.
+- Problem: we want to study the effect of the cohort that a student belongs to 
+and whether they took a statistics class during their first year on their
+anxiety levels.
 
 --
 
@@ -227,8 +225,8 @@ mtext(text = "Anxiety level", side = 2, cex = 2, line = 0.5)
 legend("topleft", legend = c("No stats","Stats", "grand mean"), 
        col = c("#c80064","#54bebe","#555555"), 
        lwd = 2, cex = 1.4, bty = "n")
-text(x = 0.55, y = 0.625, labels = expression(beta[2]), cex = 2)
-text(x = 0.45, y = 0.375, labels = expression(beta[1]), cex = 2)
+text(x = 0.55, y = 0.625, labels = expression(beta[1]), cex = 2)
+text(x = 0.45, y = 0.375, labels = expression(beta[2]), cex = 2)
 text(x = 0.07, y = 0.5, labels = expression(mu), cex = 2)
 text(x = 0.12, y = 0.175, labels = expression(alpha[1]), cex = 2)
 text(x = 0.88, y = 0.315, labels = expression(alpha[2]), cex = 2)
@@ -287,7 +285,7 @@ anxiety level of students, in other words, that the expected anxiety levels of
 students is the same regardless o whether they took a statistics class or not.
 But, for students in the 2020 cohort, their anxiety levels are the same as 
 those from students in the 2019 cohort but they increase abruptly for students
-in that took a statistics class during their first year.
+that took a statistics class during their first year.
 
 ---
 
@@ -295,7 +293,7 @@ in that took a statistics class during their first year.
 
 - There are multiple ways in which we could represent a model with an 
 interaction, however, the key idea is that, instead of having parallel lines as
-in main effects or the additive model, this times the lines will not be parallel.
+in main effects or the additive models, this times the lines will not be parallel.
 
 .pull-left[
 ```{r full-pred-graph, eval = FALSE}
@@ -324,7 +322,7 @@ legend("topleft", legend = c("No stats","Stats"),
 - Another example of an interaction is: the anxiety level of students in the 
 2019 cohort is high for students that took a statistics class and is low for
 students that did not. However, the anxiety levels of students from the 2020
-cohort is low for students that took a statistics class and it's high for
+cohort is low for those who took a statistics class and it's high for
 students that did not.
 
 --
@@ -403,25 +401,25 @@ can no longer be express as the addition of a grand mean and main effects.
 
 - This model is similar to the effects models that we have talked about before,
 as it assumes that the prediction of each group (in a between subjects factorial
-design) is different.
+design) are different.
 
 ---
 
 ## Estimators for the full model
 
-- As we talked about the previous week, the full model is simple to estimate but
+- As we mentioned the previous week, the full model is simple to estimate but
 hard to interpret.
 
 --
 
 - The estimator of $\mu_{jk}$ is equal to the average of the group that was 
 exposed to the *j-th* and *k-th* levels of our first and second factor 
-respectively. IN other words, it is equal to:
+respectively. In other words, it is equal to:
 $$\hat{\mu}_{jk} = \frac{1}{n_{jk}} \sum_i y_{ijk}$$
 
 --
 
-- Where $n_{jk}$ represents the number of participants in that where exposed to 
+- Where $n_{jk}$ represents the number of participants that where exposed to 
 the *j-th* level of factor $j$ and the *k-th* level of factor $k$.
 
 --
@@ -456,7 +454,7 @@ subjects factorial design, we will have:
 
   - One **Additive** model that assumes that the expected value of our dependent
   variable is equal to the sum of the independent effects of the levels of 
-  each factor.
+  each factor and the grand mean.
   
 --
 
@@ -526,8 +524,51 @@ model's predictions and their errors and perform our comparisons.
 $\alpha_j$ and $\beta_j$ and the means of the groups for the full model 
 $\mu_{jk}$.
 
+---
+
+## Cell means method
+
+- When we have a $2\times 2$ factorial design (p levels of the first factor
+and q levels for the second factor) we can obtain the parameters that we need 
+for all our models by using a cell means table. 
+
 --
 
-- We will use the cell means method next class in order to derive the 
-predictions of the models in the anxiety example with two cohorts and a 
-statistics class.
+- This method will only be applicable if we have the same number of observations 
+of every group in an experiment, otherwise the estimates will not be adequate.
+
+--
+
+- A cell means table is a matrix representation of the combinations of the 
+levels of a factor. In the case of a $2\times 2$ factorial design, we would 
+have the levels of one factor as the rows and the levels of the second factor
+as columns
+
+--
+
+- Le's look at an example using our students anxiety levels problem:
+
+---
+
+## Students anxiety levels
+
+- First we start with parameters of the full model, which are easy to find given
+that they are just the average of each combination of the factor levels:
+
+--
+
+- With those values we can obtain the average of the levels of each factor by 
+adding the values on a column (or row) and dividing the result by 2.
+
+--
+
+- Finally, we can obtain the grand mean by taking the average of the middle four
+cells in the matrix (cohort-statistics combinations).
+
+--
+
+|          | Statistics            | Other                 | Mean                 |
+|----------|:---------------------:|:---------------------:|:--------------------:|
+| **2019** | $\hat{\mu}_{11}$      | $\hat{\mu}_{12}$      | $\hat{\mu}_{1\cdot}$ |
+| **2020** | $\hat{\mu}_{21}$      | $\hat{\mu}_{22}$      | $\hat{\mu}_{2\cdot}$ |
+| **Mean** | $\hat{\mu}_{\cdot 1}$ | $\hat{\mu}_{\cdot 2}$ | $\hat{\mu}$          |
