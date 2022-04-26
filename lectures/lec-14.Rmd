@@ -47,17 +47,212 @@ knitr::opts_chunk$set(fig.width = 6, message = FALSE,
                       warning = FALSE, comment = "", 
                       cache = F)
 
-link <- "https://raw.githubusercontent.com/ManuelVU/psych-10c-data/main/anxiety-w5.csv"
+link <- "https://raw.githubusercontent.com/ManuelVU/psych-10c-data/main/anxiety-w5-short.csv"
 
 students <- read_csv(link) %>%
   mutate(id = as.character(id),
          anxiety = as.integer(anxiety),
-         cohort = as.factor(cohort))
+         cohort = as.character(cohort),
+         class = as.character(class))
   
 ```
 
-## Cell means method
+## Review
 
-- 
+- This week we have been going over factorial designs and the models that we 
+use to analyze the results of such experiments.
 
+--
 
+- The first model we talked about was the Null model, which assumes that the 
+expected value of the dependent variable is the same regardless of values that
+a factor can take.
+
+--
+
+- We also talked about the Main effects models, which assume that only one 
+factor has an effect on the expected value of the dependent variable. These 
+models are separated by factor, which means that there are only differences 
+between the groups that respond to the levels of one factor regardless of the 
+values of the other.
+
+--
+
+- Additive models assumed that 2 or more factors could have an effect on a 
+participants' response, however, that effect was considered to be independent 
+and therefore was equal to the sum of the main effects of each factor $(\alpha$ 
+and $\beta)$.
+
+--
+
+- Finally, we talked about the Full model, which assumes that the expected 
+value of the dependent variable was different for each group (combination of
+factor levels) in an experiment. Furthermore, this expectation can't be 
+expressed as the sum of the independent main effects of each factor.
+ 
+---
+
+## Review
+
+- The prediction of the Null model in factorial designs is known as the 
+grand mean, and it's the average of the responses of all participants regardless
+of the level of each factor that they where exposed to. $$\hat{\mu}$$
+
+--
+
+- The predictions of the Main effects models where equal to the sum of the 
+average response across all participants and the "effect" of the factor that 
+defines each model.$$\hat{\mu} + \hat{\alpha}_j$$ or $$\hat{\mu} + \hat{\beta}_k$$ 
+
+--
+
+- For factor 1 or factor 2 respectively.
+
+---
+
+## Review
+
+- We mentioned that using the estimates of the main effects $\hat{\alpha}_j$ and
+$\hat{\beta}_k$ we can derive the predictions of the additive model as:
+$$\hat{\mu} + \hat{\alpha}_j + \hat{\beta}_k$$
+
+--
+
+- Finally, we mention that the predictions of the full model where equal to the 
+average of our dependent variable for each combination of the levels of our 
+factor: $$\hat{\mu}_{jk} = \frac{1}{n_{jk}} \sum_i y_{ijk}$$
+
+--
+
+- Where $n_{jk}$ represents the number of participants in the group that 
+responded to the combination of the *j-th* and *k-th* values of factors 1 and 
+2 respectively.
+
+---
+
+## Cell means
+
+- The equations that we have seen in previous classes will always allow us to 
+obtain the values of the parameters in each model. However, when we have a 
+between subjects factorial design we can use the cell means method in order
+to obtain those values.
+
+--
+
+- This method requires us to first calculate the average of each combination
+of the levels of our factors.
+
+--
+
+- When we have a small number of participants on each group this is easy to do 
+by hand. We will try this today.
+
+---
+
+## Cell means mehtod
+
+- First we need to introduce the problem that we want to solve.
+
+--
+
+- We want to know if the cohort that a student belongs to or whether or not they
+took a statistics class during their first year has an effect on the anxiety 
+levels of students at the end of their first year.
+
+--
+
+- In order to study whether our factors (cohort and statistics class) have an 
+effect on the anxiety levels of students we asked students at a university to
+respond to an anxiety scale.
+
+--
+
+- Then we recorded whether they started college in 2019 or if they started in 
+2020 and whether they took a statistics class during the current year or not.
+
+--
+
+- We collected information of a total of 16 participants for this study, 4 of 
+whom started college in 2019 and took a statistics class, 4 started college in 
+2019 and didn't take a statistics class, 4 started college in 2020 and 
+took a statistics class and the remaining 4 started in 2020 and didn't take a 
+statistics class during the last year.
+
+---
+
+## Anxiety data:
+
+```{r show-data, echo = FALSE}
+DT::datatable(data = students,
+  fillContainer = FALSE, options = list(pageLength = 8))
+```
+
+---
+
+## Anxiety example
+
+- Using the data from slide 7, obtain the cell means for the anxiety problem.
+Remember that the cell means are the predictions of the Full model, in 
+other words, they are equal to the average of each combination of the factor
+levels.
+
+|          | Statistics            | Other                 | Mean                 |
+|----------|:---------------------:|:---------------------:|:--------------------:|
+| **2019** | $\hat{\mu}_{11}$      | $\hat{\mu}_{12}$      |  |
+| **2020** | $\hat{\mu}_{21}$      | $\hat{\mu}_{22}$      |  |
+| **Mean** |  |     |  |
+
+--
+<br>
+
+|          | Statistics | Other | Mean  |
+|----------|:----------:|:-----:|:-----:|
+| **2019** | 11.8       | 8.5   |       |
+| **2020** | 15         | 12.2  |       |
+| **Mean** |            |       |       |
+
+---
+
+## Anxiety example
+
+- After calculating the cell means, we can now calculate the mean by factor, for
+example, the mean of students in the 2019 cohort would be equal to the average 
+of the values on the first row, and for the 2020 cohort it is equal to the values
+on the second row.
+
+|          | Statistics            | Other                  | Mean                 |
+|----------|:---------------------:|:----------------------:|:--------------------:|
+| **2019** | $\hat{\mu}_{11}$      | $\hat{\mu}_{12}$       | $\hat{\mu}_{1\cdot}$ |
+| **2020** | $\hat{\mu}_{21}$      | $\hat{\mu}_{22}$       | $\hat{\mu}_{2\cdot}$ |
+| **Mean** | $\hat{\mu}_{\cdot 1}$  | $\hat{\mu}_{\cdot 2}$ |  |
+
+--
+<br>
+
+|          | Statistics | Other | Mean |
+|----------|:----------:|:-----:|:----:|
+| **2019** | 11.8       | 8.5   | 10.1 |
+| **2020** | 15         | 12.2  | 13.6 |
+| **Mean** | 13.4       | 10.4  |      |
+
+---
+
+## Anxiety example
+
+- Finally we can compute the grand mean by taking the average of the first 
+cell means (the predictions of the full model).
+
+|          | Statistics            | Other                  | Mean                 |
+|----------|:---------------------:|:----------------------:|:--------------------:|
+| **2019** | $\hat{\mu}_{11}$      | $\hat{\mu}_{12}$       | $\hat{\mu}_{1\cdot}$ |
+| **2020** | $\hat{\mu}_{21}$      | $\hat{\mu}_{22}$       | $\hat{\mu}_{2\cdot}$ |
+| **Mean** | $\hat{\mu}_{\cdot 1}$  | $\hat{\mu}_{\cdot 2}$ | $\hat{\mu}$ |
+
+--
+<br>
+
+|          | Statistics | Other | Mean   |
+|----------|:----------:|:-----:|:------:|
+| **2019** | 11.8       | 8.5   | 10.1   |
+| **2020** | 15         | 12.2  | 13.6   |
+| **Mean** | 13.4       | 10.4  | 11.875 |
