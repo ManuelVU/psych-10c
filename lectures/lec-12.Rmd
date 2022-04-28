@@ -316,7 +316,7 @@ students associated with being in the 2019 cohort.
 
 - Now we can construct an estimator of the main effects. The main effect of the 
 *j-th* level of factor $j$ is defined as: 
-$$\hat{\alpha}_j = \hat{\mu} - \hat{\mu}_j$$
+$$\hat{\alpha}_j = \hat{\mu}_j - \hat{\mu}$$
 
 --
 
@@ -480,7 +480,7 @@ $$\sum_k\beta_k=0$$
 response (dependent variable) across all participants (estimator of the 
 grand mean) and subtracting the average of all participants on the *k-th*
 level of the second factor regardless of the values of the first:
-$$\hat{\beta}_k = \hat{\mu} - \hat{\mu}_k$$
+$$\hat{\beta}_k = \hat{\mu}_k - \hat{\mu} $$
 
 ---
 

@@ -289,8 +289,68 @@ difference between the the grand mean and the average of the group.
 | $\hat{\beta}_1$  | .can-edit[]  |
 | $\hat{\beta}_2$  | .can-edit[]  |
 
+---
+
+## Predictions by model
+
+- What are the predicted anxiety levels of each model?
+
+--
+
+- Null
+
+| Cohort | Class |  Prediction |
+|:------:|:-----:|:-----------:|
+| 2019   | Stats | .can-edit[] |
+| 2019   | Other | .can-edit[] |
+| 2020   | Stats | .can-edit[] |
+| 2020   | Other | .can-edit[] |
+
+--
+
+- Main effects Cohort
+
+| Cohort | Class |  Prediction |
+|:------:|:-----:|:-----------:|
+| 2019   | Stats | .can-edit[] |
+| 2019   | Other | .can-edit[] |
+| 2020   | Stats | .can-edit[] |
+| 2020   | Other | .can-edit[] |
+
+---
+
+## Predictions by model
+
+- Main effects Class
+
+| Cohort | Class |  Prediction |
+|:------:|:-----:|:-----------:|
+| 2019   | Stats | .can-edit[] |
+| 2019   | Other | .can-edit[] |
+| 2020   | Stats | .can-edit[] |
+| 2020   | Other | .can-edit[] |
+
+--
+
+- Additive
+
+| Cohort | Class |  Prediction |
+|:------:|:-----:|:-----------:|
+| 2019   | Stats | .can-edit[] |
+| 2019   | Other | .can-edit[] |
+| 2020   | Stats | .can-edit[] |
+| 2020   | Other | .can-edit[] |
+
+---
+
+## Predictions by model
 
 
+- Full
 
-
-
+| Cohort | Class |  Prediction |
+|:------:|:-----:|:-----------:|
+| 2019   | Stats | .can-edit[] |
+| 2019   | Other | .can-edit[] |
+| 2020   | Stats | .can-edit[] |
+| 2020   | Other | .can-edit[] |

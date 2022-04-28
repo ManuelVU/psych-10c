@@ -256,3 +256,90 @@ cell means (the predictions of the full model).
 | **2019** | 11.8       | 8.5   | 10.1   |
 | **2020** | 15         | 12.2  | 13.6   |
 | **Mean** | 13.4       | 10.4  | 11.875 |
+
+---
+
+## Anxiety example
+
+- With the values that we have obtained we can now get the main effects 
+$\hat{\alpha}_j$ and $\hat{\beta}_k$. That way we will be able to get the
+predictions of the additive model.
+
+--
+
+- To get the value of $\hat{\alpha}_1$ remember that we need to get the 
+difference between the the grand mean and the average of the group.
+
+--
+
+| Effect     | Value  |
+|:----------:|:------:|
+| $\alpha_1$ | -1.775 |
+| $\alpha_2$ | 1.775  |
+| $\beta_1$  | 1.525  |
+| $\beta_2$  | -1.525 |
+
+---
+
+## Predictions by model
+
+- Null
+<br>
+
+| Cohort | Class |  Prediction |
+|:------:|:-----:|:-----------:|
+| 2019   | Stats | 11.875      |
+| 2019   | Other | 11.875      |
+| 2020   | Stats | 11.875      |
+| 2020   | Other | 11.875      |
+
+--
+
+- Main effects Cohort
+<br>
+
+| Cohort | Class |  Prediction |
+|:------:|:-----:|:-----------:|
+| 2019   | Stats | 10.1        |
+| 2019   | Other | 10.1        |
+| 2020   | Stats | 13.65       |
+| 2020   | Other | 13.65       |
+
+---
+
+## Predictions by model
+
+- Main effects Class
+
+| Cohort | Class |  Prediction |
+|:------:|:-----:|:-----------:|
+| 2019   | Stats | 13.4        |
+| 2019   | Other | 10.35       |
+| 2020   | Stats | 13.4        |
+| 2020   | Other | 10.35       |
+
+--
+
+- Additive
+
+| Cohort | Class |  Prediction |
+|:------:|:-----:|:-----------:|
+| 2019   | Stats | 11.625      |
+| 2019   | Other | 8.575       |
+| 2020   | Stats | 15.175      |
+| 2020   | Other | 12.125      |
+
+---
+
+## Predictions by model
+
+
+- Full
+
+| Cohort | Class |  Prediction |
+|:------:|:-----:|:-----------:|
+| 2019   | Stats | 11.8        |
+| 2019   | Other | 8.5         |
+| 2020   | Stats | 15          |
+| 2020   | Other | 12.2        |
+
