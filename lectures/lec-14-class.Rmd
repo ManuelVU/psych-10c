@@ -54,40 +54,36 @@ students <- read_csv(link) %>%
          anxiety = as.integer(anxiety),
          cohort = as.character(cohort),
          class = as.character(class))
+  
 ```
 
 ## Review
 
-- This week we have been going over factorial designs and the models that we 
+- Last week we talked about factorial designs and the models that we 
 use to analyze the results of such experiments.
 
 --
 
-- The first model we talked about was the Null model, which assumes that the 
-expected value of the dependent variable is the same regardless of values that
-a factor can take.
+- Null model, assumes that the expected value of the dependent variable is the 
+same regardless of values that a factor can take.
 
 --
 
-- We also talked about the Main effects models, which assume that only one 
-factor has an effect on the expected value of the dependent variable. These 
-models are separated by factor, which means that there are only differences 
-between the groups that respond to the levels of one factor regardless of the 
-values of the other.
+- Main effects models, assume that only one factor has an effect on the expected 
+value of the dependent variable.
 
 --
 
 - Additive models assumed that 2 or more factors could have an effect on a 
-participants' response, however, that effect was considered to be independent 
-and therefore was equal to the sum of the main effects of each factor $(\alpha$ 
+participants' response, however, that effect is considered to be independent 
+and therefore is equal to the sum of the main effects of each factor $(\alpha$ 
 and $\beta)$.
 
 --
 
-- Finally, we talked about the Full model, which assumes that the expected 
-value of the dependent variable was different for each group (combination of
-factor levels) in an experiment. Furthermore, this expectation can't be 
-expressed as the sum of the independent main effects of each factor.
+- Full model, which assumes that the expected value of the dependent variable is 
+different for each group (combination of factor levels). Furthermore, this 
+expectation can't be expressed as the sum of the independent main effects.
  
 ---
 
@@ -106,6 +102,19 @@ defines each model.$$\hat{\mu} + \hat{\alpha}_j$$ or $$\hat{\mu} + \hat{\beta}_k
 --
 
 - For factor 1 or factor 2 respectively.
+
+---
+
+# Error in lecture 12
+
+- So... I made a mistake in lecture 12, and we should calculate the estimator 
+$\hat{\alpha}_1$ and $\hat{\beta}_1$ using this equation: 
+$$\hat{\alpha}_1 = \hat{\mu}_{1\cdot} - \hat{\mu}$$ and $$\hat{\alpha}_1 = \hat{\mu}_{\cdot 1} - \hat{\mu}$$
+
+--
+
+- The interpretation is the same, it's the effect of being exposed to the *j-th*
+level of a factor.
 
 ---
 
@@ -161,12 +170,11 @@ levels of students at the end of their first year.
 --
 
 - In order to study whether our factors (cohort and statistics class) have an 
-effect on the anxiety levels of students we asked students at a university to
-respond to an anxiety scale.
+effect on the anxiety levels of students we asked them to respond to an anxiety scale.
 
 --
 
-- Then we recorded whether they started college in 2019 or if they started in 
+- Then we record whether they started college in 2019 or if they started in 
 2020 and whether they took a statistics class during the current year or not.
 
 --
@@ -354,3 +362,19 @@ difference between the the grand mean and the average of the group.
 | 2019   | Other | .can-edit[] |
 | 2020   | Stats | .can-edit[] |
 | 2020   | Other | .can-edit[] |
+
+---
+
+## Calculating the SSE
+
+- To calculate the SSE we just need to take each observation, subtract the 
+prediction made by the model and then add all of the errors. This can take more
+time so I will give you the values:
+
+| Model     | SSE         |
+|:---------:|:-----------:|
+| Null      | .can-edit[] |
+| ME Cohort | .can-edit[] |
+| ME Stats  | .can-edit[] |
+| Additive  | .can-edit[] |
+| Full      | .can-edit[] |
