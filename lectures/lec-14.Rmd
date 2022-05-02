@@ -109,7 +109,7 @@ defines each model. $$\hat{\mu} + \hat{\alpha}_j$$ or $$\hat{\mu} + \hat{\beta}_
 
 - So... I made a mistake in lecture 12, and we should calculate the estimator 
 $\hat{\alpha}_1$ and $\hat{\beta}_1$ using this equation: 
-$$\hat{\alpha}_1 = \hat{\mu}_{1\cdot} - \hat{\mu}$$ and $$\hat{\alpha}_1 = \hat{\mu}_{\cdot 1} - \hat{\mu}$$
+$$\hat{\alpha}_1 = \hat{\mu}_{1\cdot} - \hat{\mu}$$ and $$\hat{\beta}_1 = \hat{\mu}_{\cdot 1} - \hat{\mu}$$
 
 --
 
@@ -276,7 +276,7 @@ predictions of the additive model.
 --
 
 - To get the value of $\hat{\alpha}_1$ remember that we need to get the 
-difference between the the grand mean and the average of the group.
+difference between the average of the group and the grand mean.
 
 --
 

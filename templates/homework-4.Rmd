@@ -5,147 +5,183 @@ date: "4/18/2022"
 output: pdf_document
 ---
 
-**Background:** For this section, we will work with the responses to a memory 
-experiment. Researchers are interested in the effects of biological sex at birth 
-and word frequency (how commonly a word is used in English) on the total number 
-of words that can be correctly recalled from a list. For this experiment we have 
-two factors (biological sex and word frequency) with two levels each (female vs. 
-male and common vs. rare). For each combination of the factor levels we have 20 
-observations for a total of 80 participants. For this problem we will consider a 
-total of 4 models: (1) the Null, (2) biological sex main effect, (3) word 
-frequency main effect and (4) the additive model. 
+```{r load-library, echo = FALSE, message = FALSE, warning = FALSE}
+# Code 0: loading tidyverse library
 
-```{r load_data2, echo = TRUE}
-# Code 14: Load the data (Hint: Go back to Lec-10 and use the link)
+# This code chunk will load the tidyverse library but it will not 
+# be displayed on the pdf.
+library(tidyverse)
+```
+
+**Background:** For this section, we will work with the responses to a memory 
+experiment. Researchers are interested in the effects of word frequency (how 
+commonly a word is used in English) in two different tasks. A free recall task, 
+where participants have to write down all the words they remember after studying
+a list. A recognition task, where participants have to tell if they recognize a 
+word presented to them as being part of a list that they studied. We have a 
+2 by 2 factorial design. The first factor is the task (free recall vs 
+recognition) and the second factor is word frequency (high vs low). The 
+researchers recruited 100 participants for the study and assigned 25 to each 
+combination of the factor levels (25 each combination) and the dependent 
+variable was the number of words that where correctly recognized or correctly 
+recalled.
+
+
+```{r load_data, echo = TRUE}
+# Code 1: Load the data (Hint: Go back to Lec-15 and use the link)
 #
 # In this section you should write the code needed to load the data for
 # section 2. IMPORTANT: Remember to delete the comments inside the code 
 # chunks BEFORE submitting your homework.
 ```
 
-16. Obtain the grand mean and the effects of biological sex ($\hat{\alpha}$) and 
-word frequency ($\hat{\beta}$).
+1. Obtain the predictions of the full model (cell means). What are the 
+predictions of the **full** model for each combination of the levels of our 
+factors *task* and *word frequency*?
 
-```{r grand-eff-s2, echo = TRUE}
-# Code 15: calculating grand mean and main effects.
+```{r cell-means, echo = TRUE}
+# Code 2: calculating the full model's predictions (cell means)
 #
-# In this code chunk you can write the functions that you need to use in order 
-# to calculate the grand mean and the effects of each factor.
+# In this code chunk you can write the functions that you need in order 
+# to calculate the cell means (predictions of the full model).
 ```
 
 **ANS:** [WRITE YOUR ANSWER HERE]
 
-17. Obtain the predictions of the Null model and add them to the data. Next, 
-calculate the error of each observation and add it as a new variable. Use those 
-values to calculate the SSE and the Mean SE associated with the Null model. 
-Report the prediction, SSE and Mean SE of the Null model below.
+2. Using the cell means from (1) obtain the means for the levels of the *task* 
+factor, consider *free recall* as the first level ($j=1$ if the observation
+belongs to the free recall task). What is the mean of each *task*?
 
-```{r null-m1-s2, echo = TRUE}
-# Code 16: adding predictions, errors and calculating the SSE and Mean SE Null
-# model
+```{r task-mean, echo = TRUE}
+# Code 3: average of the levels of the first factor.
 #
 # In this code chunk you can write the functions that you need to use in order 
-# to add the predictions and squared errors of the null model to the data.
-# Calculate the SSE and the Mean SE from the new variables.
+# to calculate the average of each level of task (factor 1).
 ```
 
 **ANS:** [WRITE YOUR ANSWER HERE]
 
-18. What is the value of the Bayesian Information Criterion (BIC) for the Null model?
+3. Using the cell means from (1) obtain the means for the levels of the 
+*word frequency* factor (factor 2), consider *low frequency* as the first level 
+($k=1$ if the observation belongs to the free *low frequency* words). What is 
+the mean of each *word frequency* list?
 
-```{r bic-null-s2, echo = TRUE}
-# Code 17: Calculating the BIC for the Null model
+```{r wordfreq-mean, echo = TRUE}
+# Code 4: average of the levels of the second factor
+#
+# In this code chunk you can write the functions that you need to use in order 
+# to calculate the average of each level of word frequency (factor 2).
+```
+
+**ANS:** [WRITE YOUR ANSWER HERE]
+
+4. Using the cell means from (1) obtain the grand mean. What is the value of the 
+grand mean for this experiment and how can it be interpreted?
+
+```{r grand-mean, echo = TRUE}
+# Code 5: calculating the grand mean
+#
+# In this code chunk you can write the functions needed to calculate the grand 
+# mean of the experiment.
+```
+
+5. Obtain the effects of the *task* factor ($\hat{\alpha}_j$). What are the 
+values associated with each level of the task factor and how can we interpret 
+them?
+
+```{r me-task, echo = TRUE}
+# Code 6: Calculating the effects of task factor
 #
 # In this code chunk you can write the functions that you need in order to 
-# calculate the BIC associated to the Null model. Save it as a new variable and 
-# report the value as text below.
+# calculate the effects associated with the task factor.
 ```
 
 **ANS:** [WRITE YOUR ANSWER HERE]
 
-19. Using the values you obtained in question 16 obtain the predictions of the 
-biological sex model, add a new column with the predictions, and calculate the squared error of each observation. Then obtain the SSE and the Mean SE associated with the biological sex model. Report the prediction, SSE and Mean SE of the Null model below.
+6. Obtain the effects of the *word frequency* factor ($\hat{\beta}_k$). What are 
+the values associated with each level of the word frequency factor and how can 
+we interpret them?
 
-```{r bio-m2-s2, echo = TRUE, fig.align = 'center'}
-# Code 18: adding predictions, errors and calculating the SSE and Mean SE
-# for the biological sex model
-#
-# In this code chunk you can write the functions that you need to use in order 
-# to add the predictions and squared errors of the biological sex model to the
-# data. Calculate the SSE and the Mean SE from the new variables.
-```
-
-20. What is the value of the Bayesian Information Criterion (BIC) for the 
-biological sex model?
-
-```{r bic-bio-s2, echo = TRUE}
-# Code 19: Calculating the BIC for the biological sex model
+```{r me-wordfreq, echo = TRUE}
+# Code 7: Calculating the effects of word frequency factor
 #
 # In this code chunk you can write the functions that you need in order to 
-# calculate the BIC associated with the biological sex model. Save it as a new 
-# variable and report the value as text below.
+# calculate the effects associated with the word frequency factor.
 ```
 
 **ANS:** [WRITE YOUR ANSWER HERE]
 
-21. Using the values you obtained in question 16, obtain the predictions of the 
-word frequency model, add a new column with the predictions, and calculate the squared error of each observation. Then obtain the SSE and the Mean SE associated with the word frequency model. Report the prediction, SSE and Mean Se of the Null model below.
+7. Add the predictions of the Null model to your data and calculate the squared 
+error of each observation (your answer is just the code).
 
-```{r freq-m2-s2, echo = TRUE, fig.align = 'center'}
-# Code 18: adding predictions, errors and calculating the SSE and Mean SE
-# for the word frequency model
-#
-# In this code chunk you can write the functions that you need to use in order 
-# to add the predictions and squared errors of the word frequency model to the
-# data. Calculate the SSE and the Mean SE from the new variables.
-```
-
-22. What is the value of the Bayesian Information Criterion (BIC) for the 
-word frequency model?
-
-```{r bic-bio-s2, echo = TRUE}
-# Code 19: Calculating the BIC for the word frequency model
+```{r pred-null, echo = TRUE}
+# Code 8: Adding the predictions of the Null model to data and calculating
+# the squared error by observation
 #
 # In this code chunk you can write the functions that you need in order to 
-# calculate the BIC associated with the word frequency model. Save it as a new  
-# variable and report the value as text below.
+# add the prediction of the null model to the data and calculate the squared 
+# error of each observation.
 ```
 
-**ANS:** [WRITE YOUR ANSWER HERE]
+8. Calculate the predictions of the *task* main effects model and add them to 
+the data. Use those predictions to calculate the squared error of each 
+observation. What are the predictions of the *task* main effects model for each
+combination of the levels of our factors?
 
-23. Using the values you obtained in question 16 obtain the predictions of the 
-additive model, add a new column with the predictions, and calculate the squared
-error of each observation. Then obtain the SSE and the Mean SE associated with 
-the word frequency model. Report the prediction, SSE and Mean SE of the Null 
-model below.
-
-```{r freq-m2-s2, echo = TRUE, fig.align = 'center'}
-# Code 18: adding predictions, errors and calculating the SSE and Mean SE
-# for the additive model
-#
-# In this code chunk you can write the functions that you need to use in order 
-# to add the predictions and squared errors of the additive model to the
-# data. Calculate the SSE and the Mean SE from the new variables.
-```
-
-24. What is the value of the Bayesian Information Criterion (BIC) for the 
-additive model?
-
-```{r bic-bio-s2, echo = TRUE}
-# Code 19: Calculating the BIC for the additive model
+```{r pred-me-task, echo = TRUE}
+# Code 9: Calculating and adding the predictions of the task main effects model
+# to the data and calculating the squared error by observation.
 #
 # In this code chunk you can write the functions that you need in order to 
-# calculate the BIC associated with the additive model. Save it as a new  
-# variable and report the value as text below.
+# calculate and add your predictions of the task main effects model to the data. 
+# Calculate the squared error of each observation and add it.
 ```
 
 **ANS:** [WRITE YOUR ANSWER HERE]
 
-25. Which of the four models would you select and why?
+9. Calculate the predictions of the *word frequency* main effects model and add 
+them to the data. Use those predictions to calculate the squared error of each 
+observation. What are the predictions of the *word frequency* main effects model 
+for each combination of the levels of our factors?
+
+```{r pred-me-wordfreq, echo = TRUE}
+# Code 10: Calculating and adding the predictions of the word frequency main 
+# effects model to the data and calculating the squared error by observation.
+#
+# In this code chunk you can write the functions that you need in order to 
+# calculate and add your predictions of the word frequency main effects model 
+# to the data. Calculate the squared error of each observation and add it.
+```
 
 **ANS:** [WRITE YOUR ANSWER HERE]
 
+10. Calculate the predictions of the *additive* model and add them to the data.
+Use those predictions to calculate the squared error of each observation. What 
+are the predictions of the *additive* model for each combination of the levels 
+of our factors?
 
-26. What does the Model that you selected tell us about our research question?
+```{r pred-additive, echo = TRUE}
+# Code 11: Calculating and adding the predictions of the additive model to the 
+# data and calculating the squared error by observation.
+#
+# In this code chunk you can write the functions that you need in order to 
+# calculate and add your predictions of the additive model to the data. 
+# Calculate the squared error of each observation and add it.
+```
+
+**ANS:** [WRITE YOUR ANSWER HERE]
+
+11. Add the predictions of the *full* model to the data and use them to obtain 
+the squared error by observation. What are the predictions of the *full* model
+for each combination of the levels of our factors?
+
+```{r pred-full, echo = TRUE}
+# Code 12: Adding the predictions of the full model to the data and calculating 
+# the squared error by observation.
+#
+# In this code chunk you can write the functions that you need in order to 
+# add your predictions of the full model to the data and obtain the squared 
+# error of each observation and add it.
+```
 
 **ANS:** [WRITE YOUR ANSWER HERE]

@@ -95,9 +95,9 @@ of the level of each factor that they where exposed to. $$\hat{\mu}$$
 
 --
 
-- The predictions of the Main effects models where equal to the sum of the 
+- The predictions of the Main effects models were equal to the sum of the 
 average response across all participants and the "effect" of the factor that 
-defines each model.$$\hat{\mu} + \hat{\alpha}_j$$ or $$\hat{\mu} + \hat{\beta}_k$$ 
+defines each model. $$\hat{\mu} + \hat{\alpha}_j$$ or $$\hat{\mu} + \hat{\beta}_k$$ 
 
 --
 
@@ -109,7 +109,7 @@ defines each model.$$\hat{\mu} + \hat{\alpha}_j$$ or $$\hat{\mu} + \hat{\beta}_k
 
 - So... I made a mistake in lecture 12, and we should calculate the estimator 
 $\hat{\alpha}_1$ and $\hat{\beta}_1$ using this equation: 
-$$\hat{\alpha}_1 = \hat{\mu}_{1\cdot} - \hat{\mu}$$ and $$\hat{\alpha}_1 = \hat{\mu}_{\cdot 1} - \hat{\mu}$$
+$$\hat{\alpha}_1 = \hat{\mu}_{1\cdot} - \hat{\mu}$$ and $$\hat{\beta}_1 = \hat{\mu}_{\cdot 1} - \hat{\mu}$$
 
 --
 
@@ -126,7 +126,7 @@ $$\hat{\mu} + \hat{\alpha}_j + \hat{\beta}_k$$
 
 --
 
-- Finally, we mention that the predictions of the full model where equal to the 
+- Finally, we mention that the predictions of the full model were equal to the 
 average of our dependent variable for each combination of the levels of our 
 factor: $$\hat{\mu}_{jk} = \frac{1}{n_{jk}} \sum_i y_{ijk}$$
 
@@ -164,26 +164,27 @@ by hand. We will try this today.
 --
 
 - We want to know if the cohort that a student belongs to or whether or not they
-took a statistics class during their first year has an effect on the anxiety 
-levels of students at the end of their first year.
+took a statistics class during their first year have an effect on the anxiety 
+levels they experience at the end of their first year.
 
 --
 
-- In order to study whether our factors (cohort and statistics class) have an 
-effect on the anxiety levels of students we asked them to respond to an anxiety scale.
+- In order to study whether our factors (cohort and having taken the statistics
+class) have an effect on the anxiety levels of students we asked them to 
+respond to an anxiety scale.
 
 --
 
 - Then we record whether they started college in 2019 or if they started in 
-2020 and whether they took a statistics class during the current year or not.
+2020 and whether they took a statistics class during their first year or not.
 
 --
 
-- We collected information of a total of 16 participants for this study, 4 of 
-whom started college in 2019 and took a statistics class, 4 started college in 
-2019 and didn't take a statistics class, 4 started college in 2020 and 
-took a statistics class and the remaining 4 started in 2020 and didn't take a 
-statistics class during the last year.
+- We collected information from a total of 16 participants for this study, 4 of 
+which started college in 2019 and took a statistics class in their first year, 
+4 started college in 2019 and didn't take a statistics class, 4 started college 
+in 2020 and took a statistics class and the remaining 4 started in 2020 and 
+didn't take a statistics class during the first year.
 
 ---
 
@@ -260,6 +261,8 @@ on the second row.
 
 ---
 
+## Anxiety example
+
 - Finally we can compute the grand mean by taking the average of the first 
 cell means (the predictions of the full model).
 
@@ -284,7 +287,7 @@ predictions of the additive model.
 --
 
 - To get the value of $\hat{\alpha}_1$ remember that we need to get the 
-difference between the the grand mean and the average of the group.
+difference between the average of the group and the grand mean.
 
 --
 
@@ -399,9 +402,9 @@ model:
 
 - Using the Mean Squared Error we can calculate the BIC associated with each 
 model. Remember that the value of $k$ in the calculation of the BIC should be 
-equal to the number of unknown values that we use to find a models predictions:
+equal to the number of unknown values that we use to find a model's predictions:
 
-| Model     | Mean SE     |
+| Model     | BIC         |
 |-----------|:-----------:|
 | Null      | .can-edit[] |
 | ME Cohort | .can-edit[] |
