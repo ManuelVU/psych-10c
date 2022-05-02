@@ -1,7 +1,7 @@
 ---
 title: "homework 4"
-author: "Manuel Villarreal"
-date: "4/18/2022"
+author: "Write your name here"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
 output: pdf_document
 ---
 
@@ -19,9 +19,9 @@ commonly a word is used in English) in two different tasks. A free recall task,
 where participants have to write down all the words they remember after studying
 a list. A recognition task, where participants have to tell if they recognize a 
 word presented to them as being part of a list that they studied. We have a 
-2 by 2 factorial design. The first factor is the task (free recall vs 
-recognition) and the second factor is word frequency (high vs low). The 
-researchers recruited 100 participants for the study and assigned 25 to each 
+2 by 2 between subjects factorial design. The first factor is the task (free 
+recall vs recognition) and the second factor is word frequency (high vs low). 
+The researchers recruited 100 participants for the study and assigned 25 to each 
 combination of the factor levels (25 each combination) and the dependent 
 variable was the number of words that where correctly recognized or correctly 
 recalled.
@@ -243,8 +243,8 @@ the value of $R^2$ of the model you selected and how can you interpret it?
 
 17. Interpret the value of the predictions of the model that you selected, what
 do those values tell us about the research question? Are there differences on 
-the effects of tasks and word frequency (frequency with which words appear on 
-the English language) on the number of correctly recalled/recognized words?
+the effects of tasks and word frequency (how commonly a word is used in English) 
+on the number of correctly recalled/recognized words?
 
 **ANS:** [WRITE YOUR ANSWER HERE]
 
