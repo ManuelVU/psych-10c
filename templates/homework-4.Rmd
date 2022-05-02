@@ -185,3 +185,69 @@ for each combination of the levels of our factors?
 ```
 
 **ANS:** [WRITE YOUR ANSWER HERE]
+
+12. Calculate the Sum of Squared Errors (SSE) of each model. What is the SSE 
+for each of the 5 models in this factorial design?
+
+```{r sse-5models, echo = TRUE}
+# Code 13: Obtain the SSE of each model in the 2 by 2 between subjects
+# factorial design.
+#
+# In this code chunk you can write the functions that you need in order 
+# calculate the SSE of each model.
+```
+
+**ANS:** [WRITE YOUR ANSWER HERE]
+
+13. Calculate the Mean Squared Error (MSE) of each model. What is the MSE 
+for each of the 5 models in this factorial design?
+
+```{r mse-5models, echo = TRUE}
+# Code 14: Obtain the MSE of each model in the 2 by 2 between subjects
+# factorial design.
+#
+# In this code chunk you can write the functions that you need in order 
+# calculate the MSE of each model.
+```
+
+**ANS:** [WRITE YOUR ANSWER HERE]
+
+14. Calculate the Bayesian Information Criterion (BIC) of each model. What is 
+the BIC for each of the 5 models in this factorial design?
+
+```{r bic-5models, echo = TRUE}
+# Code 15: Obtain the BIC of each model in the 2 by 2 between subjects
+# factorial design.
+#
+# In this code chunk you can write the functions that you need in order 
+# calculate the BIC of each model.
+```
+
+**ANS:** [WRITE YOUR ANSWER HERE]
+
+15. Which of the 5 models would you choose and why?
+
+**ANS:** [WRITE YOUR ANSWER HERE]
+
+16. Calculate the value of $R^2$ of the model that you choose in (14). What is 
+the value of $R^2$ of the model you selected and how can you interpret it?
+
+```{r bic-5models, echo = TRUE}
+# Code 16: Calculate the value of R^2 of the model that you selected in (14).
+#
+# In this code chunk you can write the functions that you need in order 
+# calculate the R^2 value of the model you selected.
+```
+
+**ANS:** [WRITE YOUR ANSWER HERE]
+
+17. Interpret the value of the predictions of the model that you selected, what
+do those values tell us about the research question? Are there differences on 
+the effects of tasks and word frequency (frequency with which words appear on 
+the English language) on the number of correctly recalled/recognized words?
+
+**ANS:** [WRITE YOUR ANSWER HERE]
+
+18. In one sentence, how would you summarize the results of the analysis? 
+
+**ANS:** [WRITE YOUR ANSWER HERE]
