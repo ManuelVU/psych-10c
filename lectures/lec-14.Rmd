@@ -278,7 +278,6 @@ predictions of the additive model.
 - To get the value of $\hat{\alpha}_1$ remember that we need to get the 
 difference between the average of the group and the grand mean.
 
---
 
 | Effect     | Value  |
 |:----------:|:------:|
@@ -306,6 +305,7 @@ difference between the average of the group and the grand mean.
 - Main effects Cohort
 <br>
 
+
 | Cohort | Class |  Prediction |
 |:------:|:-----:|:-----------:|
 | 2019   | Stats | 10.1        |
@@ -319,6 +319,7 @@ difference between the average of the group and the grand mean.
 
 - Main effects Class
 
+
 | Cohort | Class |  Prediction |
 |:------:|:-----:|:-----------:|
 | 2019   | Stats | 13.4        |
@@ -329,6 +330,7 @@ difference between the average of the group and the grand mean.
 --
 
 - Additive
+
 
 | Cohort | Class |  Prediction |
 |:------:|:-----:|:-----------:|
@@ -343,6 +345,7 @@ difference between the average of the group and the grand mean.
 
 
 - Full
+
 
 | Cohort | Class |  Prediction |
 |:------:|:-----:|:-----------:|
@@ -385,6 +388,7 @@ model:
 
 ## Model BIC
 
+
 - Using the Mean Squared Error we can calculate the BIC associated with each 
 model:
 
@@ -402,13 +406,17 @@ model:
 
 - Which of the models can better account for our data?
 
+--
+
   - The model that better accounted for our data according to the BIC, was the 
   additive model.
   
 --
 
 - What can we conclude about our original research question? 
-(effect of cohort and class) 
+(effect of cohort and class)
+
+--
 
   - This indicates that both the cohort that a student belongs to and whether 
   they took a statistics class during the year have an effect on the anxiety 
@@ -417,6 +425,8 @@ model:
 --
 
 - How can we interpret the estimates of the model?
+
+--
 
   - According to our data, the average anxiety level of students was $11.9$ 
   points. The expected anxiety levels of students in the 2020 cohort was $1.77$
@@ -430,6 +440,8 @@ model:
 
 - We can also calculate the $R^2$ value of the model that we choose and 
 interpret it:
+
+--
 
   - The $R^2$ of the additive model was $0.9$, which means that it can account 
   for 90% of the variability in the data.

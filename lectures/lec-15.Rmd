@@ -1,0 +1,189 @@
+---
+title: "Lecture 15"
+subtitle: "Factorial Designs"
+author: "Psych 10 C"
+institute: "University of California, Irvine"
+date: "05/04/2022"
+output:
+  xaringan::moon_reader:
+    self_contained: true
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+```
+
+```{r xaringan-extra, echo = FALSE}
+xaringanExtra::use_tile_view()
+
+xaringanExtra::use_fit_screen()
+
+xaringanExtra::use_editable(expires = 1)
+
+xaringanExtra::use_extra_styles(
+  hover_code_line = TRUE,         #<<
+  mute_unhighlighted_code = TRUE  #<<
+)
+
+htmltools::tagList(
+  xaringanExtra::use_clipboard(
+    button_text = "<i class=\"fa fa-clipboard\"></i>",
+    success_text = "<i class=\"fa fa-check\" style=\"color: #90BE6D\"></i>",
+    error_text = "<i class=\"fa fa-times-circle\" style=\"color: #F94144\"></i>"
+  ),
+  rmarkdown::html_dependency_font_awesome()
+)
+```
+
+```{r load-tidy, echo = FALSE, message = FALSE, warning = FALSE}
+library(tidyverse)
+
+knitr::opts_chunk$set(fig.width = 6, message = FALSE, 
+                      warning = FALSE, comment = "", 
+                      cache = F)
+
+depression <- read_csv(file = here::here("data/week-5/depression-6.csv")) %>% 
+  mutate("id" = as.character(id))
+```
+
+## Factorial Designs
+
+- Last class we worked with an example of a $2\times2$ between subjects 
+factorial design using the cell means approach.
+
+--
+
+- Today we will work with a new example using R.
+
+--
+
+- First we will introduce a new study.
+
+---
+
+## Depression example
+
+- Researchers are interested on the effects of a pharmacological treatment and 
+therapy for the treatment of depression.
+
+--
+
+- They have design a study with 100 participants divided in 4 groups. The first
+group did not receive any treatment (no pharmaceutical treatment and no 
+therapy).
+
+--
+
+- The second group was exposed only to therapy for 1 month.
+
+--
+
+- The third group was only exposed to a pharmaceutical treatment for 1 month.
+
+--
+
+- The last group was exposed to both, a pharmaceutical treatment and therapy for 
+1 month.
+
+--
+
+- The dependent variable in the study was the difference between pre/post 
+treatment scores on a depression inventory (scale).
+
+---
+
+## Depression example
+
+- This is a $2\times2$ between subjects factorial design. The first factor is 
+whether participants received pharmaceutical treatment or not. We denote
+with $j = 1$ participants that did not receive pharmaceutical treatment.
+
+--
+
+- The second factor is whether the participant was exposed to therapy or not.
+We denote with $k = 1$ participants that did not receive therapy.
+
+--
+
+- As we know, there are 5 models that we need to compare for this type of study.
+
+--
+
+- The Null model assumes that the difference in depression scores between 
+pre/post treatment will be the same regardless of the group that a participant
+belongs to (combination of the levels of our factors).
+
+---
+
+## Depression example
+
+- A pharmaceutical treatment main effects model, which assumes that only 
+pharmaceutical treatment has an effect on the difference between pre/post
+treatment depression scores.
+
+--
+
+- A therapy main effects model, which assumes that only therapy has an effect on 
+the difference between pre/post treatment depression scores.
+
+--
+
+- An additive model, which assumes that both pharmaceutical treatment and 
+therapy have an effect on the difference between pre/post treatment depression
+scores. The effects according to this model are independent.
+
+--
+
+- Finally, we have the full model which assumes that the effect of a 
+pharmaceutical treatment on the difference between pre/post treatment 
+depression scores of a participant depends on whether they where also exposed to 
+therapy or not.
+
+---
+
+## Experimental data
+
+- The first thing that we need to do is look at the data. Because we have two
+independent variables (pharmaceutical treatment and therapy) a box-plot would 
+be useful:
+
+--
+
+.pull-left[
+```{r hist-score, eval = FALSE}
+ggplot(data = depression) + 
+  aes(x = therapy) + 
+  aes(y = beck_diff) +
+  aes(color = pharma_treatment) + 
+  geom_boxplot(position = position_dodge(1), outlier.shape = NA) + 
+  geom_dotplot(data = depression, binaxis = 'y', stackdir='center', 
+               dotsize = 0.37, method = "histodot", position_dodge(1),
+               alpha = 0.2, binwidth = 0.8,
+               mapping = aes(x = therapy, y = beck_diff, color = pharma_treatment,
+                             fill = pharma_treatment), show.legend = FALSE) +
+  theme_classic() + 
+  xlab("Therapy") + 
+  ylab("Depression scores (pre - post)") + 
+  guides(color = guide_legend("Pharma")) + 
+  theme(axis.title.x = element_text(size = 25), 
+        axis.title.y = element_text(size = 25),
+        axis.text = element_text(size = 20))  
+```
+]
+.pull-right[
+```{r hist-score-out, ref.label = "hist-score", fig.align = 'center', echo = FALSE, fig.width = 8, fig.height = 8}
+
+```
+]
+
+
+
+
+
+
+
