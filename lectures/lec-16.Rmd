@@ -1,0 +1,151 @@
+---
+title: "Lecture 16"
+subtitle: "Correlation and Linear Regression"
+author: "Psych 10 C"
+institute: "University of California, Irvine"
+date: "05/06/2022"
+output:
+  xaringan::moon_reader:
+    self_contained: true
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+```
+
+```{r xaringan-extra, echo = FALSE}
+xaringanExtra::use_tile_view()
+
+xaringanExtra::use_fit_screen()
+
+xaringanExtra::use_editable(expires = 1)
+
+xaringanExtra::use_extra_styles(
+  hover_code_line = TRUE,         #<<
+  mute_unhighlighted_code = TRUE  #<<
+)
+
+htmltools::tagList(
+  xaringanExtra::use_clipboard(
+    button_text = "<i class=\"fa fa-clipboard\"></i>",
+    success_text = "<i class=\"fa fa-check\" style=\"color: #90BE6D\"></i>",
+    error_text = "<i class=\"fa fa-times-circle\" style=\"color: #F94144\"></i>"
+  ),
+  rmarkdown::html_dependency_font_awesome()
+)
+```
+
+```{r load-tidy, echo = FALSE, message = FALSE, warning = FALSE}
+library(tidyverse)
+
+knitr::opts_chunk$set(fig.width = 6, message = FALSE, 
+                      warning = FALSE, comment = "", 
+                      cache = F)
+```
+
+## Correlation
+
+- Up to this point we have looked at problems with a single dependent variable, 
+however, we could have more than one.
+
+--
+
+- When we have 2 dependent variables we could ask ourselves, how are those two 
+variables related?
+
+--
+
+- The correlation between two variables is a measure of the association between 
+them.
+
+--
+
+- Formally, it's a measure of how the two variables change together. For 
+example, what happens to the values of one variable as the second one increases?
+
+--
+
+- The correlation coefficient measures this degree of association and we denote
+this value with $R$.
+
+---
+
+## Correlation
+
+- The correlation coefficient can take positive or negative values or it can 
+be 0.
+
+--
+
+- However, it will always be bounded between -1 and 1, for example:
+
+.pull-left[
+```{r cor-1,echo=FALSE, fig.align='center'}
+iq <- rnorm(50, 100, 10)
+a <- 15 - 3/20 * 100
+b <- 3/20
+plot(iq, a + b * iq, axes = F, ann = F, pch = 16,
+     col = "#0D95D0", cex = 1.3)
+box(bty = "l")
+axis(side = 1)
+axis(side = 2, las = 2)
+mtext(text = "IQ", side = 1, line = 2.6, cex = 1.8)
+mtext(text = "Depression", side = 2, line = 2.6, cex = 1.8)
+mtext(text = "R = 1", cex = 2, side = 3)
+```
+]
+.pull-right[
+```{r cor-2,echo=FALSE, fig.align='center'}
+a <- 15 + 3/20 * 100
+b <- 3/20
+plot(iq, a - b * iq, axes = F, ann = F, pch = 16,
+     col = "#0D95D0", cex = 1.3)
+box(bty = "l")
+axis(side = 1)
+axis(side = 2, las = 2)
+mtext(text = "IQ", side = 1, line = 2.6, cex = 1.8)
+mtext(text = "Depression", side = 2, line = 2.6, cex = 1.8)
+mtext(text = "R = -1", cex = 2, side = 3)
+```
+]
+
+---
+
+## Correlation
+
+- A correlation of 0 should look like this:
+
+```{r cor-0, echo=FALSE,fig.align='center', fig.width=7}
+x <- MASS::mvrnorm(200,c(15,100), c(1,10) * diag(2))
+plot(x[,2], x[,1], axes = F, ann = F, pch = 16,
+     col = "#0D95D0", cex = 1.3)
+box(bty = "l")
+axis(side = 1)
+axis(side = 2, las = 2)
+mtext(text = "IQ", side = 1, line = 2.6, cex = 1.8)
+mtext(text = "Depression", side = 2, line = 2.6, cex = 1.8)
+mtext(text = "R = 0", cex = 2, side = 3)
+```
+
+---
+
+## Correlation
+
+- Therefore, the sign of the correlation indicates whether one variable 
+**increases** as the otherone **increases** (**positive R**) or if one variable 
+**decreases** as the other one **increases** (**negative R**).
+
+--
+
+- On the other hand, the magnitud of R indicates the "strength" of the 
+association, with values closer to 1 (or -1) representing a stronger association
+between the variables.
+
+
+
+

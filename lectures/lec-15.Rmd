@@ -93,7 +93,7 @@ therapy).
 --
 
 - The dependent variable in the study was the difference between pre/post 
-treatment scores on a depression inventory (scale). $$y_{ijk} = post_{ijk} - pre_{ijk}$$
+treatment scores on a depression inventory (scale). $$y_{ijk} = \text{post}_{ijk} - \text{pre}_{ijk}$$
 
 ---
 
@@ -114,7 +114,7 @@ We denote with $k = 1$ participants that did not receive therapy.
 
 --
 
-- The Null model assumes that the difference in depression scores between 
+- The Null model assumes that the change in depression scores between 
 pre/post treatment will be the same regardless of the group that a participant
 belongs to (combination of the levels of our factors).
 
@@ -123,25 +123,25 @@ belongs to (combination of the levels of our factors).
 ## Depression example
 
 - A pharmaceutical treatment main effects model, which assumes that only 
-pharmaceutical treatment has an effect on the difference between pre/post
+pharmaceutical treatment has an effect on the change between pre/post
 treatment depression scores.
 
 --
 
 - A therapy main effects model, which assumes that only therapy has an effect on 
-the difference between pre/post treatment depression scores.
+the change between pre/post treatment depression scores.
 
 --
 
 - An additive model, which assumes that both pharmaceutical treatment and 
-therapy have an effect on the difference between pre/post treatment depression
+therapy have an effect on the change between pre/post treatment depression
 scores. The effects according to this model are independent.
 
 --
 
 - Finally, we have the full model which assumes that the effect of a 
-pharmaceutical treatment on the difference between pre/post treatment 
-depression scores, depend on whether they where also exposed to 
+pharmaceutical treatment on the change between pre/post treatment 
+depression scores, depends on whether the participant was also exposed to 
 therapy or not.
 
 ---
@@ -470,7 +470,7 @@ sse_full <- sum(depression$error_full)
 --
 
 - We will use a table to summarize the results for each model and then select
-the model that accounts for the data best.
+the one that better accounts for the data
 
 --
 
@@ -524,7 +524,7 @@ need to calculate the predictions of each model.
   - Null model: we only need to obtain the estimate $\mu$ (k = 1).
   
   - Main effects model: we need an estimate of $\mu$ and an estimate of $\alpha_1$ 
-  (or one value of $\beta_1$, thus k = 2).
+  (or one estimate of $\beta_1$, thus k = 2).
   
   - Additive model: we need to estimate $\mu$, $\alpha_1$ and $\beta_1$ (k = 3).
   
@@ -573,7 +573,7 @@ pharmacological treatment and therapy.
 
 --
 
-- The predicted values for the full model where:
+- The predicted values for the full model were:
 
 ```{r print-full2, echo = FALSE}
 DT::datatable(data = full, fillContainer = FALSE, options = list(dom = 't'),
@@ -582,7 +582,7 @@ DT::datatable(data = full, fillContainer = FALSE, options = list(dom = 't'),
 
 - The values suggest that the effect of a pharmacological treatment on the change
 between pre/post treatment depression scores was larger when participants where 
-also exposed to therapy. This means that the effects one each factor are 
+also exposed to therapy. This means that the effects of one factor are 
 modulated be the level of the other.
 
 ---
