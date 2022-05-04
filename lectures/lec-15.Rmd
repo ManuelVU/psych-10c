@@ -93,7 +93,7 @@ therapy).
 --
 
 - The dependent variable in the study was the difference between pre/post 
-treatment scores on a depression inventory (scale).
+treatment scores on a depression inventory (scale). $$y_{ijk} = post_{ijk} - pre_{ijk}$$
 
 ---
 
@@ -141,7 +141,7 @@ scores. The effects according to this model are independent.
 
 - Finally, we have the full model which assumes that the effect of a 
 pharmaceutical treatment on the difference between pre/post treatment 
-depression scores of a participant depends on whether they where also exposed to 
+depression scores, depend on whether they where also exposed to 
 therapy or not.
 
 ---
@@ -168,7 +168,7 @@ ggplot(data = depression) +
                              fill = pharma_treatment), show.legend = FALSE) +
   theme_classic() + 
   xlab("Therapy") + 
-  ylab("Depression scores (pre - post)") + 
+  ylab("Depression scores (post - pre)") + 
   guides(color = guide_legend("Pharma")) + 
   theme(axis.title.x = element_text(size = 25), 
         axis.title.y = element_text(size = 25),
@@ -181,9 +181,421 @@ ggplot(data = depression) +
 ```
 ]
 
+---
 
+## Estimating the parameters for the full model
 
+- From the specification of the model, we know that the full model has 4 
+parameters that we need to estimate, one mean for each of the groups.
 
+--
 
+- This can be done using the `group_by()` function, just that this time we 
+have to give it the 2 variables that we want to group by, which indicate whether 
+the participant received pharmaceutical treatment or not an whether they 
+received therapy or not.
 
+--
 
+```{r full-param, echo = TRUE}
+full <- depression %>% 
+  group_by(pharma_treatment, therapy) %>% 
+  summarise("pred" = mean(beck_diff))
+```
+
+--
+
+```{r print-full, echo = FALSE}
+DT::datatable(data = full, fillContainer = FALSE, options = list(dom = 't'),
+              rownames = FALSE)
+```
+
+---
+
+## Factor level means
+
+- Like we have done so far, we can obtain the means by the levels of each 
+factor using the `group_by()` function with a single variable. These values will
+allow us to obtain the main effects later.
+
+--
+
+.pull-left[
+```{r pharma-param, echo = TRUE}
+pharma <- depression %>% 
+  group_by(pharma_treatment) %>% 
+  summarise("average" = mean(beck_diff))
+```
+]
+.pull-right[
+```{r therapy-param, echo = TRUE}
+therapy_mean <- depression %>% 
+  group_by(therapy) %>% 
+  summarise("average" = mean(beck_diff))
+```
+]
+
+--
+.pull-left[
+```{r print-pharma-param, echo = FALSE}
+DT::datatable(data = pharma, fillContainer = FALSE, options = list(dom = 't'),
+              rownames = FALSE)
+```
+]
+.pull-right[
+```{r printtherapy-param, echo = FALSE}
+DT::datatable(data = therapy_mean, fillContainer = FALSE, 
+              options = list(dom = 't'),
+              rownames = FALSE)
+```
+]
+
+---
+
+## Grand mean and effect parameters
+
+- Now we only need to estimate the grand mean and we will have everything that 
+we need to compute the predictions of each model (and therefore the error).
+
+--
+
+.pull-left[
+```{r grand-mean}
+null <- depression %>% 
+  summarise("pred" = mean(beck_diff)) %>% 
+  pull(pred)
+```
+]
+.pull-right[
+- Grand mean = `r round(null,2)`
+]
+
+--
+
+- With the grand mean now we can compute the effects of each factor 
+$\hat{\alpha}_j$ for the pharmaceutical treatment and $\hat{\beta}_k$ for the 
+effect of therapy.
+
+--
+
+.pull-left[
+```{r main-effects}
+alpha <- pharma$average - null
+beta <- therapy_mean$average - null
+```
+]
+.pull-right[
+| Parameter            | Value                 |
+|:--------------------:|:---------------------:|
+| $\hat{\alpha}_{no}$  | `r round(alpha[1],2)` |
+| $\hat{\alpha}_{yes}$ | `r round(alpha[2],2)` |
+| $\hat{\beta}_{no}$   | `r round(beta[1],2)`  |
+| $\hat{\beta}_{yes}$  | `r round(beta[2],2)`  |
+]
+
+---
+
+## Model Predictions
+
+- Now we can add the predictions and the error of each model to our data.
+
+--
+
+- First we will add the predictions and errors of the null model. Remember that
+the prediction of the null model is just the grand mean.
+
+--
+
+```{r pred-null}
+depression <- depression %>% 
+  mutate("prediction_null" = null,
+         "error_null" = (beck_diff - prediction_null)^2)
+```
+
+--
+
+- Then we just need to add the values in the `error_null` column of our data 
+to get the SSE.
+
+--
+
+```{r sse-null}
+sse_null <- sum(depression$error_null)
+```
+
+--
+
+- The Sum of Squared Errors for the null model was equal to `r round(sse_null,2)`
+
+---
+
+## Main effects predictions and errors
+
+- Now we will add the predictions of the pharmaceutical treatment main effects
+model, remember that the prediction of the model for each group are equal to: 
+$$\text{pahrma}_{no} = \hat{\mu} + \hat{\alpha}_{no} \quad \text{pahrma}_{yes} = \hat{\mu} + \hat{\alpha}_{yes}$$
+
+--
+
+```{r pharma-me}
+depression <- depression %>% 
+  mutate("prediction_pharma" = 
+           case_when(pharma_treatment == "no" ~ null + alpha[1],
+                     pharma_treatment == "yes" ~ null + alpha[2]),
+         "error_pharma" = (beck_diff - prediction_pharma)^2)
+```
+
+--
+
+- Again, we compute the Sum of Squared Errors of the model by adding all of the 
+values in our new column `error_pharma`.
+
+--
+
+```{r sse-pharma}
+sse_pharma <- sum(depression$error_pharma)
+```
+
+--
+
+- The SSE for the pharmacological treatment main effects model was `r round(sse_pharma,2)`
+
+---
+
+## Main effects predictions and errors
+
+- Now we will add the predictions of the therapy main effects model, remember 
+that the prediction of the model for each group are equal to: 
+$$\text{therapy}_{no} = \hat{\mu} + \hat{\beta}_{no} \quad \text{therapy}_{yes} = \hat{\mu} + \hat{\beta}_{yes}$$
+
+--
+
+```{r therapy-me}
+depression <- depression %>% 
+  mutate("prediction_therapy" = 
+           case_when(therapy == "no" ~ null + beta[1],
+                     therapy == "yes" ~ null + beta[2]),
+         "error_therapy" = (beck_diff - prediction_therapy)^2)
+```
+
+--
+
+- Again, we compute the Sum of Squared Errors of the model by adding all of the 
+values in our new column `error_therapy`.
+
+--
+
+```{r sse-therapy}
+sse_therapy <- sum(depression$error_therapy)
+```
+
+--
+
+- The SSE for the therapy main effects model was `r round(sse_therapy,2)`
+
+---
+
+## Model predictions, additive
+
+- To add the additive model's predictions to the data we will need a logical
+test of the value of each factor. To do this we will use the `case_when()` 
+function and the logical connector "&".
+
+--
+
+```{r pred-additive}
+depression <- depression %>% 
+  mutate("prediction_additive" = case_when(
+    pharma_treatment == "no" & therapy == "no" ~ null + alpha[1] + beta[1],
+    pharma_treatment == "no" & therapy == "yes" ~ null + alpha[1] + beta[2],
+    pharma_treatment == "yes" & therapy == "no" ~ null + alpha[2] + beta[1],
+    pharma_treatment == "yes" & therapy == "yes" ~ null + alpha[2] + beta[2]),
+         "error_additive" = (beck_diff - prediction_additive)^2)
+```
+
+--
+
+- The only difference between the additive and previous models is how we 
+add its predictions to the data, however, the error is computed the same way as
+before. To compute the SSE we only need to add the values in our new column 
+`error_additive`.
+
+```{r sse-additive}
+sse_additive <- sum(depression$error_additive)
+```
+
+--
+
+- The SSE for the additive model was `r round(sse_additive,2)`
+
+---
+
+## Model predictions, full 
+
+- Given that the full model also makes a different prediction by combination of
+factor levels we will use the same structure of the `case_when()` function as 
+before.
+
+--
+
+```{r pred-full}
+depression <- depression %>% 
+  mutate("prediction_full" = case_when(
+    pharma_treatment == "no" & therapy == "no" ~ full$pred[1],
+    pharma_treatment == "no" & therapy == "yes" ~ full$pred[2],
+    pharma_treatment == "yes" & therapy == "no" ~ full$pred[3],
+    pharma_treatment == "yes" & therapy == "yes" ~ full$pred[4]),
+         "error_full" = (beck_diff - prediction_full)^2)
+```
+
+--
+
+- Again we can obtain the SSE of the full model by adding all of the values 
+on the new column we created `error_full`
+
+--
+
+```{r sse-full}
+sse_full <- sum(depression$error_full)
+```
+
+- The SSE for the additive model was `r round(sse_full,2)`
+
+---
+
+## Model comparison
+
+- Now we have all the values that we need in order to compare the 5 models.
+
+--
+
+- We will use a table to summarize the results for each model and then select
+the model that accounts for the data best.
+
+--
+
+- The first thing that we would like to present is the Mean Squared error, this 
+can be calculated by dividing the SSE by the total sample size:
+
+--
+
+```{r mse-model}
+n_total <- nrow(depression)
+
+mse_null <- 1/n_total * sse_null
+mse_pharma <- 1/n_total * sse_pharma
+mse_therapy <- 1/n_total * sse_therapy
+mse_additive <- 1/n_total * sse_additive
+mse_full <- 1/n_total * sse_full
+```
+
+---
+
+## Calculating the $R^2$ by model
+
+- With the SSE we can also calculate the value of $R^2$ for each of the models. 
+This is not something that we do all the time, normally we will just report the
+$R^2$ of the model that we selected, however, it is good practice.
+
+--
+
+- Remember that every model is compared to the Null in order to calculate the 
+value of $R^2$ which means that there is no value for the null model.
+
+--
+
+```{r r2-models}
+r2_pharma <- (sse_null - sse_pharma)/sse_null
+r2_therapy <- (sse_null - sse_therapy)/sse_null
+r2_additive <- (sse_null - sse_additive)/sse_null
+r2_full <- (sse_null - sse_full)/sse_null
+```
+
+---
+
+## Calculating the BIC 
+
+- Using the sample size and the MSE of each model we can calculate the BIC. 
+The only thing that we need to know is how many unknown values (not fixed!) we 
+need to calculate the predictions of each model.
+
+--
+
+  - Null model: we only need to obtain the estimate $\mu$ (k = 1).
+  
+  - Main effects model: we need an estimate of $\mu$ and an estimate of $\alpha_1$ 
+  (or one value of $\beta_1$, thus k = 2).
+  
+  - Additive model: we need to estimate $\mu$, $\alpha_1$ and $\beta_1$ (k = 3).
+  
+  - Full model: we need to estimate $\mu_{11}$, $\mu_{12}$, $\mu_{21}$ and $\mu_{22}$
+  (k = 4).
+  
+--
+
+```{r bic-models}
+bic_null <- n_total * log(mse_null) + 1 * log(n_total)
+bic_pharma <- n_total * log(mse_pharma) + 2 * log(n_total)
+bic_therapy <- n_total * log(mse_therapy) + 2 * log(n_total)
+bic_additive <- n_total * log(mse_additive) + 3 * log(n_total)
+bic_full <- n_total * log(mse_full) + 4 * log(n_total)
+```
+
+---
+
+## Model comparison: Summary
+
+- So now we can summarize the results of our models using a table:
+
+--
+
+| Model | Parameters | MSE | $R^2$ | BIC |
+|-------|:----------:|:---:|:-----:|:---:|
+| Null | 1 | `r round(mse_null,2)` | NA | `r round(bic_null,2)` |
+| ME Pharma | 2 | `r round(mse_pharma,2)` | `r round(r2_pharma,2)` | `r round(bic_pharma,2)` |
+| ME Therapy | 2 | `r round(mse_therapy,2)` | `r round(r2_therapy,2)` | `r round(bic_therapy,2)` |
+| Additive | 3 | `r round(mse_additive,2)` | `r round(r2_additive,2)` | `r round(bic_additive,2)` |
+| Full | 4 | `r round(mse_full,2)` | `r round(r2_full,2)` | `r round(bic_full,2)` |
+
+--
+
+- Given that the lowest BIC value corresponds to the full model we can conclude
+that there is an interaction between pharmaceutical treatment and therapy on the
+change between pre/post treatment depression scores.
+
+---
+
+## Interpreting the results of the model comparison
+
+- First we can say that: The model that accounted for the data better was the 
+full model, this result suggests that there is an interaction between 
+pharmacological treatment and therapy.
+
+--
+
+- The predicted values for the full model where:
+
+```{r print-full2, echo = FALSE}
+DT::datatable(data = full, fillContainer = FALSE, options = list(dom = 't'),
+              rownames = FALSE)
+```
+
+- The values suggest that the effect of a pharmacological treatment on the change
+between pre/post treatment depression scores was larger when participants where 
+also exposed to therapy. This means that the effects one each factor are 
+modulated be the level of the other.
+
+---
+
+## Interpreting the results of the model comparison
+
+- Finally, the value of $R^2$ from the full model shows that: The full model 
+accounted for 26% of the total variability in our observations.
+
+---
+
+- Homework link:
+
+```{r hw-link}
+link <- "https://raw.githubusercontent.com/ManuelVU/psych-10c-data/main/homework4.csv"
+```
