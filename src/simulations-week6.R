@@ -125,3 +125,38 @@ depression <- depression %>%
   select(id, pharma_treatment, therapy, beck_diff)
 
 write_csv(x = depression, file = "data/week-5/depression-6.csv")
+
+
+
+# Simulation end week 6 ---------------------------------------------------
+
+no_mult_lap <- 80
+no_mult_notes <- 80
+no_one_lap <- 74
+no_one_notes <- 74
+yes_mult_lap <- 72
+yes_mult_notes <- 72
+yes_one_lap <- 66
+yes_one_notes <- 66
+
+mu <- c(no_mult_lap, no_mult_notes,
+        no_one_lap, no_one_notes,
+        yes_mult_lap, yes_mult_notes,
+        yes_one_lap, yes_one_notes)
+
+midterm <- rbinom(n = 18 * 8, size = 100, prob = rep(x = mu/100, each = 18))
+
+
+scores <- tibble("midterm" = midterm,
+                 "music" = rep(x = c("no_music", "music"), each = 18 * 4),
+                 "study" = rep(rep(x = c("distributed", "one_day"), each = 18 * 2),
+                               times = 2),
+                 "notes" = rep(rep(rep(c("slides", "notes"), each = 18), times = 2),
+                               times = 2))
+
+anova(lm(midterm ~ music + study + notes, data = scores))
+
+write_csv(x = scores, file = "data/week-5/midterm-w6.csv")
+
+
+

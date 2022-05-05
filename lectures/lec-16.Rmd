@@ -46,6 +46,7 @@ library(tidyverse)
 knitr::opts_chunk$set(fig.width = 6, message = FALSE, 
                       warning = FALSE, comment = "", 
                       cache = F)
+scores <- read_csv(here::here("data/week-5/midterm-w6.csv"))
 ```
 
 ## Factorial designs with 3 factors
@@ -60,4 +61,366 @@ subjects factorial design are the same as the ones we used for others.
 
 --
 
-- Let's look at an example 
+- Let's look at an example about grades on a midterm.
+
+---
+
+## Example
+
+- We want to study the effects of study habits on students' midterm scores. 
+
+--
+
+- We are interested on the effects of three variables:
+
+--
+
+  1. Listening to music while studying.
+  
+--
+
+  2. Distributing the time they spend studying over multiple days vs studying 
+  the same amount of time a day before the exam.
+  
+--
+
+  3. Whether students use the provided slides or their own notes.
+  
+--
+
+- With this 3 factors (music, study and notes) we have a total of 8 independent
+groups in the study, for example, we have a group that listened to music, 
+studied one day before the exam and used their own notes.
+
+---
+
+## Example
+
+- If we compare all the models that we can build with these 3 factors, we would
+end up with a total of 12 different models.
+
+--
+
+- One Null, 3 main effects models, 4 additive models and 4 interaction models.
+
+
+--
+
+- When we have multiple factors in a model comparison setting we have to make 
+some decisions. Of course, we can always evaluate every model, but the number 
+of models will increase rapidly with the number of factors.
+
+--
+
+- The second option is to evaluate only the null, main effects and additive 
+models.
+
+--
+
+- The third option (and the better approach) is to have a hypothesis about which
+interactions might be relevant to the problem that we are trying to solve and 
+only evaluate those models.
+
+---
+
+## Model evaluation
+
+- Given that we only need to compare 8 models, we will just avoid the 
+interactions and look at the main effects and additive models.
+
+--
+
+- The approach will be the same as before. We want to compute the Sum of Squared
+Errors, which means that we need the predictions of each model and then the 
+error for each observation.
+
+--
+
+- Given that we are not interested on the full model (interactions) this time we
+can start by calculating the grand mean.
+
+--
+
+```{r grand-mean}
+null <- scores %>% 
+  summarise("pred" = mean(midterm)) %>% 
+  pull(pred)
+```
+--
+
+- The average score in the midterm was equal to `r round(null,2)`
+
+---
+
+## Main effects models
+
+- Given that we have 3 factors this time (each with two levels), we need to 
+estimate and save the effects of each independently, this is because we will
+need those values for the additive models.
+
+--
+
+- First we can obtain the main effects of the **music** factor:
+
+--
+
+```{r music}
+music_mean <- scores %>% 
+  group_by(music) %>% 
+  summarise("average" = mean(midterm))
+alpha <- music_mean$average - null
+```
+
+--
+
+.pull-left[
+| music                | average                 |
+|:--------------------:|:---------------------:|
+| music  | `r round(music_mean$average[1],2)` |
+| no_music | `r round(music_mean$average[2],2)` |
+]
+.pull-right[
+| Parameter            | Value                 |
+|:--------------------:|:---------------------:|
+| $\hat{\alpha}_{music}$  | `r round(alpha[1],2)` |
+| $\hat{\alpha}_{no\ music}$ | `r round(alpha[2],2)` |
+]
+
+---
+
+## Main effects models
+
+- Next we will calculate the effects of the **study** factor or how students 
+distribute the time they dedicate to study during a week.
+
+--
+
+```{r study}
+study_mean <- scores %>% 
+  group_by(study) %>% 
+  summarise("average" = mean(midterm))
+beta <- study_mean$average - null
+```
+
+--
+
+.pull-left[
+| music                | average                 |
+|:--------------------:|:---------------------:|
+| distributed  | `r round(study_mean$average[1],2)` |
+| one_day | `r round(study_mean$average[2],2)` |
+]
+.pull-right[
+| Parameter            | Value                 |
+|:--------------------:|:---------------------:|
+| $\hat{\beta}_{distributed}$  | `r round(beta[1],2)` |
+| $\hat{\beta}_{one\ day}$ | `r round(beta[2],2)` |
+]
+
+---
+
+## Main effects models
+
+- The last main effects that we need to calculate are the ones associated to the
+type of **notes** that students use to prepare for the midterm.
+
+--
+
+```{r notes}
+notes_mean <- scores %>% 
+  group_by(notes) %>% 
+  summarise("average" = mean(midterm))
+gama <- notes_mean$average - null
+```
+
+--
+
+.pull-left[
+| music                | average                 |
+|:--------------------:|:---------------------:|
+| notes  | `r round(notes_mean$average[1],2)` |
+| slides | `r round(notes_mean$average[2],2)` |
+]
+.pull-right[
+| Parameter            | Value                 |
+|:--------------------:|:---------------------:|
+| $\hat{\gamma}_{notes}$  | `r round(gama[1],2)` |
+| $\hat{\gamma}_{slides}$ | `r round(gama[2],2)` |
+]
+
+--
+
+<br>
+
+- Notice that in comparison to the other effects (with a magnitude between 2 
+and 3) the type of notes that students use has a lower effect.
+
+---
+
+## Predictions and errors
+
+- Now that we have the effects of the levels of each of our 3 factors we can 
+add the predictions of the model to our data and calculate the errors.
+
+--
+
+- We will start with the Null and Main effects models.
+
+--
+
+```{r error-null}
+n_total <- nrow(scores)
+scores <- scores %>% 
+  mutate("prediction_null" = null,
+         "error_null" = (midterm - null)^2)
+sse_null <- sum(scores$error_null)
+mse_null <- 1/n_total * sse_null
+bic_null <- n_total * log(mse_null) + 1 * log(n_total)
+```
+
+--
+
+- The SSE of the null model was equal to `r round(sse_null,2)`.
+
+---
+
+## Predictions and error main effects
+
+- The predictions of the **music** main effects model are: 
+$$\hat{\mu} + \hat{\alpha}_{music} \quad \hat{\mu} + \hat{\alpha}_{no\ music}$$
+
+--
+
+```{r error-music}
+scores <- scores %>% 
+  mutate("prediction_music" = case_when(music == "music" ~ null + alpha[1],
+                                        music == "no_music" ~ null + alpha[2]),
+         "error_music" = (midterm - prediction_music)^2)
+sse_music <- sum(scores$error_music)
+mse_music <- 1/n_total * sse_music
+r2_music <- (sse_null - sse_music)/sse_null
+bic_music <- n_total * log(mse_music) + 2 * log(n_total)
+```
+
+--
+
+- The SSE for the **music** main effects model was `r round(sse_music,2)`
+
+---
+
+## Predictions and error main effects
+
+- Now we will calculate the predictions of the **study** main effects model, 
+this is the effect of distributing study time across multiple days before a 
+test or if they study one day before the test.
+
+--
+
+- The predictions of the **study** main effects model are:
+$$\hat{\mu} + \hat{\beta}_{distributed} \quad \hat{\mu} + \hat{\beta}_{one\ day}$$
+--
+
+```{r error-study}
+scores <- scores %>% 
+  mutate("prediction_study" = case_when(study == "distributed" ~ null + beta[1],
+                                        study == "one_day" ~ null + beta[2]),
+         "error_study" = (midterm - prediction_study)^2)
+sse_study <- sum(scores$error_study)
+mse_study <- 1/n_total * sse_study
+r2_study <- (sse_null - sse_study)/sse_null
+bic_study <- n_total * log(mse_study) + 2 * log(n_total)
+```
+
+--
+
+- The SSE of the **study** main effects model was `r round(sse_study,2)`
+
+---
+
+## Predictions and error main effects
+
+- The last main effects model is the main effects of **notes** or whether 
+students used their own notes or the notes provided by the instructor.
+
+--
+
+- The predictions of the **notes** model are:
+$$\hat{\mu} + \hat{\gamma}_{slides} \quad \hat{\mu} + \hat{\gamma}_{notes}$$
+
+--
+
+```{r error-notes}
+scores <- scores %>% 
+  mutate("prediction_notes" = case_when(notes == "notes" ~ null + gama[1],
+                                        notes == "slides" ~ null + gama[2]),
+         "error_notes" = (midterm - prediction_notes)^2)
+sse_notes <- sum(scores$error_notes)
+mse_notes <- 1/n_total * sse_notes
+r2_notes <- (sse_null - sse_notes)/sse_null
+bic_notes <- n_total * log(mse_notes) + 2 * log(n_total)
+```
+
+--
+
+- The SSE for the **notes** main effects model was `r round(sse_notes,2)`
+
+---
+
+## Model evaluation 
+
+- Before we look at the results from the additive models, we can look at the
+comparison between the main effects models and the null.
+
+--
+
+- Again, we can summarize our results using a table.
+
+--
+
+| Model | Parameters | MSE | $R^2$ | BIC |
+|-------|:----------:|:---:|:-----:|:---:|
+| Null | 1 | `r round(mse_null,2)` | NA | `r round(bic_null,2)` |
+| ME Music | 2 | `r round(mse_music,2)` | `r round(r2_music,2)` | `r round(bic_music,2)` |
+| ME Study | 2 | `r round(mse_study,2)` | `r round(r2_study,2)` | `r round(bic_study,2)` |
+| ME Notes | 2 | `r round(mse_notes,2)` | `r round(r2_notes,2)` | `r round(bic_notes,2)` |
+
+--
+
+- From the table we can see that the best model for now is the main effects of 
+**music** given that it has the lowest BIC.
+
+--
+
+- However, an important thing to note is that the BIC of the **notes** main 
+effects model is larger than the Null.
+
+---
+
+## Model evaluation
+
+- The fact that the **notes** main effects model performs worse than the Null
+indicates that, knowing whether a student used the slides provided or 
+their own notes to study, does not improve the accuracy of our predictions
+in comparison to using the mean of all participants as a prediction (the grand 
+mean).
+
+--
+
+- Given that additive models assume that the effects of each factor are 
+independent it is very likely that models that include the **notes** factor will
+not perform better than other additive models. 
+
+--
+
+- For example, it is likely that the **music** main effects model is going to 
+be better (will have a lower BIC) than the additive model that assumes 
+that both **music** and **notes** have an effect on midterm scores (the additive 
+model that only includes those two factors).
+
+---
+
+## Predictions and errors, additive models
+
+
+
+
