@@ -232,7 +232,7 @@ the BIC for each of the 5 models in this factorial design?
 16. Calculate the value of $R^2$ of the model that you choose in (14). What is 
 the value of $R^2$ of the model you selected and how can you interpret it?
 
-```{r bic-5models, echo = TRUE}
+```{r r2-5models, echo = TRUE}
 # Code 16: Calculate the value of R^2 of the model that you selected in (14).
 #
 # In this code chunk you can write the functions that you need in order 
