@@ -205,7 +205,7 @@ beta <- study_mean$average - null
 --
 
 .pull-left[
-| music                | average                 |
+| study                | average                 |
 |:--------------------:|:---------------------:|
 | distributed  | `r round(study_mean$average[1],2)` |
 | one_day | `r round(study_mean$average[2],2)` |
@@ -236,7 +236,7 @@ gama <- notes_mean$average - null
 --
 
 .pull-left[
-| music                | average                 |
+| notes                | average                 |
 |:--------------------:|:---------------------:|
 | notes  | `r round(notes_mean$average[1],2)` |
 | slides | `r round(notes_mean$average[2],2)` |
@@ -421,6 +421,200 @@ model that only includes those two factors).
 
 ## Predictions and errors, additive models
 
+- As we said before, we have 4 additive models that we need to evaluate in a 
+$2\times 2 \times 2$ between subjects factorial design.
 
+--
 
+- The first model assumes that only factor 1 and factor 2 have an effect on the 
+expected value of the dependent variable.
 
+--
+
+- In our example, this would be the additive model that includes the factor 
+**music** and **study**.
+
+--
+
+- We already have the main effects of each ( $\alpha$ and $\beta$ respectively)
+so we can add the predictions of the model to the data.
+
+--
+
+```{r add-musicstudy}
+scores <- scores %>% 
+  mutate("prediction_additive_ms" = case_when(
+    music == "no_music" & study == "distributed" ~ null + alpha[2] + beta[1],
+    music == "no_music" & study == "one_day" ~ null + alpha[2] + beta[2],
+    music == "music" & study == "distributed" ~ null + alpha[1] + beta[1],
+    music == "music" & study == "one_day" ~ null + alpha[1] + beta[2]),
+         "error_additive_ms" = (midterm - prediction_additive_ms)^2)
+```
+
+---
+
+## Music and study additive model
+
+- Now with the predictions of the model we can calculate the SSE and the other
+values that we need for the comparison:
+
+--
+
+```{r error-musicstudy}
+sse_ms <- sum(scores$error_additive_ms)
+mse_ms <- 1/n_total * sse_ms
+r2_ms <- (sse_null - sse_ms)/sse_null
+bic_ms <- n_total * log(mse_ms) + 3 * log(n_total)
+```
+
+- The SSE of the additive model that includes the **music** and **study** 
+factors was `r round(sse_ms,2)`
+
+---
+
+## Music and notes additive model
+
+- The second additive model assumes that **only** the first and third factor 
+have an effect on the expected value of our dependent variable.
+
+--
+
+- In our example, the model assumes that only **music** and **notes** have an 
+effect on the expected midterm score of a student. We can add the predictions
+of the model to our data using a similar code as before:
+
+--
+
+```{r add-musicnotes}
+scores <- scores %>% 
+  mutate("prediction_additive_mn" = case_when(
+    music == "no_music" & notes == "notes" ~ null + alpha[2] + gama[1],
+    music == "no_music" & notes == "slides" ~ null + alpha[2] + gama[2],
+    music == "music" & notes == "notes" ~ null + alpha[1] + gama[1],
+    music == "music" & notes == "slides" ~ null + alpha[1] + gama[2]),
+         "error_additive_mn" = (midterm - prediction_additive_mn)^2)
+sse_mn <- sum(scores$error_additive_mn)
+mse_mn <- 1/n_total * sse_mn
+r2_mn <- (sse_null - sse_mn)/sse_null
+bic_mn <- n_total * log(mse_mn) + 3 * log(n_total)
+```
+
+- The SSE of the additive model that includes the **music** and **notes** 
+factors was `r round(sse_mn,2)`
+
+---
+
+## Study and notes additive model
+
+- The last additive model that includes **only** two of the factors is the model
+that assumes that only factor 2 and factor 3 have an effect on the expected 
+value of the dependent variable.
+
+--
+
+- In our example, the model assumes that only the factors **study** and **notes**
+have an effect on the expected midterm score of a student.
+
+--
+
+```{r add-studynotes}
+scores <- scores %>% 
+  mutate("prediction_additive_sn" = case_when(
+    study == "distributed" & notes == "notes" ~ null + beta[1] + gama[1],
+    study == "distributed" & notes == "slides" ~ null + beta[1] + gama[2],
+    study == "one_day" & notes == "notes" ~ null + beta[2] + gama[1],
+    study == "one_day" & notes == "slides" ~ null + beta[2] + gama[2]),
+         "error_additive_sn" = (midterm - prediction_additive_sn)^2)
+sse_sn <- sum(scores$error_additive_sn)
+mse_sn <- 1/n_total * sse_sn
+r2_sn <- (sse_null - sse_sn)/sse_null
+bic_sn <- n_total * log(mse_sn) + 3 * log(n_total)
+```
+
+- The SSE of the additive model that includes the **study** and **notes** 
+factors was `r round(sse_sn,2)`
+
+---
+
+## Additive model with 3 factors
+
+- The last model that we need to consider (if we ignore the interactions) is the 
+additive model that assumes that all 3 factors have an effect on the expected
+value of our dependent variable.
+
+--
+
+- The predictions of this model now will include the estimate of the grand mean 
+$\hat{\mu}$, the main effect of **music** $\hat{\alpha}$, the main effect of 
+**study** $\hat{\beta}$ and the main effect of **notes** $\hat{\gamma}$.
+
+--
+
+- Now we need to check 3 conditions instead of 2, this is because a participant 
+could have been exposed to a specific combination of the levels of the 3 factors. 
+For example, for the combination **no_music**-**distributed**-**slides** the 
+prediction should be:
+$$\hat{\mu} + \hat{\alpha}_{no\ music} + \hat{\beta}_{distributed} + \hat{\gamma}_{slides}$$
+
+--
+
+- However, the prediction for a student that was exposed to the levels **music**-
+**distributed**-**slides** would be: 
+$$\hat{\mu} + \hat{\alpha}_{music} + \hat{\beta}_{distributed} + \hat{\gamma}_{slides}$$
+
+---
+
+### Additive model with 3 factors predictions and error
+
+```{r pred-additive}
+scores <- scores %>% 
+  mutate("prediction_additive" = case_when(
+    music == "music" & study == "distributed" & notes == "notes" ~ 
+      null + alpha[1] + beta[1] + gama[1],
+    music == "music" & study == "distributed" & notes == "slides" ~ 
+      null + alpha[1] + beta[1] + gama[2],
+    music == "music" & study == "one_day" & notes == "notes" ~ 
+      null + alpha[1] + beta[2] + gama[1],
+    music == "music" & study == "one_day" & notes == "slides" ~ 
+      null + alpha[1] + beta[2] + gama[2],
+    music == "no_music" & study == "distributed" & notes == "notes" ~ 
+      null + alpha[2] + beta[1] + gama[1],
+    music == "no_music" & study == "distributed" & notes == "slides" ~ 
+      null + alpha[2] + beta[1] + gama[2],
+    music == "no_music" & study == "one_day" & notes == "notes" ~ 
+      null + alpha[2] + beta[2] + gama[1],
+    music == "no_music" & study == "one_day" & notes == "slides" ~ 
+      null + alpha[2] + beta[2] + gama[2]),
+         "error_additive" = (midterm - prediction_additive)^2)
+sse_additive <- sum(scores$error_additive)
+mse_additive <- 1/n_total * sse_additive
+r2_additive <- (sse_null - sse_additive)/sse_null
+bic_additive <- n_total * log(mse_additive) + 4 * log(n_total)
+```
+
+---
+
+## Comparing additive models
+
+- Now that we have all the values we need we can add the additive models to 
+the table that we started before:
+
+--
+
+| Model | Parameters | MSE | $R^2$ | BIC |
+|-------|:----------:|:---:|:-----:|:---:|
+| Null | 1 | `r round(mse_null,2)` | NA | `r round(bic_null,2)` |
+| ME Music | 2 | `r round(mse_music,2)` | `r round(r2_music,2)` | `r round(bic_music,2)` |
+| ME Study | 2 | `r round(mse_study,2)` | `r round(r2_study,2)` | `r round(bic_study,2)` |
+| ME Notes | 2 | `r round(mse_notes,2)` | `r round(r2_notes,2)` | `r round(bic_notes,2)` |
+| Music + Study | 3 | `r round(mse_ms,2)` | `r round(r2_ms,2)` | `r round(bic_ms,2)` |
+| Music + Notes | 3 | `r round(mse_mn,2)` | `r round(r2_mn,2)` | `r round(bic_mn,2)` |
+| Study + Notes | 3 | `r round(mse_sn,2)` | `r round(r2_sn,2)` | `r round(bic_sn,2)` |
+| Music + Study + Notes | 4 | `r round(mse_additive,2)` | `r round(r2_additive,2)` | `r round(bic_additive,2)` |
+
+--
+
+- Like we expected, adding the **notes** factor does not improve on the models
+that where already better at accounting for the data, for example, the model that 
+includes **study** and **notes** has a higher BIC than the model that only 
+includes **study**
