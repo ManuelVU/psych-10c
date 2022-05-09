@@ -56,7 +56,7 @@ however, we could have more than one.
 --
 
 - When we have 2 dependent variables we could ask ourselves, how are those two 
-variables related?
+variables associated?
 
 --
 
@@ -77,12 +77,14 @@ this value with $R$.
 
 ## Correlation
 
-- The correlation coefficient can take positive or negative values or it can 
+- The correlation coefficient can take positive, negative values or it can 
 be 0.
 
 --
 
 - However, it will always be bounded between -1 and 1, for example:
+
+--
 
 .pull-left[
 ```{r cor-1,echo=FALSE, fig.align='center'}
@@ -99,6 +101,9 @@ mtext(text = "Depression", side = 2, line = 2.6, cex = 1.8)
 mtext(text = "R = 1", cex = 2, side = 3)
 ```
 ]
+
+--
+
 .pull-right[
 ```{r cor-2,echo=FALSE, fig.align='center'}
 a <- 15 + 3/20 * 100
@@ -143,7 +148,7 @@ mtext(text = "R = 0", cex = 2, side = 3)
 --
 
 - On the other hand, the magnitude of R indicates the "strength" of the 
-association, with values closer to 1 (or -1) representing a stronger association
+associations, with values closer to 1 (or -1) representing a stronger association
 between the variables.
 
 --
@@ -162,8 +167,10 @@ mtext(text = "IQ", side = 1, line = 2.6, cex = 1.8)
 mtext(text = "Depression", side = 2, line = 2.6, cex = 1.8)
 mtext(text = "R = 0.8", cex = 2, side = 3)
 ```
-
 ]
+
+--
+
 .pull-right[
 ```{r cor-02, echo=FALSE,fig.align='center', fig.width=7}
 x <- MASS::mvrnorm(200,c(0,0), rbind(c(1,0.3),c(0.3,1)))
@@ -228,18 +235,30 @@ the closer it is to 1 (or -1).
 --
 
 - For example, a correlation of 0.5 implies a stronger association between the 
-variables than a correlation 0f 0.2.
+variables than a correlation of 0.2.
 
 --
 
-- However, a correlation of $-0.3$ also implies a stronger association between the 
+- A correlation of $-0.3$ also implies a stronger association between the 
 variables than a correlation of $0.2$
 
 --
 
 - Correlation measures the association between two variables, however, in this 
-class we are not interested on association but on using one variable to 
+class we are not interested on associations but on using one variable to 
 **predict** the values of another.
+
+--
+
+- For example, when we have two groups like the year when a student started
+college, we would like to use that in order to predict (know if it affects) some
+other variable like their anxiety levels.
+
+--
+
+- Linear regression builds on the concept of a correlation and allows us to make 
+**predictions** about the values of a dependent variable using the values of an 
+independent variable.
 
 ---
 
@@ -248,7 +267,7 @@ class we are not interested on association but on using one variable to
 - To this point we have been using categorical variables in order to make 
 predictions about data. However, what should we do if we have a continuous
 independent variable, or a variable that can take many different values like 
-income?
+income or IQ in the previous graphs?
 
 --
 
@@ -298,6 +317,9 @@ mtext(text = "Missed classes", side = 1, line = 2.6, cex = 1.8)
 mtext(text = "Grade", side = 2, line = 2.6, cex = 1.8)
 ```
 ]
+
+--
+
 .pull-right[
 ```{r miss-grade-lm, echo=FALSE, fig.align='center',fig.width=7, fig.height=7}
 x <- c(2,4,6,8)
@@ -317,14 +339,14 @@ curve(98 - 5.2 * x, from = 2, to = 8, lwd = 2.5, col = "#774fa0", add = TRUE)
 
 ## Linear Reression
 
-- To this point we have used averages to predict the values of our observations
+- We have used averages before to predict the values of our observations
 in an experiment (averages by group or by combinations of factor levels). The 
 mean was our best prediction for the expected value of a dependent variable.
 
 --
 
 - However, when we have a continuous independent variable or a numeric variable 
-that can take many values, we can use lines instead of averages.
+that can take many values, we can use **lines** instead of averages.
 
 --
 
@@ -338,7 +360,7 @@ our dependent variable using the value of our independent variable.
 --
 
 - Where $x_i$ represents the value of our independent variable associated with 
-our $i-th$ observation.
+our $i-th$ observation. This variable is also known as the **predictor**.
 
 --
 
@@ -350,7 +372,7 @@ in our sample missed 8 classes.
 
 ## Parameters of the equation line
 
-- There are 2 parameters in the equation line from the previous slide:
+- There are 2 parameters in the equation of a line:
 
 --
 
@@ -371,28 +393,239 @@ interpreted as the predicted grade of a student that didn't miss a single class.
 --
 
 - On the other hand, **the slope** $\beta_1$ would be interpreted as the number 
-of points that a student is predicted to loose (because the line is going down)
+of points that a student is expected to loose (because the line is going down)
 for each missed class.
+
+--
+
+- How can we get the predictions for different values of $x$?
 
 ---
 
-### How do we actually estimate the parameters of a model?
+## Predictions of a linear model
 
-- When we started comparing two groups we said that the best prediction (or the 
-estimator) for the expected value $(\mu)$ was the average of the responses.
-Because of that we used the average of our dependent variable as a prediction.
-
---
-
-- Well that's not how it actually works...
+- Say that when a student misses 0 classes hey are expected to get 98 points on 
+average.
 
 --
 
-- If you remember, the only step that has remained constant for the methods
-that we have learned in this class is that we always calculate the **Error** of
-the model the same way. 
+  - This means that we can set $\beta_0 = 98$ in our line equation.
 
 --
 
-- To evaluate every model we always need to obtain the Sum of Squared Errors
-of said model. 
+- Additionally, assume that students are expected to lose 5 points on average 
+for each class they miss during the quarter.
+
+--
+
+  - This means that $\beta_1 = - 5$ points in our line equation.
+  
+--
+
+- What would be the average predicted number of points for students that missed
+2, 4, 5 and 8 classes during the quarter? Remember that the equation of the line 
+is $\beta_0 + \beta_1 x_i$
+
+--
+
+| Classes missed | Average predicted grade |
+|----------------|:-----------------------:|
+| 2              | .can-edit[]             |
+| 4              | .can-edit[]             |
+| 5              | .can-edit[]             |
+| 8              | .can-edit[]             |
+
+---
+
+## Simple linear regression
+
+- When we only have one **predictor** (just one $x$) we refer to this model as
+simple linear regression.
+
+--
+
+- As we will see later on the course, we can have more than one predictor in our 
+models. When we use more that one **predictor** in our models (more than one 
+$x$) we call it Multiple Linear Regression.
+
+--
+
+- As with other models in the class, the key step will be to find the 
+predictions of the model for each of observation in order to calculate the SSE 
+of the model. 
+
+--
+
+- Like we did in the example, we will get our predictions by using the equation 
+of the line.
+
+--
+
+- However, the problem is how do we find the best **intercept** $(\beta_0)$ and
+**slope** $(\beta_1)$?
+
+--
+
+- The short answer is that we have to ask a computer...
+
+--
+
+- However, I believe that it's always better to try to understand the intuition
+behind how we find those values. To do that we need to use Math. 
+
+---
+
+## Parameters in a linear regression
+
+- First let's think about what it means to have different values for the 
+**intercept** $(\beta_0)$ and **slope** $(\beta_1)$.
+
+--
+
+- Each combination of those values will give us a different line.
+
+--
+
+- However, regardless of the line, our data is always fixed. The points in our
+graph are just the grades of the students and those grades don't change because
+we use different lines to predict them.
+
+--
+
+.pull-left[
+```{r miss-grade-lm1, echo=FALSE, fig.align='center',fig.width=7, fig.height=6}
+par(oma = c(0,0,0,0),
+    mai = c(1,1,0,0))
+plot(x, y, axes = F, ann = F,
+      cex = 2, ylim=c(50,100), type = "n")
+arrows(x0 = seq(2,8,2),y0 = 82 - 3.6 * seq(2,8,2), x1 = seq(2,8,2),
+      y1 = y, length = 0.2, lty = 2, lwd = 3)
+points(x, y, col = "#0D95D0", pch = 16, cex = 2.5)
+box(bty = "l")
+axis(side = 1, cex.axis = 1.8)
+axis(side = 2, las = 2, cex.axis = 1.8)
+mtext(text = "Missed classes", side = 1, line = 3, cex = 2.5)
+mtext(text = "Grade", side = 2, line = 3, cex = 2.5)
+curve(82 - 3.6* x, from = 2, to = 8, lwd = 2.5, col = "#774fa0", add = TRUE)
+legend("topright", legend = c(expression(paste(beta[0], " = 82")),
+                              expression(paste(beta[1], " = -3.6"))),
+       bty = "n", cex = 2.5)
+```
+]
+
+.pull-right[
+```{r miss-grade-lm2, echo=FALSE, fig.align='center',fig.width=7, fig.height=6}
+par(oma = c(0,0,0,0),
+    mai = c(1,1,0,0))
+plot(x, y, axes = F, ann = F, ylim=c(50,100), type = "n")
+arrows(x0 = seq(2,8,2),y0 = 105 - 6 * seq(2,8,2), x1 = seq(2,8,2),
+      y1 = y, length = 0.2, lty = 2, lwd = 3)
+points(x, y, col = "#0D95D0", pch = 16, cex = 2.5)
+box(bty = "l")
+axis(side = 1, cex.axis = 1.8)
+axis(side = 2, las = 2, cex.axis = 1.8)
+mtext(text = "Missed classes", side = 1, line = 3, cex = 2.5)
+mtext(text = "Grade", side = 2, line = 3, cex = 2.5)
+curve(105 - 6 * x, from = 2, to = 8, lwd = 2.5, col = "#774fa0", add = TRUE)
+legend("topright", legend = c(expression(paste(beta[0], " = 105")),
+                              expression(paste(beta[1], " = -6"))),
+       bty = "n", cex = 2.5)
+```
+]
+
+---
+
+## Parameters in a linear regression 
+
+- As we saw in the previous graphs, each line will have a different distance 
+(black arrows) between prediction (purple line) and observation (blue points).
+
+--
+
+- These distances are the same as in other models, they are the difference 
+between prediction and observation, or what we call **error**. 
+
+--
+
+- When we square those values and add them all together we get the 
+Sum of Squared Errors.  
+
+--
+
+- This means that each line (different combination of the values of $\beta_0$ 
+and $\beta_1$) that we can draw on our graph will have a different SSE.
+
+--
+
+- Therefore, we can look for the line that has the smallest average 
+distance from all the points, or the smallest **SSE**.
+
+--
+
+- In other words, we want to find the values of $\beta_0$ and $\beta_1$ that 
+minimize the Sum of Squared Errors.
+
+---
+
+## Estimators for linear models
+
+- This is not only the case for the simple linear regression, but for every 
+linear model. 
+
+--
+
+- When we had two groups and we used the average of all participants in the 
+experiment as the prediction for the Null model, this was because that average
+minimizes the SSE of a model that assumes that all groups follow the same 
+Normal distribution.
+
+--
+
+- When we used the average of the groups is because the two averages minimize 
+the distance (SSE) between the prediction and observation for a model that 
+assumes that there are two different groups.
+
+--
+
+- The **estimators** that we have used for each model have all been found using 
+the same idea. 
+
+--
+
+- This is the general intuition behind the **estimators** used on any linear
+model (two groups, multiple groups, factorial designs and linear regression).
+
+---
+
+## Estimators for linear models
+
+- When we formalize our models with some parameters (like $\beta_0$ and $\beta_1$ 
+in the simple linear regression model) our objective will always be to find
+the values of those parameters that minimize the Sum of Squared Errors. This 
+method is known Least Squares.
+
+--
+
+- Every **estimator** that we have seen in the class has been obtained this way.
+
+--
+
+- Because of this, they are known as **Least Squares Estimators**. 
+
+--
+
+- This is the name that you might find in an introductory statistics textbook,
+and it means that the **estimator** was found by looking for the value of a 
+parameter in a model that makes the SSE as small as possible.
+
+--
+
+- However, this does not mean that the value we obtain is the smallest among 
+all possible models, but just that it will be the smallest value of that 
+specific model.
+
+--
+
+- For example, almost all our Null models use the average response of all 
+participants because when we only have one parameter, the average minimizes the 
+SSE.
