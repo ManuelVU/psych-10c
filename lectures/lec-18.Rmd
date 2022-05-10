@@ -1,0 +1,188 @@
+---
+title: "Lecture 18"
+subtitle: "Simple Linear Regression"
+author: "Psych 10 C"
+institute: "University of California, Irvine"
+date: "05/11/2022"
+output:
+  xaringan::moon_reader:
+    self_contained: true
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+```
+
+```{r xaringan-extra, echo = FALSE}
+xaringanExtra::use_tile_view()
+
+xaringanExtra::use_fit_screen()
+
+xaringanExtra::use_editable(expires = 1)
+
+xaringanExtra::use_extra_styles(
+  hover_code_line = TRUE,         #<<
+  mute_unhighlighted_code = TRUE  #<<
+)
+
+htmltools::tagList(
+  xaringanExtra::use_clipboard(
+    button_text = "<i class=\"fa fa-clipboard\"></i>",
+    success_text = "<i class=\"fa fa-check\" style=\"color: #90BE6D\"></i>",
+    error_text = "<i class=\"fa fa-times-circle\" style=\"color: #F94144\"></i>"
+  ),
+  rmarkdown::html_dependency_font_awesome()
+)
+```
+
+```{r load-tidy, echo = FALSE, message = FALSE, warning = FALSE}
+library(tidyverse)
+
+knitr::opts_chunk$set(fig.width = 6, message = FALSE, 
+                      warning = FALSE, comment = "", 
+                      cache = F)
+```
+
+## Simple linear regression
+
+- Last class we mentioned that we can use a line in order to make predictions
+about the values of a continuous dependent variable when we have information
+about an independent variable.
+
+--
+
+- We also mentioned that the equation of the line is defined by two parameters: 
+
+--
+
+  - $\beta_0$ which is known as the **intercept** and it can be interpreted as 
+  the expected value of the dependent variable when the independent variable
+  is equal to 0.
+  
+--
+
+  - $\beta_1$ which is known as the **slope** which is the change in the 
+  expectation of our dependent variable for a **unit** increase in the value
+  of our independent variable.
+  
+--
+
+- The problem was that each combination of values of $\beta_0$ (**intercept**) 
+and $\beta_1$ (**slope**) will give us a different line, so we need a way to
+choose the best one.
+
+---
+
+## Least Squares
+
+- The method that we use to find the values of $\beta_0$ and $\beta_1$ is known
+as Least Squares. The idea is that we want to choose the values of the 
+parameters that minimize the error of the predictions in the model.
+
+--
+
+- In other words, we want to find the values that minimize the Sum of Squared 
+Errors (SSE).
+
+.pull-left[
+```{r miss-grade-lm1, echo=FALSE, fig.align='center',fig.width=7, fig.height=6}
+par(oma = c(0,0,0,0),
+    mai = c(1,1,0,0))
+x <- c(2,4,6,8)
+y <- 98 - 5.2 * x + c(7,-13,11,-5)
+sse1 <- sum((y - (82 - 3.6 * seq(2,8,2)))^2)
+plot(x, y, axes = F, ann = F,
+      cex = 2, ylim=c(50,100), type = "n")
+arrows(x0 = seq(2,8,2),y0 = 82 - 3.6 * seq(2,8,2), x1 = seq(2,8,2),
+      y1 = y, length = 0.2, lty = 2, lwd = 3)
+points(x, y, col = "#0D95D0", pch = 16, cex = 2.5)
+box(bty = "l")
+axis(side = 1, cex.axis = 1.8)
+axis(side = 2, las = 2, cex.axis = 1.8)
+mtext(text = "Missed classes", side = 1, line = 3, cex = 2.5)
+mtext(text = "Grade", side = 2, line = 3, cex = 2.5)
+curve(82 - 3.6* x, from = 2, to = 8, lwd = 2.5, col = "#774fa0", add = TRUE)
+legend("topright", legend = c(expression(paste(beta[0], " = 82")),
+                              expression(paste(beta[1], " = -3.6")),
+                              expression(paste(SSE, " = 709"))),
+       bty = "n", cex = 2.8)
+```
+]
+
+.pull-right[
+```{r miss-grade-lm2, echo=FALSE, fig.align='center',fig.width=7, fig.height=6}
+par(oma = c(0,0,0,0),
+    mai = c(1,1,0,0))
+sse2 <- sum((y - (105 - 6 * seq(2,8,2)))^2)
+plot(x, y, axes = F, ann = F, ylim=c(50,100), type = "n")
+arrows(x0 = seq(2,8,2),y0 = 105 - 6 * seq(2,8,2), x1 = seq(2,8,2),
+      y1 = y, length = 0.2, lty = 2, lwd = 3)
+points(x, y, col = "#0D95D0", pch = 16, cex = 2.5)
+box(bty = "l")
+axis(side = 1, cex.axis = 1.8)
+axis(side = 2, las = 2, cex.axis = 1.8)
+mtext(text = "Missed classes", side = 1, line = 3, cex = 2.5)
+mtext(text = "Grade", side = 2, line = 3, cex = 2.5)
+curve(105 - 6 * x, from = 2, to = 8, lwd = 2.5, col = "#774fa0", add = TRUE)
+legend("topright", legend = c(expression(paste(beta[0], " = 105")),
+                              expression(paste(beta[1], " = -6")),
+                              expression(paste(SSE, " = 393"))),
+       bty = "n", cex = 2.8)
+```
+]
+
+---
+
+## Models for simple linear regression
+
+- Before we find the values of the parameters for the simple linear regression
+model, we want to formalize the models that we are going to compare.
+
+--
+
+- Given that we have a single independent variable $x_i$, we will only need to 
+compare two models in order for us to test whether the independent variable 
+has an effect on our dependent variable.
+
+---
+
+## Null model
+
+- As with previous problems, in a simple linear regression we want to compare
+2 different models. The first on these models is the Null.
+
+--
+
+- The Null model in a simple linear regression formalizes the assumption that 
+the expected value of our independent variable does not depend on the values 
+of the independent variable. 
+
+--
+
+- This model is expressed formally as: $$y_i \sim \text{Normal}(\beta_0, \sigma_0^2)$$
+
+--
+
+- This Null model is similar to the one we have used before, and it assumes
+that the expected value of our dependent variable $y$ is the same 
+regardless of the values of our independent variable $x_i$.
+
+--
+
+- Let's look back to our example about predicting grades from the number of 
+classes that a student missed during a quarter.
+
+---
+
+## Example: grades and classes missed
+
+- We want to know how the grade that a student gets (dependent variable) changes 
+as a function of the number of classes they missed during the quarter 
+(independent variable).
+
+
