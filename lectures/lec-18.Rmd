@@ -42,10 +42,12 @@ htmltools::tagList(
 
 ```{r load-tidy, echo = FALSE, message = FALSE, warning = FALSE}
 library(tidyverse)
+library(flipbookr)
 
 knitr::opts_chunk$set(fig.width = 6, message = FALSE, 
                       warning = FALSE, comment = "", 
                       cache = F)
+grades <- read_csv(file = here::here("data/week-7/sim-examples.csv"))
 ```
 
 ## Simple linear regression
@@ -138,7 +140,7 @@ legend("topright", legend = c(expression(paste(beta[0], " = 105")),
 
 ---
 
-## Models for simple linear regression
+## Simple linear regression
 
 - Before we find the values of the parameters for the simple linear regression
 model, we want to formalize the models that we are going to compare.
@@ -146,21 +148,57 @@ model, we want to formalize the models that we are going to compare.
 --
 
 - Given that we have a single independent variable $x_i$, we will only need to 
-compare two models in order for us to test whether the independent variable 
-has an effect on our dependent variable.
+compare two models, one that assumes that the independent variable has no 
+effect on the values of the dependent variable, and the other one that assumes 
+that assumes that the independent variable has an effect.
+
+--
+
+- Comparing those two models will let us decide if our independent variable is a 
+**good predictor** of the dependent variable.
+
+--
+
+- Before we introduce the models that we want to compare in a simple linear 
+regression let's expand the example with grades and missed classes.
 
 ---
 
-## Null model
+### Example: grades and classes missed
 
-- As with previous problems, in a simple linear regression we want to compare
-2 different models. The first on these models is the Null.
+- We want to know how the grade that a student gets (dependent variable) changes 
+as a function of the number of classes they missed during the quarter 
+(independent variable).
+
+--
+
+- In other words, we want to know if the number of classes missed by a student
+is a good predictor of their final grade.
+
+--
+
+- We have the final grade and number of classes missed by 130 students in a 
+statistics class:
+
+--
+
+```{r print-data, echo = FALSE}
+DT::datatable(data = grades,
+  fillContainer = FALSE, options = list(pageLength = 4))
+```
+
+
+---
+
+## Models for simple linear regression
+
+- The first model that we need to compare the Null model.
 
 --
 
 - The Null model in a simple linear regression formalizes the assumption that 
-the expected value of our independent variable does not depend on the values 
-of the independent variable. 
+the expected value of our dependent variable is constant regardless of the 
+values of the predictor (independent variable). 
 
 --
 
@@ -168,21 +206,240 @@ of the independent variable.
 
 --
 
-- This Null model is similar to the one we have used before, and it assumes
-that the expected value of our dependent variable $y$ is the same 
-regardless of the values of our independent variable $x_i$.
+- Were $i$ denotes the observation number.
 
 --
 
-- Let's look back to our example about predicting grades from the number of 
-classes that a student missed during a quarter.
+- In our example, this model assumes that the expected grade of a student is 
+independent of the number of classes they missed.
+
+--
+
+- Notice that the only difference between this Null model and ones that we have 
+seen before is that we denote the expectation as $\beta_0$ instead of $\mu$.
+
+--
+
+- Given that we only have one value to minimize the error of our predictions our
+best guess for the value of $\beta_0$ for the Null model will be the group 
+average.
 
 ---
 
-## Example: grades and classes missed
+## Simple linear regression model
 
-- We want to know how the grade that a student gets (dependent variable) changes 
-as a function of the number of classes they missed during the quarter 
-(independent variable).
+- The second model that we need to evaluate is the linear regression.
 
+--
+
+- This model assumes that the expected value of our dependent variable is a 
+linear function of the number of classes missed by a student.
+
+--
+
+- Formally, the model is expressed as: 
+$$y_i \sim \text{Normal}(\ \beta_0+\beta_1x_i,\sigma_1^2)$$
+
+--
+
+- In other words, the model assumes that all observations with with the same 
+value of the predictor $x_i$ follow the same distribution, but this distribution 
+is not the same for every value of $x$.
+
+--
+
+- In our grades example this means that the model assumes that the expected
+grade of students that missed 3 classes is $\beta_0 +\beta_1\ 3$ and that
+distribution is different from students that missed 5, 6 or any other number of
+classes.
+
+--
+
+- Notice that the variance is the same regardless of the number of classes that 
+the student missed.
+
+---
+
+## Simple linear regression
+
+- Another way to think about this is that the linear model predicts a different
+expected grade for each number of classes missed.
+
+--
+
+- This would be similar to the multiple groups case that we talked about on week 
+4.
+
+--
+
+- However, a simple linear regression has the advantage that it assumes that 
+the change in the expected value of the dependent variable should follow a 
+straight line.
+
+--
+
+- Now we can look at the values of the parameters for each model.
+
+---
+
+## Predictions: Null model
+
+- As we said before, the Null model assumes that the expected grade of a student 
+is constant (doesn't change) as a function of the number of classes they missed.
+
+--
+
+- Given that the model has only one parameter, our best guess for the value of 
+that parameter will be the average of the dependent variable of all participants. 
+This is the same estimator that we have used for the Null model before.
+
+--
+
+```{r null-pred}
+n_total <- nrow(grades)
+
+null <- grades %>% 
+  summarise("pred" = mean(grade))
+
+grades <- grades %>% 
+  mutate("prediction_null" = null$pred,
+         "error_null" = (grade - prediction_null)^2)
+
+sse_null <- sum(grades$error_null)
+mse_null <- 1/n_total * sse_null
+bic_null <- n_total * log(mse_null) + 1 * log(n_total)
+```
+
+---
+
+## Simple linear regression
+
+- Now we need to get the values for $\hat{\beta}_0$ and $\hat{\beta}_1$ for the 
+simple linear regression.
+
+--
+
+- There is no function that I know in `tidyverse` that will allow us to do this,
+however, it is easy to do in base R.
+
+--
+
+- The R function to do a linear regression in base R is `lm()`.
+
+--
+
+- There are 2 important arguments of this function that we need to use. The 
+first one is `formula =` and it requires us to express the model as:
+$$\text{dependent-variable} \sim \text{independent-variable}$$ 
+
+--
+
+- The second argument for the function is the `data =` where we have to indicate
+the name of the object that contains our observations.
+
+---
+
+## Parameters: Simple linear regression
+
+- First we will get the values of $\hat{\beta}_0$ and $\hat{\beta}_1$.
+
+```{r lm-betas}
+betas <- lm(formula = grade ~ classes_missed, data = grades)$coef
+```
+
+--
+
+- The function `lm()` will return multiple values so to get only the values of 
+$\hat{\beta}_0$ and $\hat{\beta}_1$ we need to use `$coef` after the function.
+
+--
+
+- Now we can add the predictions and errors of the linear model to our data, 
+remember that the prediction of the linear model will be:
+$$\hat{\beta}_0 + \hat{\beta}_1 \text{classes-missed}_i$$
+
+--
+
+```{r lm-pred}
+grades <- grades %>% 
+  mutate("prediction_linear" = betas[1] + betas[2] * classes_missed,
+         "error_linear" = (grade - prediction_linear)^2)
+```
+
+---
+
+## Model comparison
+
+- As with the previous problems, we can get the SSE, Mean SE, $R^2$ and BIC for
+the models in a linear regression.
+
+--
+
+```{r lm-compare}
+sse_linear <- sum(grades$error_linear)
+mse_linear <- 1/n_total * sse_linear
+r2_linear <- (sse_null - sse_linear)/sse_null
+bic_linear <- n_total * log(mse_linear) + 2 * log(n_total)
+```
+
+- We can compare the models using a table:
+
+| Model | Parameters | MSE | $R^2$ | BIC |
+|-------|:----------:|:---------------------:|:-----:|:--------------------:|
+| Null  | 1          | `r round(mse_null,0)` | NA    | `r round(bic_null,0)`|
+| Classes Missed  | 2          | `r round(mse_linear,0)` | `r round(r2_linear,2)` | `r round(bic_linear,0)`|
+
+--
+
+- This means that including the classes missed by a student as a predictor of
+final grade improves the model in comparison to using the mean.
+
+---
+
+## Interpretation
+
+- The value of $R^2$ is interpreted the same way as before, it is the proportion
+of error accounted for by the model in comparison to the Null model.
+
+--
+
+- Now we can interpret the values of the coefficients $\hat{\beta}_0$ and 
+$\hat{\beta}_1$.
+
+--
+
+  - Students that missed 0 classes have on average a final grade of approximately
+  `r round(betas[1],0)` $(\hat{\beta}_0)$.
+  
+--
+
+  - According to the model, the number of points that a student is expected to 
+  lose for every class missed is approximately `r round(betas[2],0)` 
+  $(\hat{\beta}_1)$.
+  
+--
+
+- Using `ggplot` we can visualize the predictions of a simple linear regression.
+
+--
+
+- We call this type of data visualization a `scatterplot`.
+
+---
+
+```{r scatter-code, include = FALSE}
+ggplot(data = grades) + #BREAK
+  aes(y = grade) + #BREAK
+  aes(x = classes_missed) + #BREAK
+  geom_point(color = "#0D95D0", alpha = 0.5, size = 3) + #BREAK
+  xlab("Classes Missed") + #BREAK
+  ylab("Final Grade") + #BREAK
+  guides(fill = "none") + #BREAK
+  theme_classic() + #BREAK
+  theme(axis.title.x = element_text(size = 20),
+        axis.title.y = element_text(size = 20)) +
+  geom_smooth(method = lm, se = FALSE, color = "#774fa0")
+```
+
+`r chunk_reveal(chunk_name = "scatter-code", title = "### Scater plot grade by classes missed")`
 
