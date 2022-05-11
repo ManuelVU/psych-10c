@@ -150,7 +150,7 @@ model, we want to formalize the models that we are going to compare.
 - Given that we have a single independent variable $x_i$, we will only need to 
 compare two models, one that assumes that the independent variable has no 
 effect on the values of the dependent variable, and the other one that assumes 
-that assumes that the independent variable has an effect.
+that the independent variable has an effect.
 
 --
 
@@ -192,7 +192,7 @@ DT::datatable(data = grades,
 
 ## Models for simple linear regression
 
-- The first model that we need to compare the Null model.
+- The first model that we need to compare is the Null model.
 
 --
 
@@ -215,20 +215,19 @@ independent of the number of classes they missed.
 
 --
 
-- Notice that the only difference between this Null model and ones that we have 
+- Notice that the only difference between this Null model and the ones that we have 
 seen before is that we denote the expectation as $\beta_0$ instead of $\mu$.
 
 --
 
-- Given that we only have one value to minimize the error of our predictions our
-best guess for the value of $\beta_0$ for the Null model will be the group 
-average.
+- Similarly, our best guess for the value of $\beta_0$ for the Null model will 
+be the group average.
 
 ---
 
 ## Simple linear regression model
 
-- The second model that we need to evaluate is the linear regression.
+- The second model that we need to evaluate is the linear regression model.
 
 --
 
@@ -242,14 +241,14 @@ $$y_i \sim \text{Normal}(\ \beta_0+\beta_1x_i,\sigma_1^2)$$
 
 --
 
-- In other words, the model assumes that all observations with with the same 
-value of the predictor $x_i$ follow the same distribution, but this distribution 
-is not the same for every value of $x$.
+- In other words, the model assumes that all observations that share the same 
+value of the predictor $x_i$ follow the same distribution. In other words, this 
+distribution is not the same for every value of $x$.
 
 --
 
 - In our grades example this means that the model assumes that the expected
-grade of students that missed 3 classes is $\beta_0 +\beta_1\ 3$ and that
+grade of students that missed 3 classes is $\beta_0 +\beta_1\ (3)$ and that
 distribution is different from students that missed 5, 6 or any other number of
 classes.
 
@@ -330,7 +329,7 @@ however, it is easy to do in base R.
 
 - There are 2 important arguments of this function that we need to use. The 
 first one is `formula =` and it requires us to express the model as:
-$$\text{dependent-variable} \sim \text{independent-variable}$$ 
+$$\text{dependent_variable} \sim \text{independent_variable}$$ 
 
 --
 
@@ -356,7 +355,7 @@ $\hat{\beta}_0$ and $\hat{\beta}_1$ we need to use `$coef` after the function.
 
 - Now we can add the predictions and errors of the linear model to our data, 
 remember that the prediction of the linear model will be:
-$$\hat{\beta}_0 + \hat{\beta}_1 \text{classes-missed}_i$$
+$$\hat{\beta}_0 + \hat{\beta}_1 \text{classes_missed}_i$$
 
 --
 
