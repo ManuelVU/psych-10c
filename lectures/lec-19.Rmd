@@ -1,0 +1,472 @@
+---
+title: "Lecture 18"
+subtitle: "Simple Linear Regression"
+author: "Psych 10 C"
+institute: "University of California, Irvine"
+date: "05/11/2022"
+output:
+  xaringan::moon_reader:
+    self_contained: true
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+```
+
+```{r xaringan-extra, echo = FALSE}
+xaringanExtra::use_tile_view()
+
+xaringanExtra::use_fit_screen()
+
+xaringanExtra::use_editable(expires = 1)
+
+xaringanExtra::use_extra_styles(
+  hover_code_line = TRUE,         #<<
+  mute_unhighlighted_code = TRUE  #<<
+)
+
+htmltools::tagList(
+  xaringanExtra::use_clipboard(
+    button_text = "<i class=\"fa fa-clipboard\"></i>",
+    success_text = "<i class=\"fa fa-check\" style=\"color: #90BE6D\"></i>",
+    error_text = "<i class=\"fa fa-times-circle\" style=\"color: #F94144\"></i>"
+  ),
+  rmarkdown::html_dependency_font_awesome()
+)
+```
+
+```{r load-tidy, echo = FALSE, message = FALSE, warning = FALSE}
+library(tidyverse)
+library(flipbookr)
+
+knitr::opts_chunk$set(fig.width = 6, message = FALSE, 
+                      warning = FALSE, comment = "", 
+                      cache = F)
+
+mental_rotation <- read_csv(file = here::here("data/week-7/mental-rotation.csv"))
+```
+
+## Simple linear regression
+
+- We will start with another example using simple linear regression.
+
+--
+
+- We are interested in studying how the time that it takes participants to 
+identify a geometrical object changes as a function of the degrees by which the 
+object is rotated.
+
+--
+
+- For example, in a single trial of the experiment we present a participant with 
+a geometric figure (left), and then after a a fixed period of time has passed 
+(say 10 seconds) we present the participant another figure (right). The objective 
+of the participant is to respond whether the figure is the same or not.
+
+.pull-left[
+.center[![](start.png)]
+]
+
+.pull-right[
+.center[![](rotated.png)]
+]
+
+---
+
+## Example: Mental rotation
+
+- We presented participants with 6 figures rotated 10, 45, 90, 130, 
+160 or 180 degrees respectively, and recorded the time it took them to identify 
+if the second image was the same figure but rotated. 
+
+--
+
+- We don't have access to a population of students to experiment with, 
+so the age of participants in the experiment ranged from 7 to 21 years.
+
+--
+
+- The data from the experiment looks like this:
+
+--
+
+```{r print-data, echo = FALSE}
+DT::datatable(data = mental_rotation,
+  fillContainer = FALSE, options = list(pageLength = 4, rownames = FALSE))
+```
+
+---
+
+## Example: Mental rotation
+
+- Response times are saved in milliseconds (ms), thus the large numbers.
+
+--
+
+- For now we will assume that the age of the participant has no effect on 
+response times.
+
+--
+
+- This is how we usually approach data analysis with linear models. Remember 
+that our research question focuses on the effect of the angle of rotation on 
+response time, not on the age of participants.
+
+--
+
+- Because we are interested in the effect of angle of rotation we will start 
+with a simple linear regression.
+
+---
+
+## Null model
+
+- The first model that we need is the Null model, which assumes that there is no
+effect of rotation angle on the time it takes participants to identify that the 
+figure has is the same but has been rotated (response time).
+
+--
+
+- Remember that the model is formalized as:
+$$y_i \sim \text{Normal}(\beta_0, \sigma_0^2)$$
+
+--
+
+- Were $y_i$ represents the *i-th* response time in the experiment, $\beta_0$ is
+the expected response time according to the Null model, and $\sigma_0^2$ is the 
+variance of response times according to the Null model.
+
+--
+
+- As we have mentioned before, the best guess for the expected value of a Normal 
+distribution (when there is only one parameter) is the average of all response 
+times in the experiment.
+
+--
+
+- Therefore, $$\hat{\beta}_0 = \bar{y} = \frac{\sum_{i=1}^{n} y_i}{n}$$
+
+---
+
+## Regression model
+
+- The second model that we need is the simple linear regression. This model 
+assumes that the expected response time changes as a function of the degrees
+by which the figure has been rotated.
+
+--
+
+- In other words, the model assumes that the **angle of rotation** is a good 
+predictor of response times.
+
+--
+
+- The model is formalized as follows:
+$$y_i \sim \text{Normal}(\beta_0+\beta_1x_i, \sigma_1^2)$$
+
+--
+
+- Were $y_i$ represents the *i-th* response time. 
+
+--
+
+- $\beta_0$ is the intercept or the response time to a figure that has been 
+rotated by 0 degrees.
+
+---
+
+## Regression model
+
+- $\beta_1$ is the slope or the change in response time for a 1 degree increase 
+the in the rotation of the figure, for example, the change in response time to 
+a figure that has been rotated 10 degrees in comparison to one that has been 
+rotated 11 degrees.
+
+--
+
+- $x_i$ represents the angle of rotation of the *i-th* figure presented to the 
+participant.
+
+
+--
+
+- Finally, $\sigma_1^2$ represents the variability of response times with 
+respect to their expectation $\beta_0 + \beta_1x_i$.
+
+--
+
+- Notice that this model assumes that the expected response time will be 
+different depending on the angle of rotation of the figure, in other words, 
+we expect response times to be around one value for figures rotated 10 degrees
+and to have a different expectation when the figure is rotated 10.1 degrees.
+
+--
+
+- In other words, our prediction about the expectation of the response times 
+are a continuous variable that follows a straight line!
+
+---
+
+## Regression model
+
+- The prediction of the linear model for a given angle of rotation $x_i$ are:
+$$\hat{\beta}_0 + \hat{\beta}_1x_i$$
+
+--
+
+- We can obtain the estimators $\hat{\beta}_0$ and $\hat{\beta}_1$ using the 
+`lm()` function in R. 
+
+--
+
+- Remember that the function in R takes two arguments "**`formula =`**" which has 
+to be written as: 
+$$\text{dependent-variable} \sim \text{independent-variable}$$ 
+
+--
+
+- The second argument is "**`data =`**" which is the name of the object that 
+contains our observations.
+
+---
+
+## Predictions: Null model
+
+- Let's start by adding the predictions of the Null model to the data and 
+calculating the squared error by observation.
+
+--
+
+```{r null}
+# Total sample size
+n_total <- nrow(mental_rotation)
+
+# Prediction of the Null model
+null <- mental_rotation %>% 
+  summarise("pred" = mean(response_time)) %>% 
+  pull(pred)
+
+# Add prediction to data and calculate error
+mental_rotation <- mental_rotation %>% 
+  mutate("prediction_null" = null,
+         "error_null" = (response_time - prediction_null)^2)
+
+# Calculate the Sum of Squared Error of the Null model
+sse_null <- sum(mental_rotation$error_null)
+
+# Calculate the Mean Squared Error of the Null model
+mse_null <- 1/n_total * sse_null
+
+# Calculate the BIC for the Null model
+bic_null <- n_total * log(mse_null) + 1 * log(n_total)
+```
+
+---
+
+## Predictions: Linear regression
+
+- Now we can add the prediction and error of the "rotation" model.
+
+--
+
+```{r rotation}
+# Obtain estimators for beta0 and beta1
+betas <- lm(formula = response_time ~ angle, data = mental_rotation)$coef
+
+# Add prediction and error of the linear model
+mental_rotation <- mental_rotation %>% 
+  mutate("prediction_rotation" = betas[1] + betas[2] * angle, 
+         "error_rotation" = (response_time - prediction_rotation)^2,
+         "epsilon_rotation" = (response_time - prediction_rotation))
+
+# Calculate the SSE of the linear model
+sse_rotation <- sum(mental_rotation$error_rotation)
+
+# Calculate the MSE of the linear model
+mse_rotation <- 1/n_total * sse_rotation
+
+# Calculate the variance accounted for by the linear model
+r2_rotation <- (sse_null - sse_rotation)/sse_null
+
+# Calculate the BIC of the linear model
+bic_rotation <- n_total * log(mse_rotation) + 2 * log(n_total)
+```
+
+---
+
+## Results
+
+- Now that we have calculated all the values that we need we can summarize them
+on a table in order to compare our two models and answer our research question.
+
+--
+
+| Model | Parameters | MSE | $R^2$ | BIC |
+|-------|:----------:|:---------------------:|:-----:|:--------------------:|
+| Null  | 1          | $`r round(mse_null,0)`$ | NA    | `r round(bic_null,0)`|
+| Angle of Rotation  | 2          | $`r round(mse_rotation,0)`$ | `r round(r2_rotation,2)` | `r round(bic_rotation,0)`|
+
+--
+
+- The results indicate that the angle of rotation of a figure is a good predictor
+of the time it takes to participants to identify if a rotated figure is the same 
+as the one they saw at the start of the trial.
+
+--
+
+- We can also interpret the estimated values of the parameters in the model.
+
+---
+
+## Interpretation of model parameters
+
+- When we interpret the parameters of a linear model we usually write something
+like this:
+
+--
+
+  - The estimated value of the intercept was `r round(betas[1],0)`, which means
+  that the it takes participants `r round(betas[1],0)` milliseconds on 
+  **average** to identify a figure that **was not rotated** (rotated 0 degrees).
+  
+--
+
+  - The estimated value of the slope was `r round(betas[2], 0)`, this suggests
+  that it takes participants on **average** `r round(betas[2], 0)` milliseconds
+  **more** to identify a figure **for each additional degree** that the figure 
+  has been rotated by.
+  
+--
+
+- Notice that when we interpret the parameters we always have to say 
+"**on average**", this is because the model predictions are about the expected
+response times, which means that there is error around those predicted values.
+
+--
+
+- Furthermore, the interpretation has to be made by making reference to the 
+variables on the study, for example, "**expected response time in milliseconds**"
+of "**for each additional degree of rotation**". This is because each estimate
+is associated with a different variable in the study.
+
+---
+
+## Evaluating the linear model
+
+- In the code of the linear model we added an additional calculation called 
+**`epsilon_rotation`**, this variable is just the difference between observation 
+and model prediction without squaring the value.
+
+--
+
+- We have said before that if we add the difference between observation and 
+model prediction that difference will be equal to 0 by definition. This is
+true regardless of the situation, however, we can use those differences to 
+evaluate our model in a more specific way.
+
+--
+
+- In general we want those errors to have two properties:
+
+--
+
+  1. The difference between observations and predictions follows approximately
+  a Normal distribution centered at 0. This means that if we make a histogram
+  of the difference, the histogram should be centered at 0 and be symmetric.
+  
+--
+
+  2. There are no patters, in the difference between observation and prediction 
+  of the model. This means that regardless of how we define our *x-axis* on a 
+  graph, the difference between observation and prediction should look like 
+  white noise (there are no obvious patterns).
+  
+---
+
+```{r epsilon-hist, include=FALSE}
+  ggplot(data = mental_rotation) + #BREAK
+  aes(x = epsilon_rotation) + #BREAK
+  geom_histogram(color = "#E72F52", fill = "#E72F52", binwidth = 40,
+                 aes(y =..density..), ) + #BREAK
+  theme_classic() + #BREAK
+  xlab("Response time - Prediction") + 
+  ylab("") + 
+  theme(axis.title.x = element_text(size = 20),
+        axis.title.y = element_text(size = 20)) + #BREAK
+  stat_function(fun = dnorm, 
+                args = list(mean = 0, sd = sqrt(mse_rotation)))
+```
+
+
+`r chunk_reveal(chunk_name = "epsilon-hist", title = "### Histogram of the difference between observation and prediction")`
+
+---
+
+```{r epsilon-index, include=FALSE}
+  ggplot(data = mental_rotation) + #BREAK
+  aes(x = as.numeric(rownames(mental_rotation))) + #BREAK
+  aes(y = epsilon_rotation) + #BREAK
+  geom_point(color = "#E72F52", size = 3) + #BREAK
+  theme_classic() + #BREAK
+  xlab("Observation number") + 
+  ylab("Response time - Prediction") + 
+  theme(axis.title.x = element_text(size = 20),
+        axis.title.y = element_text(size = 20)) + #BREAK
+  geom_smooth(se = FALSE, size = 2, color = "#0d95d0")
+```
+
+
+`r chunk_reveal(chunk_name = "epsilon-index", title = "### Difference between observation and prediction")`
+
+---
+
+```{r epsilon-age, include=FALSE}
+  ggplot(data = mental_rotation) + #BREAK
+  aes(x = age) + #BREAK
+  aes(y = epsilon_rotation) + #BREAK
+  geom_point(color = "#E72F52", size = 3) + #BREAK
+  theme_classic() + #BREAK
+  xlab("Participant age") + 
+  ylab("Response time - Prediction") + 
+  theme(axis.title.x = element_text(size = 20),
+        axis.title.y = element_text(size = 20)) + #BREAK
+  geom_smooth(se = FALSE, size = 2, color = "#0d95d0")
+```
+
+
+`r chunk_reveal(chunk_name = "epsilon-age", title = "### Difference between observation and prediction by age")`
+
+---
+
+## Evaluating the linear model
+
+- The last graph showed us that there was a trend on the difference between the 
+response time of participants and the predictions of the model.
+
+--
+
+- The blue line showed us that, on average, the error of the model decreased 
+with the age of the participants.
+
+--
+
+- Whenever, we see a trend on the difference between observation and prediction
+this suggests that there is an important variable that we are not taking into 
+account. 
+
+--
+
+- In this case, the response time of participants in the task seems to be 
+associated not only with the angle of rotation of a figure but also to the 
+age of the participant.
+
+--
+
+- In order to be able to take this second variable into account we need to 
+extend our linear model by considering more than one independent variable.
+
