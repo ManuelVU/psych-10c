@@ -298,10 +298,11 @@ This is the same estimator that we have used for the Null model before.
 n_total <- nrow(grades)
 
 null <- grades %>% 
-  summarise("pred" = mean(grade))
+  summarise("pred" = mean(grade)) %>% 
+  pull(pred)
 
 grades <- grades %>% 
-  mutate("prediction_null" = null$pred,
+  mutate("prediction_null" = null,
          "error_null" = (grade - prediction_null)^2)
 
 sse_null <- sum(grades$error_null)

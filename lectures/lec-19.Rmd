@@ -1,9 +1,9 @@
 ---
-title: "Lecture 18"
+title: "Lecture 19"
 subtitle: "Simple Linear Regression"
 author: "Psych 10 C"
 institute: "University of California, Irvine"
-date: "05/11/2022"
+date: "05/13/2022"
 output:
   xaringan::moon_reader:
     self_contained: true
