@@ -434,7 +434,6 @@ ggplot(data = grades) + #BREAK
   geom_point(color = "#0D95D0", alpha = 0.5, size = 3) + #BREAK
   xlab("Classes Missed") + #BREAK
   ylab("Final Grade") + #BREAK
-  guides(fill = "none") + #BREAK
   theme_classic() + #BREAK
   theme(axis.title.x = element_text(size = 20),
         axis.title.y = element_text(size = 20)) +
@@ -443,3 +442,141 @@ ggplot(data = grades) + #BREAK
 
 `r chunk_reveal(chunk_name = "scatter-code", title = "### Scater plot grade by classes missed")`
 
+---
+
+## Correlation and Simple linear regression
+
+- Remember that the correlation is a measure of the association between two 
+dependent variables.
+
+--
+
+- The visualization of the simple linear regression looks very similar to the 
+correlation between two variables.
+
+--
+
+- This is because the correlation and the slope of a line are two concepts
+that are related, but are not the same thing.
+
+--
+
+- For example, if the correlation between classes missed and grades was 0 
+(R = 0), then if we use one of those variables as a predictor (in a simple 
+linear regression $x_i$) the slope of that regression line $(\beta_1)$ would 
+also be equal to 0.
+
+--
+
+- If the slope of a simple linear regression is equal to 0 $(\beta_1 = 0)$, then 
+the correlation (R) between the two variables would also be equal to 0.
+
+--
+
+- However, correlation and **slope** are two different concepts, 
+and they will not be equal in the majority of the cases.
+
+---
+
+## Example: Same correlation, different slope
+
+.pull-left[
+```{r constant-cor, echo=FALSE,fig.align='center'}
+x <- MASS::mvrnorm(200,c(0,0), rbind(c(1,0.3),c(0.3,1)))
+x1 <- cbind(x[,1], x[,2]) 
+plot(x1[,2], x1[,1], axes = F, ann = F, pch = 16,
+     col = "#0D95D0", cex = 1.3, xlim = c(-3,3), ylim = c(-3,3))
+box(bty = "l")
+axis(side = 1)
+axis(side = 2, las = 2)
+mtext(text = "X", side = 1, line = 2.6, cex = 1.8)
+mtext(text = "Y", side = 2, line = 2.6, cex = 1.8)
+mtext(text = bquote(paste("R = ", .(round(cor(x1[,1], x1[,2]), 3)))),
+      cex = 2, side = 3, at = -1.5)
+mtext(text = bquote(paste(hat(beta)[1], " = ", .(round(lm(x1[,1]~x1[,2])$coef[2],3)))),
+      cex = 2, side = 3, at = 1.5)
+abline(a = lm(x1[,1]~x1[,2])$coef[1], b = lm(x1[,1]~x1[,2])$coef[2], lwd = 3, 
+       col = "#774fa0")
+```
+]
+
+.pull-right[
+```{r constnat-cor2,echo=FALSE,fig.align='center'}
+x2 <- cbind(0.5 * x[,1], x[,2]) 
+plot(x2[,2], x2[,1], axes = F, ann = F, pch = 16,
+     col = "#0D95D0", cex = 1.3, xlim = c(-3,3), ylim = c(-3,3))
+box(bty = "l")
+axis(side = 1)
+axis(side = 2, las = 2)
+mtext(text = "X", side = 1, line = 2.6, cex = 1.8)
+mtext(text = "Y", side = 2, line = 2.6, cex = 1.8)
+mtext(text = bquote(paste("R = ", .(round(cor(x2[,1], x2[,2]),3)))),
+      cex = 2, side = 3, at = -1.5)
+mtext(text = bquote(paste(hat(beta)[1], " = ", .(round(lm(x2[,1]~x2[,2])$coef[2],3)))),
+      cex = 2, side = 3, at = 1.5)
+abline(a = lm(x2[,1]~x2[,2])$coef[1], b = lm(x2[,1]~x2[,2])$coef[2], lwd = 3, 
+       col = "#774fa0")
+```
+]
+
+---
+
+## Example: Different correlation, same slope
+
+.pull-left[
+```{r constant-b, echo=FALSE,fig.align='center'}
+x <- rnorm(n = 200, mean = 0, sd = 1)
+ep <- rnorm(200, 0, 1)
+x1 <- cbind(0.5 * x + ep,x) 
+plot(x1[,2], x1[,1], axes = F, ann = F, pch = 16,
+     col = "#0D95D0", cex = 1.3, xlim = c(-3,3), ylim = c(-3,3))
+box(bty = "l")
+axis(side = 1)
+axis(side = 2, las = 2)
+mtext(text = "X", side = 1, line = 2.6, cex = 1.8)
+mtext(text = "Y", side = 2, line = 2.6, cex = 1.8)
+mtext(text = bquote(paste("R = ", .(round(cor(x1[,1], x1[,2]), 3)))),
+      cex = 2, side = 3, at = -1.5)
+mtext(text = bquote(paste(hat(beta)[1], " = ", .(round(lm(x1[,1]~x1[,2])$coef[2],3)))),
+      cex = 2, side = 3, at = 1.5)
+abline(a = lm(x1[,1]~x1[,2])$coef[1], b = lm(x1[,1]~x1[,2])$coef[2], lwd = 3, 
+       col = "#774fa0")
+```
+]
+
+.pull-right[
+```{r constnat-b2,echo=FALSE,fig.align='center'}
+x2 <- cbind(0.5 * x + 0.5 * ep,x)
+plot(x2[,2], x2[,1], axes = F, ann = F, pch = 16,
+     col = "#0D95D0", cex = 1.3, xlim = c(-3,3), ylim = c(-3,3))
+box(bty = "l")
+axis(side = 1)
+axis(side = 2, las = 2)
+mtext(text = "X", side = 1, line = 2.6, cex = 1.8)
+mtext(text = "Y", side = 2, line = 2.6, cex = 1.8)
+mtext(text = bquote(paste("R = ", .(round(cor(x2[,1], x2[,2]),3)))),
+      cex = 2, side = 3, at = -1.5)
+mtext(text = bquote(paste(hat(beta)[1], " = ", .(round(lm(x2[,1]~x2[,2])$coef[2],3)))),
+      cex = 2, side = 3, at = 1.5)
+abline(a = lm(x2[,1]~x2[,2])$coef[1], b = lm(x2[,1]~x2[,2])$coef[2], lwd = 3, 
+       col = "#774fa0")
+```
+]
+
+---
+
+## Correlation and slope
+
+- The correlation and the slope in simple linear regression express similar ideas.
+
+--
+
+- The correlation is the association between two variables and therefore does
+not depend on the units of measurement (for example, weight in Kilograms vs
+weight in pounds).
+
+--
+
+- On the other hand, the slope in a simple linear regression measures the 
+impact or change in a dependent variable for a **unit** change in our 
+independent variable, and therefore it will depend on the unit of measure.
