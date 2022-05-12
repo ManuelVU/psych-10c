@@ -470,3 +470,137 @@ age of the participant.
 - In order to be able to take this second variable into account we need to 
 extend our linear model by considering more than one independent variable.
 
+---
+
+## Multiple linear regression
+
+- The main idea of a multiple linear regression is that we can add more variables
+to a linear model in order to improve our predictions.
+
+--
+
+- In a multiple linear regression model we can add more than one predictor 
+(independent variable) which will be associated to a new parameter.
+
+--
+
+- In our example we want to add to the model the **age** of participants as a 
+new predictor of response time.
+
+--
+
+- The model is formalized this way:
+$$y_i\sim\text{Normal}(\beta_0 + \beta_1x_{i1} + \beta_2x_{i2}, \sigma_m^2)$$
+
+--
+
+- Were $y_i$ represents the response time of the *i-th* participant, $x_{i1}$
+represents the **rotation angle** associated with the *i-th* observation and
+$x_{i2}$ represents the age associated with the *i-th* observation.
+
+---
+
+## Multiple linear regression
+
+- This new model now has 3 parameters associated with its predictions, $\beta_0$
+or the **intercept**, $\beta_1$ or the **slope** associated with a change in the 
+angle of rotation of a figure and $\beta_2$ or the **slope** associated with the 
+age of the participant.
+
+--
+
+- The key difference is that the predictions of the model can no longer be drawn
+as a line on a graph, but the interpretation of the parameters doesn't change
+that much, we just have to be careful on how we talk about them.
+
+--
+
+- For example, $\beta_0$ is the expected response time for a trial where the 
+object is rotated by 0 degrees $(x_{i1} = 0)$ and a participant that is 
+0 years old $(x_{i2} = 0)$...
+
+--
+
+- Typically, if the interpretation of the parameter doesn't make much sense in 
+the context of a experiment, we just report the value "the intercept was equal 
+to..."
+
+---
+
+## Interpreting the slopes
+
+- The interpretation of the slopes also has to be adjusted.
+
+--
+
+- For example, we now interpret $\beta_1$ as the expected change on response 
+time associated with a unit increase in the angle of rotation 
+**while holding the age of the participant constant**.
+
+--
+
+- The main difference from our previous interpretation, is that this will be 
+the change of the dependent variable only when the other independent variable, 
+in this case **age** doesn't change.
+
+--
+
+- If we allow both variables to take other values at the same time, then we 
+would not be able to interpret parameters as the change in our dependent 
+variable, because the total change would be equal to the sum of both parameters.
+
+--
+
+- Because of this, we always include the phrase "holding other variables constant"
+to our interpretation, this means that only the independent variable associated
+to the $\beta$ value that we are looking at is allowed to change.
+
+---
+
+## Multiple linear regression
+
+- It is important to know that, whenever we add a new variable to a linear
+regression, the estimated values of the parameters that we have will change.
+
+--
+
+- In other words, the estimate $\hat{\beta}_1$ from the simple linear model 
+will not be the same as the estimate of $\hat{\beta}_1$ in the multiple linear
+regression.
+
+--
+
+- This is because some of the change in the dependent variable that was 
+attributed only to our first independent variable $(x_{i1})$, is now attributed 
+to the second one $(x_{i12})$.
+
+--
+
+- In other words, part of the change in a participants response time depends on 
+the angle of rotation and some of it depends on the age of the participant.
+
+--
+
+- We will finish the example next class.
+
+---
+
+## Links for the final project data
+
+- Split Brain
+
+```{r sp-link}
+link <- "https://raw.githubusercontent.com/ManuelVU/psych-10c-data/main/problem-1.csv"
+```
+
+- Cognitive Decline
+
+```{r cd-link}
+link <- "https://raw.githubusercontent.com/ManuelVU/psych-10c-data/main/project-2.csv"
+```
+
+- Ikea Effect
+
+```{r if-link}
+link <- "https://raw.githubusercontent.com/ManuelVU/psych-10c-data/main/project-3.csv"
+```
