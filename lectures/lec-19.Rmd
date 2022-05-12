@@ -64,8 +64,8 @@ object is rotated.
 --
 
 - For example, in a single trial of the experiment we present a participant with 
-a geometric figure (left), and then after a a fixed period of time has passed 
-(say 10 seconds) we present the participant another figure (right). The objective 
+a geometric figure (left), and then, after a a fixed period of time has elapsed 
+(say 10 seconds), we present the participant another figure (right). The objective 
 of the participant is to respond whether the figure is the same or not.
 
 .pull-left[
@@ -82,16 +82,15 @@ of the participant is to respond whether the figure is the same or not.
 
 - We presented participants with 6 figures rotated 10, 45, 90, 130, 
 160 or 180 degrees respectively, and recorded the time it took them to identify 
-if the second image was the same figure but rotated. 
+if the second image was the same figure. 
 
 --
 
-- We don't have access to a population of students to experiment with, 
-so the age of participants in the experiment ranged from 7 to 21 years.
+- The age of participants in the experiment ranged from 7 to 21 years.
 
 --
 
-- The data from the experiment looks like this:
+- The data from the looks like this:
 
 --
 
@@ -114,25 +113,25 @@ response times.
 --
 
 - This is how we usually approach data analysis with linear models. Remember 
-that our research question focuses on the effect of the angle of rotation on 
-response time, not on the age of participants.
+that the focus of our research question is on the effect of the 
+**angle of rotation** on response time, not the **age**.
 
 --
 
 - Because we are interested in the effect of angle of rotation we will start 
-with a simple linear regression.
+with a simple linear regression using only that predictor.
 
 ---
 
 ## Null model
 
-- The first model that we need is the Null model, which assumes that there is no
-effect of rotation angle on the time it takes participants to identify that the 
-figure has is the same but has been rotated (response time).
+- The first model is the Null, which assumes that there is no effect of angle 
+of rotation on the time it takes participants to identify if the figure is the 
+same but has been rotated (response time).
 
 --
 
-- Remember that the model is formalized as:
+- Remember the model is formalized as:
 $$y_i \sim \text{Normal}(\beta_0, \sigma_0^2)$$
 
 --
@@ -155,9 +154,9 @@ times in the experiment.
 
 ## Regression model
 
-- The second model that we need is the simple linear regression. This model 
-assumes that the expected response time changes as a function of the degrees
-by which the figure has been rotated.
+- The second model is the simple linear regression. This model assumes that the
+expected response time changes as a linear function of the degrees by which the 
+figure has been rotated.
 
 --
 
@@ -175,15 +174,15 @@ $$y_i \sim \text{Normal}(\beta_0+\beta_1x_i, \sigma_1^2)$$
 
 --
 
-- $\beta_0$ is the intercept or the response time to a figure that has been 
-rotated by 0 degrees.
+- $\beta_0$ represents the response time to a figure that has been rotated by 0
+degrees.
 
 ---
 
 ## Regression model
 
-- $\beta_1$ is the slope or the change in response time for a 1 degree increase 
-the in the rotation of the figure, for example, the change in response time to 
+- $\beta_1$ represents the change in response time for a 1 degree increase 
+in the rotation of the figure. For example, the change in response time to 
 a figure that has been rotated 10 degrees in comparison to one that has been 
 rotated 11 degrees.
 
@@ -201,26 +200,26 @@ respect to their expectation $\beta_0 + \beta_1x_i$.
 --
 
 - Notice that this model assumes that the expected response time will be 
-different depending on the angle of rotation of the figure, in other words, 
-we expect response times to be around one value for figures rotated 10 degrees
-and to have a different expectation when the figure is rotated 10.1 degrees.
+different depending on the angle of rotation of the figure. In other words, 
+we expect response times to be one value for figures rotated 10 degrees
+and a different one when the figure is rotated 10.1 degrees.
 
 --
 
-- In other words, our prediction about the expectation of the response times 
+- In other words, our predictions about the expectation of response times
 are a continuous variable that follows a straight line!
 
 ---
 
 ## Regression model
 
-- The prediction of the linear model for a given angle of rotation $x_i$ are:
+- The prediction of the linear model for a given angle of rotation $x_i$ is:
 $$\hat{\beta}_0 + \hat{\beta}_1x_i$$
 
 --
 
 - We can obtain the estimators $\hat{\beta}_0$ and $\hat{\beta}_1$ using the 
-`lm()` function in R. 
+**`lm()`** function in R. 
 
 --
 
@@ -245,7 +244,6 @@ calculating the squared error by observation.
 ```{r null}
 # Total sample size
 n_total <- nrow(mental_rotation)
-
 # Prediction of the Null model
 null <- mental_rotation %>% 
   summarise("pred" = mean(response_time)) %>% 
@@ -301,7 +299,7 @@ bic_rotation <- n_total * log(mse_rotation) + 2 * log(n_total)
 
 ## Results
 
-- Now that we have calculated all the values that we need we can summarize them
+- Now that we have calculated all the values that we need, we can summarize them
 on a table in order to compare our two models and answer our research question.
 
 --
@@ -314,8 +312,8 @@ on a table in order to compare our two models and answer our research question.
 --
 
 - The results indicate that the angle of rotation of a figure is a good predictor
-of the time it takes to participants to identify if a rotated figure is the same 
-as the one they saw at the start of the trial.
+of the time it takes participants to identify if a figure is the same 
+as the one they saw at the start of the trial that has been rotated.
 
 --
 
@@ -331,7 +329,7 @@ like this:
 --
 
   - The estimated value of the intercept was `r round(betas[1],0)`, which means
-  that the it takes participants `r round(betas[1],0)` milliseconds on 
+  that it takes participants `r round(betas[1],0)` milliseconds on 
   **average** to identify a figure that **was not rotated** (rotated 0 degrees).
   
 --
@@ -344,14 +342,14 @@ like this:
 --
 
 - Notice that when we interpret the parameters we always have to say 
-"**on average**", this is because the model predictions are about the expected
+"**on average**", this is because the model's predictions are about the expected
 response times, which means that there is error around those predicted values.
 
 --
 
 - Furthermore, the interpretation has to be made by making reference to the 
 variables on the study, for example, "**expected response time in milliseconds**"
-of "**for each additional degree of rotation**". This is because each estimate
+or "**for each additional degree of rotation**". This is because each estimate
 is associated with a different variable in the study.
 
 ---
@@ -364,14 +362,14 @@ and model prediction without squaring the value.
 
 --
 
-- We have said before that if we add the difference between observation and 
-model prediction that difference will be equal to 0 by definition. This is
+- As we have said before, if we add the difference between observation and 
+model prediction that difference will be equal to 0 (by definition). This is
 true regardless of the situation, however, we can use those differences to 
 evaluate our model in a more specific way.
 
 --
 
-- In general we want those errors to have two properties:
+- In general we want those differences to have two properties:
 
 --
 
@@ -381,7 +379,7 @@ evaluate our model in a more specific way.
   
 --
 
-  2. There are no patters, in the difference between observation and prediction 
+  2. There are no patterns, in the difference between observation and prediction 
   of the model. This means that regardless of how we define our *x-axis* on a 
   graph, the difference between observation and prediction should look like 
   white noise (there are no obvious patterns).
@@ -461,9 +459,9 @@ account.
 
 --
 
-- In this case, the response time of participants in the task seems to be 
-associated not only with the angle of rotation of a figure but also to the 
-age of the participant.
+- In this case, the **response time** of participants in the task seems to be 
+associated not only with the **angle of rotation** of a figure but also to the 
+**age** of the participant.
 
 --
 
@@ -495,8 +493,9 @@ $$y_i\sim\text{Normal}(\beta_0 + \beta_1x_{i1} + \beta_2x_{i2}, \sigma_m^2)$$
 --
 
 - Were $y_i$ represents the response time of the *i-th* participant, $x_{i1}$
-represents the **rotation angle** associated with the *i-th* observation and
-$x_{i2}$ represents the age associated with the *i-th* observation.
+represents the **angle of rotation** associated with the *i-th* observation and
+$x_{i2}$ represents the **age** of the participant associated with the *i-th*
+observation.
 
 ---
 
@@ -504,7 +503,7 @@ $x_{i2}$ represents the age associated with the *i-th* observation.
 
 - This new model now has 3 parameters associated with its predictions, $\beta_0$
 or the **intercept**, $\beta_1$ or the **slope** associated with a change in the 
-angle of rotation of a figure and $\beta_2$ or the **slope** associated with the 
+angle of rotation of a figure, and $\beta_2$ or the **slope** associated with the 
 age of the participant.
 
 --
@@ -516,14 +515,15 @@ that much, we just have to be careful on how we talk about them.
 --
 
 - For example, $\beta_0$ is the expected response time for a trial where the 
-object is rotated by 0 degrees $(x_{i1} = 0)$ and a participant that is 
-0 years old $(x_{i2} = 0)$...
+object is rotated by 0 degrees $(x_{i1} = 0)$ and the participant is 0 years 
+old $(x_{i2} = 0)$.
 
 --
 
 - Typically, if the interpretation of the parameter doesn't make much sense in 
-the context of a experiment, we just report the value "the intercept was equal 
-to..."
+the context of a experiment (like a participant that is 0 years old), we just 
+report the estimated value of the parameter. For example, 
+"the estimate of the intercept was equal to..."
 
 ---
 
@@ -535,32 +535,33 @@ to..."
 
 - For example, we now interpret $\beta_1$ as the expected change on response 
 time associated with a unit increase in the angle of rotation 
-**while holding the age of the participant constant**.
+**while holding the age of participants constant**.
 
 --
 
-- The main difference from our previous interpretation, is that this will be 
-the change of the dependent variable only when the other independent variable, 
-in this case **age** doesn't change.
+- The main difference from our previous interpretation, is that this time we 
+have to interpret it as the change in our dependent variable when the other 
+independent variable, in this case **age**, are held constant.
 
 --
 
-- If we allow both variables to take other values at the same time, then we 
+- If we allow both variables to change values at the same time, then we 
 would not be able to interpret parameters as the change in our dependent 
-variable, because the total change would be equal to the sum of both parameters.
+variable, because the total change would be equal to the sum of both 
+$\beta_1$ and $\beta_2$.
 
 --
 
-- Because of this, we always include the phrase "holding other variables constant"
-to our interpretation, this means that only the independent variable associated
-to the $\beta$ value that we are looking at is allowed to change.
+- Because of this, we always include the phrase "holding other variables 
+constant" to our interpretation. This means that only the independent variable
+associated to the $\beta$ value that we are looking at is allowed to change.
 
 ---
 
 ## Multiple linear regression
 
 - It is important to know that, whenever we add a new variable to a linear
-regression, the estimated values of the parameters that we have will change.
+regression, the estimated values of the parameters that we had before will change.
 
 --
 
@@ -572,16 +573,13 @@ regression.
 
 - This is because some of the change in the dependent variable that was 
 attributed only to our first independent variable $(x_{i1})$, is now attributed 
-to the second one $(x_{i12})$.
+to the second independent variable $(x_{i12})$.
 
 --
 
 - In other words, part of the change in a participants response time depends on 
-the angle of rotation and some of it depends on the age of the participant.
-
---
-
-- We will finish the example next class.
+the angle of rotation and some of that change depends on the age of the 
+participant.
 
 ---
 
