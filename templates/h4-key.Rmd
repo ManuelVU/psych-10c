@@ -1,0 +1,265 @@
+---
+title: "Rubric-homework 4"
+author: "Write your name here"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output: pdf_document
+---
+
+```{r load-library, echo = FALSE, message = FALSE, warning = FALSE}
+library(tidyverse)
+```
+
+```{r load_data, echo = FALSE, message=FALSE, warning=FALSE}
+link <- "https://raw.githubusercontent.com/ManuelVU/psych-10c-data/main/homework4.csv"
+memory <- read_csv(file = link)
+```
+
+1. **(0.5 points)**
+
+```{r cell-means, echo = TRUE, message=FALSE, warning=FALSE}
+full <- memory %>% 
+  group_by(task, word_frequency) %>% 
+  summarise("pred" = mean(recalled))
+```
+
+**ANS:** The average number of correctly recalled words by combination of the 
+task and word frequency factors was:
+
+| Task        | Word Frequency | Mean                      | Points        | 
+|-------------|----------------|:-------------------------:|---------------|
+| Free recall | High           | `r round(full$pred[1],2)` | **0.125 pts** |
+| Free recall | Low            | `r round(full$pred[2],2)` | **0.125 pts** |
+| Recognition | High           | `r round(full$pred[3],2)` | **0.125 pts** |
+| Recognition | Low            | `r round(full$pred[4],2)` | **0.125 pts** |
+
+2. **(0.5 points)**
+
+```{r task-mean, echo = TRUE}
+task <- memory %>% 
+  group_by(task) %>% 
+  summarise("mean" = mean(recalled))
+```
+
+**ANS:** The average number fo correctly recalled words by task was:
+
+| Task        | Mean                      | Points       | 
+|-------------|:-------------------------:|--------------|
+| Free recall | `r round(task$mean[1],2)` | **0.25 pts** |
+| Recognition | `r round(task$mean[2],2)` | **0.25 pts** |
+
+3. **(0.5 points)**
+
+```{r wordfreq-mean, echo = TRUE}
+wf <- memory %>% 
+  group_by(word_frequency) %>% 
+  summarise("mean" = mean(recalled))
+```
+
+**ANS:** The average number fo correctly recalled words by word frequency was:
+
+| Word Frequency | Mean                      | Points       | 
+|----------------|:-------------------------:|--------------|
+| High           | `r round(wf$mean[1],2)`   | **0.25 pts** |
+| Low            | `r round(wf$mean[2],2)`   | **0.25 pts** |
+
+4. **(0.5 points)**
+
+```{r grand-mean, echo = TRUE}
+grand_mean <- memory %>% 
+  summarise("mean" = mean(recalled)) %>% 
+  pull(mean)
+```
+
+**ANS:** The average number of correctly recalled words was **`r round(grand_mean,2)`**
+
+5. **(0.5 points)**
+
+```{r me-task, echo = TRUE}
+alpha <- task$mean - grand_mean
+```
+
+**ANS:** The main effect of the free recall task was **`r round(alpha[1],2)`**,
+the main effect of the recognition task was **`r round(alpha[2],2)`**
+
+6. **(0.5 points)**
+
+```{r me-wordfreq, echo = TRUE}
+beta <- wf$mean - grand_mean
+```
+
+**ANS:** The main effect for high frequency words was **`r round(beta[1],2)`**,
+the main effect of low frequency words was **`r round(beta[2],2)`**
+
+7. **(0.5 points)**
+
+```{r pred-null, echo = TRUE}
+memory <- memory %>% 
+  mutate("prediction_null" = grand_mean,
+         "error_null" = (recalled - prediction_null)^2)
+```
+
+8. **(0.5 points)**
+
+```{r pred-me-task, echo = TRUE}
+memory <- memory %>% 
+  mutate("prediction_task" = case_when(task == "free_recall" ~ grand_mean + alpha[1],
+                                       task == "recognition" ~ grand_mean + alpha[2]),
+         "error_task" = (recalled - prediction_task)^2)
+```
+
+**ANS:** The predictions of the task main effects model by combination of the
+factor levels are: 
+
+| Task        | Word Frequency | Mean                      | Points        | 
+|-------------|----------------|:-------------------------:|---------------|
+| Free recall | High           | `r round(grand_mean+alpha[1],2)` | **0.125 pts** |
+| Free recall | Low            | `r round(grand_mean+alpha[1],2)` | **0.125 pts** |
+| Recognition | High           | `r round(grand_mean+alpha[2],2)` | **0.125 pts** |
+| Recognition | Low            | `r round(grand_mean+alpha[2],2)` | **0.125 pts** |
+
+9. **(0.5 points)**
+
+```{r pred-me-wordfreq, echo = TRUE}
+memory <- memory %>% 
+  mutate("prediction_wf" = case_when(word_frequency == "high" ~ grand_mean + beta[1],
+                                     word_frequency == "low" ~ grand_mean + beta[2]),
+         "error_wf" = (recalled - prediction_wf)^2)
+```
+
+**ANS:** The predictions of the word frequency main effects model by combination 
+of the factor levels are: 
+
+| Task        | Word Frequency | Mean                      | Points        | 
+|-------------|----------------|:-------------------------:|---------------|
+| Free recall | High           | `r round(grand_mean+beta[1],2)` | **0.125 pts** |
+| Free recall | Low            | `r round(grand_mean+beta[2],2)` | **0.125 pts** |
+| Recognition | High           | `r round(grand_mean+beta[1],2)` | **0.125 pts** |
+| Recognition | Low            | `r round(grand_mean+beta[2],2)` | **0.125 pts** |
+
+10. **(0.5 points)**
+
+```{r pred-additive, echo = TRUE}
+memory <- memory %>% 
+  mutate("prediction_add" = case_when(
+    task == "free_recall" & word_frequency == "high" ~ grand_mean + alpha[1] + beta[1],
+    task == "free_recall" & word_frequency == "low" ~ grand_mean + alpha[1] + beta[2],
+    task == "recognition" & word_frequency == "high" ~ grand_mean + alpha[2] + beta[1],
+    task == "recognition" & word_frequency == "low" ~ grand_mean + alpha[2] + beta[2]
+  ),
+  "error_add" = (recalled - prediction_add)^2)
+```
+
+**ANS:** The predictions of the additive model by combination  of the factor 
+levels are: 
+
+| Task        | Word Frequency | Mean                      | Points        | 
+|-------------|----------------|:-------------------------:|---------------|
+| Free recall | High           | `r round(grand_mean+alpha[1]+beta[1],2)` | **0.125 pts** |
+| Free recall | Low            | `r round(grand_mean+alpha[1]+beta[2],2)` | **0.125 pts** |
+| Recognition | High           | `r round(grand_mean+alpha[2]+beta[1],2)` | **0.125 pts** |
+| Recognition | Low            | `r round(grand_mean+alpha[2]+beta[2],2)` | **0.125 pts** |
+
+11. **(0.5 points)**
+
+```{r pred-full, echo = TRUE}
+memory <- memory %>% 
+  mutate("prediction_full" = case_when(
+    task == "free_recall" & word_frequency == "high" ~ full$pred[1],
+    task == "free_recall" & word_frequency == "low" ~ full$pred[2],
+    task == "recognition" & word_frequency == "high" ~ full$pred[3],
+    task == "recognition" & word_frequency == "low" ~ full$pred[4]),
+  "error_full" = (recalled - prediction_full)^2)
+```
+
+**ANS:** The predictions of the full model are:
+
+| Task        | Word Frequency | Mean                      | Points        | 
+|-------------|----------------|:-------------------------:|---------------|
+| Free recall | High           | `r round(full$pred[1],2)` | **0.125 pts** |
+| Free recall | Low            | `r round(full$pred[2],2)` | **0.125 pts** |
+| Recognition | High           | `r round(full$pred[3],2)` | **0.125 pts** |
+| Recognition | Low            | `r round(full$pred[4],2)` | **0.125 pts** |
+
+12. **(0.5 points)**
+
+```{r sse-5models, echo = TRUE}
+sse_null <- sum(memory$error_null)
+sse_task <- sum(memory$error_task)
+sse_wf <- sum(memory$error_wf)
+sse_add <- sum(memory$error_add)
+sse_full <- sum(memory$error_full)
+```
+
+**ANS:** The SSE by model are:
+
+| Model             | SSE                   | Points        |
+|-------------------|:---------------------:|:-------------:|
+| Null              | `r round(sse_null,2)` | **0.125 pts** |
+| Me Task           | `r round(sse_task,2)` | **0.125 pts** |
+| Me Word Frequency | `r round(sse_wf,2)`   | **0.125 pts** |
+| Additive          | `r round(sse_add,2)`  | **0.125 pts** |
+| Full              | `r round(sse_full,2)` | **0.125 pts** |
+
+13. **(0.5 points)**
+
+```{r mse-5models, echo = TRUE}
+n_total <- nrow(memory)
+mse_null <- 1/n_total * sum(memory$error_null)
+mse_task <- 1/n_total * sum(memory$error_task)
+mse_wf <- 1/n_total * sum(memory$error_wf)
+mse_add <- 1/n_total * sum(memory$error_add)
+mse_full <- 1/n_total * sum(memory$error_full)
+```
+
+**ANS:** The SSE by model are:
+
+| Model             | MSE                   | Points        |
+|-------------------|:---------------------:|:-------------:|
+| Null              | `r round(mse_null,2)` | **0.125 pts** |
+| Me Task           | `r round(mse_task,2)` | **0.125 pts** |
+| Me Word Frequency | `r round(mse_wf,2)`   | **0.125 pts** |
+| Additive          | `r round(mse_add,2)`  | **0.125 pts** |
+| Full              | `r round(mse_full,2)` | **0.125 pts** |
+
+14. Calculate the Bayesian Information Criterion (BIC) of each model. What is 
+the BIC for each of the 5 models in this factorial design? **(1 point)**
+
+```{r bic-5models, echo = TRUE}
+# Code 15: Obtain the BIC of each model in the 2 by 2 between subjects
+# factorial design.
+#
+# In this code chunk you can write the functions that you need in order 
+# calculate the BIC of each model.
+```
+
+**ANS:** [WRITE YOUR ANSWER HERE]
+
+15. Which of the 5 models would you choose and why? **(1 point)**
+
+**ANS:** The model with the lowest BIC was the Full model, which is the one 
+that they should choose. However, try to grade on consistency, if there is an 
+error on the code that made them get different BIC values, consider 
+following the rule (choose the model with the lowest BIC) as a correct answer
+
+16. Calculate the value of $R^2$ of the model that you choose in (14). What is 
+the value of $R^2$ of the model you selected and how can you interpret it?
+
+```{r r2-5models, echo = TRUE}
+# Code 16: Calculate the value of R^2 of the model that you selected in (14).
+#
+# In this code chunk you can write the functions that you need in order 
+# calculate the R^2 value of the model you selected.
+```
+
+**ANS:** [WRITE YOUR ANSWER HERE]
+
+17. Interpret the value of the predictions of the model that you selected, what
+do those values tell us about the research question? Are there differences on 
+the effects of tasks and word frequency (how commonly a word is used in English) 
+on the number of correctly recalled/recognized words?
+
+**ANS:** [WRITE YOUR ANSWER HERE]
+
+18. In one sentence, how would you summarize the results of the analysis? 
+
+**ANS:** 
