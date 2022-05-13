@@ -194,11 +194,11 @@ sse_full <- sum(memory$error_full)
 
 | Model             | SSE                   | Points        |
 |-------------------|:---------------------:|:-------------:|
-| Null              | `r round(sse_null,2)` | **0.125 pts** |
-| Me Task           | `r round(sse_task,2)` | **0.125 pts** |
-| Me Word Frequency | `r round(sse_wf,2)`   | **0.125 pts** |
-| Additive          | `r round(sse_add,2)`  | **0.125 pts** |
-| Full              | `r round(sse_full,2)` | **0.125 pts** |
+| Null              | `r round(sse_null,2)` | **0.1 pts** |
+| Me Task           | `r round(sse_task,2)` | **0.1 pts** |
+| Me Word Frequency | `r round(sse_wf,2)`   | **0.1 pts** |
+| Additive          | `r round(sse_add,2)`  | **0.1 pts** |
+| Full              | `r round(sse_full,2)` | **0.1 pts** |
 
 13. **(0.5 points)**
 
@@ -211,30 +211,38 @@ mse_add <- 1/n_total * sum(memory$error_add)
 mse_full <- 1/n_total * sum(memory$error_full)
 ```
 
-**ANS:** The SSE by model are:
+**ANS:** The SSE's by model are:
 
 | Model             | MSE                   | Points        |
 |-------------------|:---------------------:|:-------------:|
-| Null              | `r round(mse_null,2)` | **0.125 pts** |
-| Me Task           | `r round(mse_task,2)` | **0.125 pts** |
-| Me Word Frequency | `r round(mse_wf,2)`   | **0.125 pts** |
-| Additive          | `r round(mse_add,2)`  | **0.125 pts** |
-| Full              | `r round(mse_full,2)` | **0.125 pts** |
+| Null              | `r round(mse_null,2)` | **0.1 pts** |
+| Me Task           | `r round(mse_task,2)` | **0.1 pts** |
+| Me Word Frequency | `r round(mse_wf,2)`   | **0.1 pts** |
+| Additive          | `r round(mse_add,2)`  | **0.1 pts** |
+| Full              | `r round(mse_full,2)` | **0.1 pts** |
 
-14. Calculate the Bayesian Information Criterion (BIC) of each model. What is 
-the BIC for each of the 5 models in this factorial design? **(1 point)**
+14. **(1 point)**
 
 ```{r bic-5models, echo = TRUE}
-# Code 15: Obtain the BIC of each model in the 2 by 2 between subjects
-# factorial design.
-#
-# In this code chunk you can write the functions that you need in order 
-# calculate the BIC of each model.
+bic_null <- n_total * log(mse_null) + 1 * log(n_total)
+bic_task <- n_total * log(mse_task) + 2 * log(n_total)
+bic_wf <- n_total * log(mse_wf) + 2 * log(n_total)
+bic_add <- n_total * log(mse_add) + 3 * log(n_total)
+bic_full <- n_total * log(mse_full) + 4 * log(n_total)
 ```
 
-**ANS:** [WRITE YOUR ANSWER HERE]
+**ANS:** The BIC of each model is:
 
-15. Which of the 5 models would you choose and why? **(1 point)**
+| Model             | BIC                   | Points        |
+|-------------------|:---------------------:|:-------------:|
+| Null              | `r round(bic_null,2)` | **0.2 pts** |
+| Me Task           | `r round(bic_task,2)` | **0.2 pts** |
+| Me Word Frequency | `r round(bic_wf,2)`   | **0.2 pts** |
+| Additive          | `r round(bic_add,2)`  | **0.2 pts** |
+| Full              | `r round(bic_full,2)` | **0.2 pts** |
+
+
+15. **(1 point)**
 
 **ANS:** The model with the lowest BIC was the Full model, which is the one 
 that they should choose. However, try to grade on consistency, if there is an 
@@ -245,21 +253,43 @@ following the rule (choose the model with the lowest BIC) as a correct answer
 the value of $R^2$ of the model you selected and how can you interpret it?
 
 ```{r r2-5models, echo = TRUE}
-# Code 16: Calculate the value of R^2 of the model that you selected in (14).
-#
-# In this code chunk you can write the functions that you need in order 
-# calculate the R^2 value of the model you selected.
+r2_task <- (sse_null - sse_task)/sse_null
+r2_wf <- (sse_null - sse_wf)/sse_null
+r2_add <- (sse_null - sse_add)/sse_null
+r2_full <- (sse_null - sse_full)/sse_null
 ```
 
-**ANS:** [WRITE YOUR ANSWER HERE]
+**ANS:** The correct answer should be: The proportion of variance accounted 
+for by the **full** model was `r round(100*r2_full,2)`%.
 
-17. Interpret the value of the predictions of the model that you selected, what
-do those values tell us about the research question? Are there differences on 
-the effects of tasks and word frequency (how commonly a word is used in English) 
-on the number of correctly recalled/recognized words?
+However, if the student made a mistake in the code and selected a different 
+model that is not the full, here are the rest of the possible values for $R^2$
 
-**ANS:** [WRITE YOUR ANSWER HERE]
+| Model             | $R^2$                   |
+|-------------------|:---------------------:|
+| Me Task           | `r round(r2_task,2)` |
+| Me Word Frequency | `r round(r2_wf,2)`   |
+| Additive          | `r round(r2_add,2)`  |
+| Full              | `r round(r2_full,2)` |
 
-18. In one sentence, how would you summarize the results of the analysis? 
+As long as the answer is consistent give them the points
 
-**ANS:** 
+17. **(1 point)**
+
+**ANS:** Participants are better at free recall when the list is made up from 
+high frequency words in comparison to low frequency words, in contrast, 
+they are better at recognizing words that have a low frequency in comparison 
+to high frequency words.
+
+18. **(0.5 points)** 
+
+**ANS:** There is an interaction between the type of task (free recall vs 
+recognition) and the frequency of the words that participants study. The effect
+of moving from low to high frequency words is positive in free recall tasks 
+and negative in recognition tasks.
+
+The answer doesn't have to be this specific but the idea is that the effect of 
+word frequency is different by task.
+
+
+
