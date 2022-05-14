@@ -1,0 +1,266 @@
+---
+title: "Lecture 20"
+subtitle: "Multiple Linear Regression"
+author: "Psych 10 C"
+institute: "University of California, Irvine"
+date: "05/16/2022"
+output:
+  xaringan::moon_reader:
+    self_contained: true
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+```
+
+```{r xaringan-extra, echo = FALSE}
+xaringanExtra::use_tile_view()
+
+xaringanExtra::use_fit_screen()
+
+xaringanExtra::use_editable(expires = 1)
+
+xaringanExtra::use_extra_styles(
+  hover_code_line = TRUE,         #<<
+  mute_unhighlighted_code = TRUE  #<<
+)
+
+htmltools::tagList(
+  xaringanExtra::use_clipboard(
+    button_text = "<i class=\"fa fa-clipboard\"></i>",
+    success_text = "<i class=\"fa fa-check\" style=\"color: #90BE6D\"></i>",
+    error_text = "<i class=\"fa fa-times-circle\" style=\"color: #F94144\"></i>"
+  ),
+  rmarkdown::html_dependency_font_awesome()
+)
+```
+
+```{r load-tidy, echo = FALSE, message = FALSE, warning = FALSE}
+library(tidyverse)
+library(flipbookr)
+
+knitr::opts_chunk$set(fig.width = 6, message = FALSE, 
+                      warning = FALSE, comment = "", 
+                      cache = F)
+
+mental_rotation <- read_csv(file = here::here("data/week-7/mental-rotation.csv"))
+```
+
+## Review
+
+- Today, we will continue working with the mental rotation example.
+
+--
+
+- We are interested in how the time it takes (response time) for participants to
+identify a geometrical object varies with the angle of rotation of that object.
+
+--
+
+- The results from our model comparisons showed that the "angle of rotation"
+was a good predictor of the response time of participants in the task.
+
+--
+
+- This predictor accounted for 95% of the total variability in our observations 
+in comparison to the Null model.
+
+--
+
+- However, when we looked at the difference between observation and prediction
+we noticed that there was a pattern, where the model was underestimating 
+the response time of younger participants.
+
+---
+
+## Difference between observation and prediction
+
+- When we graph the difference between observation and prediction as a function
+of age (age being the variable on the *x-axis*), we saw a trend were the 
+model had **on average** more positive errors for young participants.
+
+--
+
+```{r simple-lm, echo=FALSE}
+n_total <- nrow(mental_rotation)
+
+betas <- lm(formula = response_time ~ angle, data = mental_rotation)$coef
+
+# Add prediction and error of the linear model
+mental_rotation <- mental_rotation %>% 
+  mutate("prediction_rotation" = betas[1] + betas[2] * angle, 
+         "error_rotation" = (response_time - prediction_rotation)^2,
+         "epsilon_rotation" = (response_time - prediction_rotation))
+
+# Calculate the SSE of the linear model
+sse_rotation <- sum(mental_rotation$error_rotation)
+
+# Calculate the MSE of the linear model
+mse_rotation <- 1/n_total * sse_rotation
+```
+
+
+```{r epsilon-age, echo=FALSE, fig.align='center', fig.width=7, fig.height=5.9}
+  ggplot(data = mental_rotation) + #BREAK
+  aes(x = age) + #BREAK
+  aes(y = epsilon_rotation) + #BREAK
+  geom_point(color = "#E72F52", size = 3) + #BREAK
+  theme_classic() + #BREAK
+  xlab("Participant age") + 
+  ylab("Response time - Prediction") + 
+  theme(axis.title.x = element_text(size = 20),
+        axis.title.y = element_text(size = 20)) + #BREAK
+  geom_smooth(se = FALSE, size = 2, color = "#0d95d0")
+```
+
+
+---
+
+## Simple linear regression
+
+```{r rotation-colorage, fig.align='center', echo=FALSE, fig.width=8}
+ggplot(data = mental_rotation) + 
+  aes(x = angle) + 
+  aes(y = response_time) + 
+  aes(fill = age) +
+  geom_jitter(size = 4.5, width = 7, pch = 21) + 
+  theme_classic() + 
+  scale_fill_gradient(low = "#e4f1e1", high = "#0d585f") +
+  xlab("Participant age") + 
+  ylab("Response time") + 
+  theme(axis.title.x = element_text(size = 20),
+        axis.title.y = element_text(size = 20))
+```
+
+---
+
+## Adding a new predictor
+
+- There is a lot of variability in our observations, but we do see that older
+participants seem to have faster repnse times in comparison with younger 
+participants.
+
+--
+
+- Now we will include the predictor **age** to our model so that we can make 
+a comparison between a multiple linear regression and the simple linear 
+regression which only includes the **angle of rotation** as a predictor.
+
+--
+
+- This model will be formalized as follows:
+$$y_i \sim \text{Normal}(\beta_0 + \beta_1x_{i1} + \beta_2x_{i2}, \sigma_m^2)$$
+
+--
+
+- This means that now we need to estimate the value of 3 parameters:
+
+--
+
+  - The intercept $\beta_0$.
+  
+--
+  
+  - The slope associated to changes in the angle of rotation $\beta_1$.
+  
+--
+
+  - The slope associated to changes in the age of participants $\beta_2$
+
+---
+
+## Predictions of the multiple linear regression
+
+- Given that now there are two slopes, the model will make a different 
+prediction for each combination of our independent variables.
+
+--
+
+- This is similar to the idea of a factorial design, where the additive model 
+could make different prediction for each combinations of the levels of our 
+factors in a study.
+
+--
+
+- However, this time instead of having levels of a factor, what we have are 
+continuous values of two independent variables.
+
+--
+
+- This means that we will have a predicted response time for a participant who 
+is 10 years old and is responding to a figure that has been rotated 10 degrees, 
+and this prediction will be different from a participant who is 11 years old
+and is responfing to a figure that was rotated 11 degrees.
+
+--
+
+- With the variables in our example, we can write the predicted response time:
+$$\hat{y}_i = \hat{\beta}_0 + \hat{\beta}_1\text{angle}_i + \hat{\beta}_2\text{age}_i$$
+
+---
+
+## Model predictions
+
+- We have just introduced a new notation. When we want to denote the prediction
+of a linear model about a single observation (a single row in our file) we 
+denote that by using a "y" with a "hat".
+
+--
+
+- Remember that whenever we use "hats" that means that the variable is an 
+estimator (or a statistic) and not an observation in the study.
+
+--
+
+- In other words, $y$ and $\hat{y}$ are not the same!
+
+--
+
+- We use this notation to introduce the error of the models, also known as 
+"epsilon": $$\hat{\epsilon}_i = y_i - \hat{y}_i$$
+
+--
+
+- We use $\hat{y}$ to denote the prediction of a model so that we don't have to 
+write the whole equation:
+$$\hat{\epsilon}_i = y_i - \hat{y}_i = y_i - \hat{\beta}_0 - \hat{\beta}_1x_{i1} - \hat{\beta}_2x{i2}$$
+
+---
+
+## Model predictions
+
+- This new notation will also alow us to write the squared error by observation:
+$$\hat{\epsilon}_i^2 = (y_i - \hat{y}_i)^2$$
+
+--
+
+- $\hat{\epsilon}_i^2$ is the variable that we have been adding to our data with 
+the name "**error_model**" for all the examples in the class, and it represents
+the difference in squared units between the observation and prediction.
+
+--
+
+- If we **add** all of the values of $\hat{\epsilon}_i^2$ we get the Sum of 
+Squared Errors:
+$$SSE = \sum_{i = 1}^{n} \hat{\epsilon}_i^2$$
+
+--
+
+- Now we have the notation that we need to refer to all the elements that we 
+typically calculate in order to compare our models.
+
+--
+
+- Notice that this are not new variables, they are the same ones that we have 
+been using in all problems. The only difference is that now we have introduced
+notation for them.
+
+
+
+
+
