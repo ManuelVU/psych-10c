@@ -89,23 +89,35 @@ model had **on average** more positive errors for young participants.
 ```{r simple-lm, echo=FALSE}
 n_total <- nrow(mental_rotation)
 
+null <- mental_rotation %>% 
+  summarise("mean" = mean(response_time)) %>% 
+  pull(mean)
+
 betas <- lm(formula = response_time ~ angle, data = mental_rotation)$coef
 
 # Add prediction and error of the linear model
 mental_rotation <- mental_rotation %>% 
-  mutate("prediction_rotation" = betas[1] + betas[2] * angle, 
+  mutate("prediction_null" = null,
+         "error_null" = (response_time - prediction_null)^2,
+         "prediction_rotation" = betas[1] + betas[2] * angle, 
          "error_rotation" = (response_time - prediction_rotation)^2,
          "epsilon_rotation" = (response_time - prediction_rotation))
 
 # Calculate the SSE of the linear model
+sse_null <- sum(mental_rotation$error_null)
 sse_rotation <- sum(mental_rotation$error_rotation)
 
 # Calculate the MSE of the linear model
+mse_null <- 1/n_total * sse_null
 mse_rotation <- 1/n_total * sse_rotation
+
+r2_rotation <- (sse_null - sse_rotation)/sse_null
+bic_null <- n_total * log(mse_null) + 1 * log(n_total)
+bic_rotation <- n_total * log(mse_rotation) + 2 * log(n_total)
 ```
 
 
-```{r epsilon-age, echo=FALSE, fig.align='center', fig.width=7, fig.height=5.9}
+```{r epsilon-age-lm, echo=FALSE, fig.align='center', fig.width=7, fig.height=5.9}
   ggplot(data = mental_rotation) + #BREAK
   aes(x = age) + #BREAK
   aes(y = epsilon_rotation) + #BREAK
@@ -232,9 +244,9 @@ $$\hat{\epsilon}_i = y_i - \hat{y}_i = y_i - \hat{\beta}_0 - \hat{\beta}_1x_{i1}
 
 ---
 
-## Model predictions
+## Model errors
 
-- This new notation will also alow us to write the squared error by observation:
+- This new notation will also allow us to write the squared error by observation:
 $$\hat{\epsilon}_i^2 = (y_i - \hat{y}_i)^2$$
 
 --
@@ -256,11 +268,295 @@ typically calculate in order to compare our models.
 
 --
 
-- Notice that this are not new variables, they are the same ones that we have 
+- Notice that these are not new variables, they are the same ones that we have 
 been using in all problems. The only difference is that now we have introduced
 notation for them.
 
+---
 
+## Multiple linear regression in R
 
+- Now to get our estimates of the intercept $(\beta_0)$, the slope for angle of 
+rotation $(\beta_1)$ and the slope associated with the participant age 
+$(\beta_2)$ we can use the following code:
+
+--
+
+```{r ang-age}
+betas <- lm(formula = response_time ~ angle + age, data = mental_rotation)$coef
+```
+
+--
+
+- The estimated values were equal to:
+
+| Estimator       | Value                 |
+|-----------------|:---------------------:|
+| $\hat{\beta}_0$ | `r round(betas[1],2)` |
+| $\hat{\beta}_1$ | `r round(betas[2],2)` |
+| $\hat{\beta}_2$ | `r round(betas[3],2)` |
+
+---
+
+## Interpreting the estimates of $\beta$
+
+- Now we can interpret each of the estimated values as follows:
+
+--
+
+  - $(\beta_0)$: The estimated value of the estimate was `r round(betas[1],2)`, which is the 
+  expected response time when the other variables take the value of 0.
+  
+--
+
+  - $(\beta_1)$: The estimated value of the slope associated with angle of rotation was equal
+  to `r round(betas[2],2)`, this means that the average response time increases
+  by approximately `r round(betas[2],0)` milliseconds for each additional degree 
+  by which a figure is rotated.
+  
+--
+
+ - $(\beta_2)$: The estimated value of the slope associated with the age of 
+ participants was equal to `r round(betas[3],2)`, this means that the average 
+ response time decreases by approximately `r round(betas[3],0)` milliseconds 
+ on average for each year that a participants age increases by.
+
+--
+
+- Now we can add the predictions of our model $(\hat{y}_i)$, the errors 
+$(\hat{\epsilon}_i)$ and the squared errors $(\hat{\epsilon}^2_i)$ to our data, 
+and compare our new model with the two that we had previously.
+
+---
+
+## Adding predictions and errors
+
+- The code that we need to use to introduce add our predictions and errors to 
+the data is the same as with the linear regression model, we just need to add 
+the product of $\hat{\beta}_2$ and multiply it by the age of each participant.
+
+--
+
+```{r mlr-angage}
+# Adding prediction, difference between outcome and prediction and 
+# squared error by observation
+mental_rotation <- mental_rotation %>% 
+  mutate("prediction_angle_age" = betas[1] + betas[2] * angle + betas[3] * age,
+         "epsilon_angle_age" = response_time - prediction_angle_age,
+         "error_angle_age" = (epsilon_angle_age)^2)
+
+# Sum of Squared Errors
+sse_angle_age <- sum(mental_rotation$error_angle_age)
+
+# Mean Squared Error
+mse_angle_age <- 1/n_total * sse_angle_age
+
+# Proportion of variance accounted for by Multiple linear regression
+r2_angle_age <- (sse_null - sse_angle_age)/sse_null
+
+# BIC of Multiple Linear Regression
+bic_angle_age <- n_total * log(mse_angle_age) + 3 * log(n_total)
+```
+
+---
+
+## Model comparison
+
+- Now we have all the values that we need to compare the 3 models that we have 
+talked about:
+
+--
+
+  - Null: assumes that the response time of particpants is constant regardless of
+  age or angle of rotation of the figure.
+  
+--
+
+  - Simple linear regression: assumes that only the number of degrees that a 
+  figure has been rotated by has an effect on the expected response time.
+  
+--
+
+  - Multiple linear regression: assumes that response times change depending on 
+  the angle of rotation of a figure and the age of the participants. 
+  
+--
+
+- Another way of saying this is: "response times are a **linear function** of 
+the angle of rotation of a figure and the age of the participant".
+
+---
+
+## Model comparison
+
+- We will sumarize the results using a table:
+
+--
+
+| Model | Parameters | MSE | $R^2$ | BIC |
+|-------|:----------:|:---------------------:|:-----:|:--------------------:|
+| Null  | 1          | $`r round(mse_null,0)`$ | NA    | `r round(bic_null,0)`|
+| Angle of Rotation  | 2          | $`r round(mse_rotation,0)`$ | `r round(r2_rotation,3)` | `r round(bic_rotation,0)`|
+| Angle of Rotation & Age  | 3          | $`r round(mse_angle_age,0)`$ | `r round(r2_angle_age,3)` | `r round(bic_angle_age,0)`|
+
+--
+
+- Taking the squared root of the MSE values on the table we can see that the 
+average error of the model that only takes angle of rotation into account is 
+207 milliseconds, adding age reduced the average error to 202 milliseconds.
+
+--
+
+- This is a small change in error which is reflected on the estimated value of 
+$R^2$ which tells us that the model that takes both angle of rotation and age 
+into account only explains an additional 0.3% of the total variability in 
+comparison to the simple linear regression.
+
+--
+
+- Nevertheless, the values obtained for the BIC indicate that we can improve our
+predictions by adding the age of the participants as a predictor in the model.
+
+---
+
+# Interpretation
+
+- In summary, the results from the model comparisons indicate that the model
+that assumes that the expected response time in the experiment is a 
+**linear function**  of the angle of rotation of a figure and the age of the 
+participant.
+
+--
+
+- According to the model, the average response time increases with the 
+degrees that a figure is rotated, furthermore, older participants seem 
+to have lower reponse times on average for figures wit the same angle of 
+rotation.
+
+--
+
+- Now we can avaluate if the multiple linear regression has the properties that 
+we where looking for:
+
+--
+
+  - Errors follow approximately a Normal distribution centered at 0.
+  
+--
+
+  - There are no patterns in the errors when graphed against other variables.
+  
+---
+
+## Histogram: $\hat{\epsilon}_i$
+
+.pull-left[
+```{r epsilon-hist, eval=FALSE}
+  ggplot(data = mental_rotation) + #BREAK
+  aes(x = epsilon_angle_age) + #BREAK
+  geom_histogram(color = "#E72F52", fill = "#E72F52", binwidth = 40,
+                 aes(y =..density..)) + #BREAK
+  theme_classic() + #BREAK
+  xlab("Response time - Prediction") + 
+  ylab("") + 
+  theme(axis.title.x = element_text(size = 30)) + #BREAK
+  stat_function(fun = dnorm, 
+                args = list(mean = 0, sd = sqrt(mse_angle_age)))
+```
+]
+
+.pull-right[
+```{r epsilon-hist-out, ref.label = "epsilon-hist", fig.align = 'center', echo = FALSE, fig.width = 8, fig.height = 8}
+
+```
+]
+
+--
+
+- The errors seem to follow approximately a normal distribution centered around
+0.
+
+---
+
+## Scatter-plot: $\hat{\epsilon}_i$
+
+.pull-left[
+```{r epsilon-index, eval=FALSE}
+  ggplot(data = mental_rotation) + #BREAK
+  aes(x = as.numeric(rownames(mental_rotation))) + #BREAK
+  aes(y = epsilon_rotation) + #BREAK
+  geom_point(color = "#E72F52", size = 4) + #BREAK
+  theme_classic() + #BREAK
+  xlab("Observation number") + 
+  ylab("Response time - Prediction") + 
+  theme(axis.title.x = element_text(size = 30),
+        axis.title.y = element_text(size = 30)) + #BREAK
+  geom_smooth(se = FALSE, size = 2, color = "#0d95d0")
+```
+]
+
+.pull-right[
+```{r epsilon-index-out, ref.label = "epsilon-index", fig.align = 'center', echo = FALSE, fig.width = 8, fig.height = 8}
+
+```
+]
+
+--
+
+- There is no pattern in the errors when ploted against the observation number.
+
+---
+
+## Scatter-plot: $\hat{\epsilon}_i$
+
+.pull-left[
+```{r epsilon-age, eval=FALSE}
+  ggplot(data = mental_rotation) + #BREAK
+  aes(x = age) + #BREAK
+  aes(y = epsilon_angle_age) + #BREAK
+  geom_point(color = "#E72F52", size = 4) + #BREAK
+  theme_classic() + #BREAK
+  xlab("Participant age") + 
+  ylab("Response time - Prediction") + 
+  theme(axis.title.x = element_text(size = 30),
+        axis.title.y = element_text(size = 30)) + #BREAK
+  geom_smooth(se = FALSE, size = 2, color = "#0d95d0")
+```
+]
+
+.pull-right[
+```{r epsilon-age-out, ref.label = "epsilon-age", fig.align = 'center', echo = FALSE, fig.width = 8, fig.height = 8}
+
+```
+]
+
+--
+
+- There is no longer a patter in the errors when graphed against the age of the 
+participants (because we are now using age as a predictor).
+
+---
+
+## Model evaluation
+
+- Given that there are no obvious deviations on the errors from a Normal 
+distribution centered at 0 and with a variance of $\hat{\sigma}^2_m$, and that 
+there are no patterns when we graph the errors agains other variables in the 
+study, we can be more "comfortable" with our choice of a linear model.
+
+--
+
+- The best model according to our analysis was the multiple linear regression
+that introduces angle of rotation and participant age as predictors, therefore 
+we can conclude that:
+
+--
+
+  - The model that better accounted for our observation was a multiple linear
+  regression that includes angle of rotation and participant's age as predictors
+  of response time in a mental rotation task. The results suggest that the
+  average response time of participants increases with the angle of rotation and
+  decreases with participant's age. The model can account for approximately
+  95% of the total variability in response times.
 
 
