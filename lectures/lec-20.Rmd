@@ -73,7 +73,7 @@ in comparison to the Null model.
 --
 
 - However, when we looked at the difference between observation and prediction
-we noticed that there was a pattern, where the model was underestimating 
+we noticed that there was a pattern, were the model was underestimating 
 the response time of younger participants.
 
 ---
@@ -153,13 +153,13 @@ ggplot(data = mental_rotation) +
 
 ## Adding a new predictor
 
-- There is a lot of variability in our observations, but we do see that older
-participants seem to have faster repnse times in comparison with younger 
+- There is a lot of variability in our observations, but it looks like older
+participants have faster response times in comparison with younger 
 participants.
 
 --
 
-- Now we will include the predictor **age** to our model so that we can make 
+- Now we need include the predictor **age** to our model so that we can make 
 a comparison between a multiple linear regression and the simple linear 
 regression which only includes the **angle of rotation** as a predictor.
 
@@ -207,7 +207,7 @@ continuous values of two independent variables.
 - This means that we will have a predicted response time for a participant who 
 is 10 years old and is responding to a figure that has been rotated 10 degrees, 
 and this prediction will be different from a participant who is 11 years old
-and is responfing to a figure that was rotated 11 degrees.
+and is responding to a figure that was rotated 11 degrees.
 
 --
 
@@ -218,7 +218,7 @@ $$\hat{y}_i = \hat{\beta}_0 + \hat{\beta}_1\text{angle}_i + \hat{\beta}_2\text{a
 
 ## Model predictions
 
-- We have just introduced a new notation. When we want to denote the prediction
+- We have just introduced new notation. When we want to denote the prediction
 of a linear model about a single observation (a single row in our file) we 
 denote that by using a "y" with a "hat".
 
@@ -304,34 +304,35 @@ betas <- lm(formula = response_time ~ angle + age, data = mental_rotation)$coef
 
 --
 
-  - $(\beta_0)$: The estimated value of the estimate was `r round(betas[1],2)`, which is the 
-  expected response time when the other variables take the value of 0.
+  - $(\beta_0)$: The estimated value of the intercept was `r round(betas[1],2)`, 
+  which represents the expected response time when the other variables in the 
+  model take the value of 0.
   
 --
 
-  - $(\beta_1)$: The estimated value of the slope associated with angle of rotation was equal
-  to `r round(betas[2],2)`, this means that the average response time increases
-  by approximately `r round(betas[2],0)` milliseconds for each additional degree 
-  by which a figure is rotated.
+  - $(\beta_1)$: The estimated value of the slope associated with angle of 
+  rotation was equal to `r round(betas[2],2)`, this means that the average 
+  response time increases by approximately `r round(betas[2],0)` milliseconds 
+  for each additional degree by which a figure is rotated.
   
 --
 
  - $(\beta_2)$: The estimated value of the slope associated with the age of 
  participants was equal to `r round(betas[3],2)`, this means that the average 
- response time decreases by approximately `r round(betas[3],0)` milliseconds 
- on average for each year that a participants age increases by.
+ response time decreases by approximately `r abs(round(betas[3],0))` 
+ milliseconds on average for each year.
 
 --
 
 - Now we can add the predictions of our model $(\hat{y}_i)$, the errors 
 $(\hat{\epsilon}_i)$ and the squared errors $(\hat{\epsilon}^2_i)$ to our data, 
-and compare our new model with the two that we had previously.
+and compare our new model with the Null and the simple linear regression.
 
 ---
 
 ## Adding predictions and errors
 
-- The code that we need to use to introduce add our predictions and errors to 
+- The code that we need to use to add our predictions and errors to 
 the data is the same as with the linear regression model, we just need to add 
 the product of $\hat{\beta}_2$ and multiply it by the age of each participant.
 
@@ -362,13 +363,12 @@ bic_angle_age <- n_total * log(mse_angle_age) + 3 * log(n_total)
 
 ## Model comparison
 
-- Now we have all the values that we need to compare the 3 models that we have 
-talked about:
+- Now we have all the values that we need to compare our 3 models:
 
 --
 
-  - Null: assumes that the response time of particpants is constant regardless of
-  age or angle of rotation of the figure.
+  - Null: assumes that the response time of participants is constant regardless 
+  of angle of rotation of the figure or participant's age.
   
 --
 
@@ -389,7 +389,7 @@ the angle of rotation of a figure and the age of the participant".
 
 ## Model comparison
 
-- We will sumarize the results using a table:
+- We will summarize the results using a table:
 
 --
 
@@ -421,21 +421,20 @@ predictions by adding the age of the participants as a predictor in the model.
 
 # Interpretation
 
-- In summary, the results from the model comparisons indicate that the model
-that assumes that the expected response time in the experiment is a 
-**linear function**  of the angle of rotation of a figure and the age of the 
-participant.
+- In summary, the results from the model comparisons indicate that  both the 
+angle of rotation of a figure and the age of the participants are good
+predictors of the response time of participants in a mental rotation task.
 
 --
 
 - According to the model, the average response time increases with the 
 degrees that a figure is rotated, furthermore, older participants seem 
-to have lower reponse times on average for figures wit the same angle of 
+to have lower response times on average for figures whit the same angle of 
 rotation.
 
 --
 
-- Now we can avaluate if the multiple linear regression has the properties that 
+- Now we can evaluate if the multiple linear regression has the properties that 
 we where looking for:
 
 --
@@ -473,7 +472,7 @@ we where looking for:
 
 --
 
-- The errors seem to follow approximately a normal distribution centered around
+- The errors seem to follow approximately a Normal distribution centered around
 0.
 
 ---
@@ -503,7 +502,7 @@ we where looking for:
 
 --
 
-- There is no pattern in the errors when ploted against the observation number.
+- There is no pattern in the errors when graphed against the observation number.
 
 ---
 
@@ -540,9 +539,9 @@ participants (because we are now using age as a predictor).
 ## Model evaluation
 
 - Given that there are no obvious deviations on the errors from a Normal 
-distribution centered at 0 and with a variance of $\hat{\sigma}^2_m$, and that 
-there are no patterns when we graph the errors agains other variables in the 
-study, we can be more "comfortable" with our choice of a linear model.
+distribution centered at 0 and with a variance of $\hat{\sigma}^2_m$ (MSE), and that 
+there are no patterns when we graph the errors against other variables in the 
+study, we can be more "confident" with our choice of a linear model.
 
 --
 
@@ -552,11 +551,11 @@ we can conclude that:
 
 --
 
-  - The model that better accounted for our observation was a multiple linear
-  regression that includes angle of rotation and participant's age as predictors
-  of response time in a mental rotation task. The results suggest that the
-  average response time of participants increases with the angle of rotation and
-  decreases with participant's age. The model can account for approximately
-  95% of the total variability in response times.
+  - The model that better accounts for our observation was a multiple linear
+  regression that includes angle of rotation and participant's age as predictors. 
+  The results suggest that the average response time of participants in a mental
+  rotation task increases with the angle of rotation and decreases with 
+  participant's age. The model can account for approximately 95% of the total
+  variability in response times.
 
 
