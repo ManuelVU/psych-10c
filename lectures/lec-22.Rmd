@@ -1,0 +1,584 @@
+---
+title: "Lecture 22"
+subtitle: "Multiple Linear Regression With Categorical Variables"
+author: "Psych 10 C"
+institute: "University of California, Irvine"
+date: "05/20/2022"
+output:
+  xaringan::moon_reader:
+    self_contained: true
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+```
+
+```{r xaringan-extra, echo = FALSE}
+xaringanExtra::use_tile_view()
+
+xaringanExtra::use_fit_screen()
+
+xaringanExtra::use_editable(expires = 1)
+
+xaringanExtra::use_extra_styles(
+  hover_code_line = TRUE,         #<<
+  mute_unhighlighted_code = TRUE  #<<
+)
+
+htmltools::tagList(
+  xaringanExtra::use_clipboard(
+    button_text = "<i class=\"fa fa-clipboard\"></i>",
+    success_text = "<i class=\"fa fa-check\" style=\"color: #90BE6D\"></i>",
+    error_text = "<i class=\"fa fa-times-circle\" style=\"color: #F94144\"></i>"
+  ),
+  rmarkdown::html_dependency_font_awesome()
+)
+```
+
+```{r load-tidy, echo = FALSE, message = FALSE, warning = FALSE}
+library(tidyverse)
+library(flipbookr)
+
+knitr::opts_chunk$set(fig.width = 6, message = FALSE, 
+                      warning = FALSE, comment = "", 
+                      cache = F)
+
+pressure <- read_csv(file = here::here("data/week-8/sys-pressure.csv"))
+```
+
+## Review
+
+- Last class we started working with an example using multiple linear regression.
+
+--
+
+- We wanted to know if the age and height were good predictors of the blood 
+pressure of a participant.
+
+--
+
+- We started by comparing 4 models:
+
+--
+
+  1. Null model: blood pressure is constant regardless of age and height.
+  
+--
+
+  1. Age model: the expected blood pressure of participants changes as a linear
+  function of their age.
+  
+--
+
+  1. Height model: the expected blood pressure of participants changes as a linear
+  function of their height.
+  
+--
+
+  1. Age + Height model: the expected blood pressure of participants changes as 
+  a linear function of their age and height.
+  
+---
+
+## Results from the model comparison
+
+```{r, echo=FALSE}
+n_total <- nrow(pressure)
+null <- pressure %>% 
+  summarise("pred" = mean(blood_pressure)) %>% 
+  pull(pred)
+pressure <- pressure %>% 
+  mutate("prediction_null" = null,
+         "error_null" = (blood_pressure - prediction_null)^2)
+sse_null <- sum(pressure$error_null)
+mse_null <- 1/n_total * sse_null
+bic_null <- n_total * log(mse_null) + 1 * log(n_total)
+betas_age <- lm(formula = blood_pressure ~ age, data = pressure)$coef
+pressure <- pressure %>% 
+  mutate("prediction_age" = betas_age[1] + betas_age[2] * age,
+         "error_age" = (blood_pressure - prediction_age)^2)
+sse_age <- sum(pressure$error_age)
+mse_age <- 1/n_total * sse_age
+r2_age <- (sse_null - sse_age) / sse_null
+bic_age <- n_total * log(mse_age) + 2 * log(n_total)
+betas_height <- lm(formula = blood_pressure ~ height, data = pressure)$coef
+pressure <- pressure %>% 
+  mutate("prediction_height" = betas_height[1] + betas_height[2] * height,
+         "error_height" = (blood_pressure - prediction_height)^2)
+sse_height <- sum(pressure$error_height)
+mse_height <- 1/n_total * sse_height
+r2_height <- (sse_null - sse_height) / sse_null
+bic_height <- n_total * log(mse_height) + 2 * log(n_total)
+betas_ah <- lm(formula = blood_pressure ~ age + height, data = pressure)$coef
+pressure <- pressure %>% 
+  mutate("prediction_ah" = betas_ah[1] + betas_ah[2] * age + betas_ah[3] * height,
+         "error_ah" = (blood_pressure - prediction_ah)^2)
+sse_ah <- sum(pressure$error_ah)
+mse_ah <- 1/n_total * sse_ah
+r2_ah <- (sse_null - sse_ah) / sse_null
+bic_ah <- n_total * log(mse_ah) + 3 * log(n_total)
+```
+
+- We compared these 4 models using the following table:
+
+| Model | Parameters | MSE | $R^2$ | BIC |
+|-------|:----------:|:---:|:-----:|:---:|
+| Null | 1 | `r round(mse_null, 2)` | | `r round(bic_null, 2)`|
+| Age | 2 | `r round(mse_age, 2)` | `r round(r2_age, 2)` | `r round(bic_age, 2)`|
+| Height | 2 | `r round(mse_height, 2)` | `r round(r2_height, 2)` | `r round(bic_height, 2)`|
+| Age + Height | 3 | `r round(mse_ah, 2)` | `r round(r2_ah, 2)` | `r round(bic_ah, 2)`|
+
+
+--
+
+- The results indicate that, using only the continuous variables in our data 
+the best model is the one that assumes that both age and height have an effect
+on the blood pressure of participants.
+
+--
+
+- However, when we did the analysis we ignored one of our variables which was 
+the sec of participants at birth.
+
+---
+
+## Sex at birth and blood pressure
+
+.pull-left[
+```{r, fig.align='center', echo=FALSE, fig.width=8}
+color_sex <- c("#ff6361", "#58508d")
+ggplot(data = pressure) + 
+  aes(x = height) + 
+  aes(y = blood_pressure) +
+  aes(color = sex_at_birth) +
+  geom_point(size = 5) + 
+  scale_color_manual(values = color_sex, labels = c("Female", "Male")) +
+  theme_classic() + 
+  xlab("Participant Height") + 
+  ylab("Blood pressure") + 
+  theme(axis.title.x = element_text(size = 30),
+        axis.title.y = element_text(size = 30),
+        legend.text = element_text(size = 15),
+        legend.title=element_text(size = 20)) +
+  labs(color = "Sex at birth")
+```
+]
+
+.pull-right[
+```{r, fig.align='center', echo=FALSE, fig.width=8}
+ggplot(data = pressure) + 
+  aes(x = age) + 
+  aes(y = blood_pressure) +
+  aes(color = sex_at_birth) +
+  geom_point(size = 5) + 
+  scale_color_manual(values = color_sex, labels = c("Female", "Male")) +
+  theme_classic() + 
+  xlab("Participant Age") + 
+  ylab("Blood pressure") + 
+  theme(axis.title.x = element_text(size = 30),
+        axis.title.y = element_text(size = 30),
+        legend.text = element_text(size = 15),
+        legend.title=element_text(size = 20)) +
+  labs(color = "Sex at birth")
+```
+]
+
+--
+
+- From the first graph there are two things that we can notice, first is that 
+blood pressure levels seem to be different between the two groups, however, 
+the relation between height and age inside each group is not clear.
+
+--
+
+- From the second graph, there seems to be a difference between the two 
+groups, however, the effect of age seems to be approximately the same in both.
+
+---
+
+## Adding categorical variables
+
+- Given that there seems to be a difference between the two groups, we now want
+to add our categorical variable to the linear regression model.
+
+--
+
+- In order to do this, first we need to assign numeric values to each of the 
+labels. To do this we use the indicator function:
+
+$$z_i =
+  \begin{cases}
+    0 & \quad \text{if observation i is male}\\ 
+    1 & \quad \text{if observation i is female} 
+    \end{cases}$$
+    
+--
+
+- According to this definition of the variable we say that the group "male"
+is the reference group, so the parameter associated to the variable $z_i$ 
+can be interpreted as the change in blood pressure for members of the 
+"female" group compared to males.
+
+--
+
+- Now we want to add linear models that consider the categorical variable "sex at
+birth" as a predictor of blood pressure.
+
+---
+
+## Linear models with categorical variables
+
+- For now we will only consider the additive models that consider our 
+categorical variable as a predictor of blood pressure.
+
+--
+
+  1. Sex model: **only** the sex at birth of a participant has an
+  effect on blood pressure. $$y_i \sim \text{Normal}(\beta_0 + \beta_3 \text{sex}_i,\sigma_5^2)$$
+  
+--
+
+  1. Sex + Age model: the expected blood pressure of participants 
+  is a linear function of their age and sex at birth. $$y_i \sim \text{Normal}(\beta_0 + \beta_1\text{age}_i + \beta_3 \text{sex}_i,\sigma_6^2)$$
+  
+--
+
+  1. Sex + Height model: the expected blood pressure of 
+  participants is a linear function of their height and sex at birth. $$y_i \sim \text{Normal}(\beta_0 + \beta_2\text{height}_i + \beta_3 \text{sex}_i,\sigma_7^2)$$
+
+--
+
+  1. Sex + Age + Height model: the expected blood pressure of 
+  participants is a linear function of their age, height and sex at birth. $$y_i \sim \text{Normal}(\beta_0 + \beta_1\text{age}_i + \beta_2\text{height}_i + \beta_3 \text{sex}_i,\sigma_8^2)$$
+
+---
+
+## Adding indicator variable to our data
+
+- The steps that we need to take to add the predictions and errors of each of 
+these new models to our data in order to perform a model comparison are 
+the same as before, the only change is that now we first need to add a new 
+variable. 
+
+--
+
+- We can add our indicator variable $z_i$ using the `mutate()` and `case_when()`
+functions:
+
+```{r}
+pressure <- pressure %>% 
+  mutate("sex_id" = case_when(sex_at_birth == "male" ~ 0,
+                              sex_at_birth == "female" ~ 1))
+```
+
+--
+
+- This adds a new variable to our data file that takes the value 1 when the 
+row has the label "female" and takes the value 0 when the row has the label 
+"male".
+
+---
+
+## Adding predictions and errors
+
+- We will start with the predictions of the model that assumes that only sex
+at birth is a good predictor of blood pressure.
+
+--
+
+```{r}
+# Estimate the parameters of the model via lm
+betas_sex <- lm(formula = blood_pressure ~ sex_id, data = pressure)$coef
+
+# Add predictions and errors
+pressure <- pressure %>% 
+  mutate("prediction_sex" = betas_sex[1] + betas_sex[2] * sex_id,
+         "error_sex" = (blood_pressure - prediction_sex)^2)
+
+# Calculate SSE, MSE R^2 and BIC
+sse_sex <- sum(pressure$error_sex)
+mse_sex <- 1/n_total * sse_sex
+r2_sex <- (sse_null - sse_sex) / sse_null
+bic_sex <- n_total * log(mse_sex) + 2 * log(n_total)
+```
+
+---
+
+## Graph of the model's predictions
+
+```{r, fig.align='center', echo=FALSE, fig.width=8, fig.height=5.5}
+col_line <- c("#003f5c","#ffa600")
+ggplot(data = pressure) + 
+  aes(x = as.numeric(rownames(pressure))) + 
+  aes(y = blood_pressure) +
+  aes(color = sex_at_birth) +
+  geom_point(size = 5) + 
+  scale_color_manual(values = color_sex, labels = c("Female", "Male")) +
+  geom_smooth(method = lm, formula = y~1, se = FALSE, size = 2) +
+  theme_classic() + 
+  xlab("Observation number") + 
+  ylab("Blood pressure") + 
+  theme(axis.title.x = element_text(size = 30),
+        axis.title.y = element_text(size = 30),
+        legend.text = element_text(size = 15),
+        legend.title=element_text(size = 20)) +
+  labs(color = "Sex at birth")
+```
+
+--
+
+- As you can see, the predictions of the model are just the averages of each 
+group.
+
+---
+
+## Age + Sex model
+
+- The age + sex model is a multiple linear regression, however, this time we 
+will be able to visualize the predictions of the model because one of the 
+independent variables is not continuous.
+
+```{r}
+# Estimate the parameters of the model via lm
+betas_as <- lm(formula = blood_pressure ~ age + sex_id, data = pressure)$coef
+
+# Add predictions and errors
+pressure <- pressure %>% 
+  mutate("prediction_as" = betas_as[1] + betas_as[2] * age + betas_as[3] * sex_id,
+         "error_as" = (blood_pressure - prediction_as)^2)
+
+# Calculate SSE, MSE R^2 and BIC
+sse_as <- sum(pressure$error_as)
+mse_as <- 1/n_total * sse_as
+r2_as <- (sse_null - sse_as) / sse_null
+bic_as <- n_total * log(mse_as) + 3 * log(n_total)
+```
+
+---
+
+## Predictions Age + Sex model
+
+```{r, fig.align='center', echo=FALSE, fig.width=8, fig.height=5.5}
+ggplot(data = pressure) + 
+  aes(x = age) + 
+  aes(y = blood_pressure) +
+  aes(color = sex_at_birth) +
+  geom_point(size = 5) + 
+  scale_color_manual(values = color_sex, labels = c("Female", "Male")) +
+  geom_segment(aes(x = min(age), xend = max(age), 
+                   y = betas_as[1] + betas_as[2] * min(age), 
+                   yend = betas_as[1] + betas_as[2] * max(age)),
+               size = 2, col = color_sex[2]) +
+  geom_segment(aes(x = min(age), xend = max(age), 
+                   y = betas_as[1] + betas_as[3] + betas_as[2] * min(age), 
+                   yend = betas_as[1] + betas_as[3] + betas_as[2] * max(age)),
+               size = 2, col = color_sex[1]) +
+  theme_classic() + 
+  xlab("Observation number") + 
+  ylab("Blood pressure") + 
+  theme(axis.title.x = element_text(size = 30),
+        axis.title.y = element_text(size = 30),
+        legend.text = element_text(size = 15),
+        legend.title=element_text(size = 20)) +
+  labs(color = "Sex at birth")
+```
+
+
+- The predictions now are different for each group (we have two lines), however,
+notice that those lines are parallel, this is because we are not allowing for
+an interaction between the variables. 
+
+---
+
+## Height + Sex model
+
+- This is another multiple linear regression whose predictions we will be able 
+to visualize using a graph.
+
+```{r}
+# Estimate the parameters of the model via lm
+betas_hs <- lm(formula = blood_pressure ~ height + sex_id, data = pressure)$coef
+
+# Add predictions and errors
+pressure <- pressure %>% 
+  mutate("prediction_hs" = betas_hs[1] + betas_hs[2] * height + betas_hs[3] * sex_id,
+         "error_hs" = (blood_pressure - prediction_hs)^2)
+
+# Calculate SSE, MSE R^2 and BIC
+sse_hs <- sum(pressure$error_hs)
+mse_hs <- 1/n_total * sse_hs
+r2_hs <- (sse_null - sse_hs) / sse_null
+bic_hs <- n_total * log(mse_hs) + 3 * log(n_total)
+```
+
+---
+
+## Predictions Height + Sex model
+
+```{r, fig.align='center', echo=FALSE, fig.width=8, fig.height=5.5}
+ggplot(data = pressure) + 
+  aes(x = height) + 
+  aes(y = blood_pressure) +
+  aes(color = sex_at_birth) +
+  geom_point(size = 5) + 
+  scale_color_manual(values = color_sex, labels = c("Female", "Male")) +
+  geom_segment(aes(x = min(height), xend = max(height), 
+                   y = betas_hs[1] + betas_hs[2] * min(height), 
+                   yend = betas_hs[1] + betas_hs[2] * max(height)),
+               size = 2, col = color_sex[2]) +
+  geom_segment(aes(x = min(height), xend = max(height), 
+                   y = betas_hs[1] + betas_hs[3] + betas_hs[2] * min(height), 
+                   yend = betas_hs[1] + betas_hs[3] + betas_hs[2] * max(height)),
+               size = 2, col = color_sex[1]) +
+  theme_classic() + 
+  xlab("Participant height") + 
+  ylab("Blood pressure") + 
+  theme(axis.title.x = element_text(size = 30),
+        axis.title.y = element_text(size = 30),
+        legend.text = element_text(size = 15),
+        legend.title=element_text(size = 20)) +
+  labs(color = "Sex at birth")
+```
+
+--
+
+- This new model suggests that as the height of the participant increases blood
+pressure decreases, this different from the result from the model that only has
+height as a predictor. $(\hat{\beta}_2 =$ `r round(betas_hs[2],2)`)
+
+---
+
+## Age + Height + Sex model
+
+- With this fourth model we will not be able to visualize its predictions, this 
+is due to the fact that we now have two continuous variables.
+
+```{r}
+
+betas_ahs <- lm(formula = blood_pressure ~ age + height + sex_id, data = pressure)$coef
+
+# Add predictions and errors
+pressure <- pressure %>% 
+  mutate("prediction_ahs" = betas_ahs[1] + betas_ahs[2] * age + betas_ahs[3] * height + betas_ahs[4] * sex_id,
+         "error_ahs" = (blood_pressure - prediction_ahs)^2)
+
+# Calculate SSE, MSE R^2 and BIC
+sse_ahs <- sum(pressure$error_ahs)
+mse_ahs <- 1/n_total * sse_ahs
+r2_ahs <- (sse_null - sse_ahs) / sse_null
+bic_ahs <- n_total * log(mse_ahs) + 4 * log(n_total)
+```
+
+---
+
+## Comparing all 8 models
+
+- To compare all 8 models we can add them to the table we had before, we start 
+with the models that have only 1 predictor, then the ones that have 2, and 
+finally the model with all 3 predictors.
+
+| Model | Parameters | MSE | $R^2$ | BIC |
+|-------|:----------:|:---:|:-----:|:---:|
+| Null | 1 | `r round(mse_null, 2)` | | `r round(bic_null, 2)`|
+| Age | 2 | `r round(mse_age, 2)` | `r round(r2_age, 2)` | `r round(bic_age, 2)`|
+| Height | 2 | `r round(mse_height, 2)` | `r round(r2_height, 2)` | `r round(bic_height, 2)`|
+| **SEX** | **2** | **`r round(mse_sex, 2)`** | **`r round(r2_sex, 2)`** | **`r round(bic_sex, 2)`**|
+| Age + Height | 3 | `r round(mse_ah, 2)` | `r round(r2_ah, 2)` | `r round(bic_ah, 2)`|
+| **Age + SEX** | **3** | **`r round(mse_as, 2)`** | **`r round(r2_as, 2)`** | **`r round(bic_as, 2)`**|
+| **Height + SEX** | **3** | **`r round(mse_hs, 2)`** | **`r round(r2_hs, 2)`** | **`r round(bic_hs, 2)`**|
+| **Age + Height + SEX** | **4** | **`r round(mse_ahs, 2)`** | **`r round(r2_ahs, 2)`** | **`r round(bic_ahs, 2)`**|
+
+---
+
+## Model comparison
+
+- When we only took into account the continuous variables in the study the best
+model was the one that assumed that the age and height of participants affected 
+the average blood pressure of participants.
+
+--
+
+- Once we take into account the sex at birth of participants now we have two 
+models that are better.
+
+--
+
+- First, the model that includes all 3 predictors was better than a model that 
+only includes height and age.
+
+--
+
+- However, the best model is the one that assumes that only the age and sex at 
+birth of the participants have an effect on the expected blood pressure.
+
+--
+
+- As we saw from in the graph, once we take into account sex at birth, the 
+parameter associated with height was very close to 0.
+
+--
+
+- This is because when we used only the height as a predictor, the effect of the
+sex of the participant at birth was being confounded. In other words, 
+we could not tell whether it was an effect of height or if it was associated 
+with the fact that sex at birth and height are highly correlated.
+
+---
+
+## Condounders
+
+- This is not an uncommon case, many times there are variables that can seem 
+relevant, however, their effect can be due to their association to other variables.
+
+--
+
+- In this example, height was a good predictor of blood pressure only because 
+it carried some information about the sex at birth of the participants.
+
+--
+
+- When we include the information about the sex at birth of a participant into 
+the model then the association between height and blood pressure almost
+disappears, this is because the information is now redundant.
+
+--
+
+- Now that we know that the best model is one that assumes that blood pressure 
+is a linear model of age and sex at birth we can interpret the values of the 
+parameters that we found.
+
+---
+
+## Interpretation of the parameters
+
+- The model that we selected (age + sex) has 3 parameters, the intercept 
+$\beta_0$, the slope associated with age $\beta_1$ and the slope associated with 
+sex at birth $\beta_3$.
+
+--
+
+- For the parameter $\beta_0$ we can say: The estimated value of the 
+intercept was equal to `r round(betas_as[1],2)`. In other words, the average 
+blood pressure of a **male** that is 0 years old (new born) is approximately 
+`r round(betas_as[1],2)`.
+
+--
+
+- For the slope associated with age: The estimated value of the slope associated
+with age was `r round(betas_as[2],2)`. This means that on average, the 
+blood pressure of participants increases `r round(betas_as[2],2)` approximately
+each year.
+
+--
+
+- Last, for the slope associated with sex at birth we say: The estimated value 
+of the slope associated with sex at birth was `r round(betas_as[3],2)`, this 
+indicates that the blood pressure of **female** participants in the study was 
+approximately `r round(betas_as[2],2)` lower than the males regardless of 
+their age.
+
