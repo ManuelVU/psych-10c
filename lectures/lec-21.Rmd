@@ -1,6 +1,6 @@
 ---
 title: "Lecture 21"
-subtitle: "Linear Regression"
+subtitle: "Multiple Linear Regression"
 author: "Psych 10 C"
 institute: "University of California, Irvine"
 date: "05/18/2022"
@@ -68,13 +68,8 @@ pressure.
 
 --
 
-- We are not sure if only one or both of this variables are good predictors so 
-we want to compare all the models that we can build using these two variables.
-
---
-
-- This will be similar to the notion of main effects and interactions in 
-factorial designs.
+- We are not sure if only one or both of these variables are good predictors; so 
+we want to compare all the models we can build using these two variables.
 
 ---
 
@@ -106,7 +101,7 @@ taken during a routine check up. The average blood pressure of participants was
 
 ---
 
-## Models
+## Data
 
 - Now that we have a description of the data we can visualize our observations
 using a scatter plot, in this case we are interested in two variables (age and
@@ -142,6 +137,167 @@ ggplot(data = pressure) +
         axis.title.y = element_text(size = 30))
 ```
 ]
+
+---
+
+## Data
+
+- From the previous graphs it seems that both height and age could be associated
+with the blood pressure of participants.
+
+--
+
+- However, we can't draw conclusions from a plot, we need to test linear models
+in order to tell if our independent variables are good predictors.
+
+--
+
+- Given that we have 2 independent variables (without taking into account the
+sex of participants which is categorical), we can compare 4 models.
+
+--
+
+- When we **only** have continuous variables as predictors we don't model 
+interactions because there is no way to interpret them.
+
+---
+
+## Models
+
+- The 4 models that we need to compare are:
+
+--
+
+  1. **Null model**: Blood pressure is constant regardless of age and height of 
+  a participant $$\text{blood-pressure}_i \sim \text{Normal}(\beta_0, \sigma^2_1)$$
+  
+--
+
+  1. **Age model**: Blood pressure is a linear function of the age of the 
+  participant $$\text{blood-pressure}_i \sim \text{Normal}(\beta_0 + \beta_1 \text{age}_i, \sigma^2_2)$$
+  
+--
+
+  1. **Height model**: Blood pressure is a linear function of the height of the 
+  participant $$\text{blood-pressure}_i \sim \text{Normal}(\beta_0 + \beta_2 \text{height}_i, \sigma^2_3)$$
+--
+
+  1. **Age & Height model**: Blood pressure is a linear function of the height of the 
+  participant $$\text{blood-pressure}_i \sim \text{Normal}(\beta_0 + \beta_1 \text{age}_i + \beta_2 \text{height}_i, \sigma^2_4)$$
+
+---
+
+## Predictions and errors
+
+- As we have done before, we want to calculate the predictions and errors of 
+each model in order to make a comparison and select the best one.
+
+--
+
+- Once we have the model that accounts for the data better, we will look at 
+the distribution of the difference between observations and model's predictions
+$(\hat{\epsilon}_i)$ to evaluate the adequacy of the model.
+
+---
+
+## Null model
+
+.pull-left[
+```{r null-pred}
+# Total sample size
+n_total <- nrow(pressure)
+# Prediction of the null model
+null <- pressure %>% 
+  summarise("pred" = mean(blood_pressure)) %>% 
+  pull(pred)
+# Adding prediction and error of null to the data
+pressure <- pressure %>% 
+  mutate("prediction_null" = null,
+         "error_null" = (blood_pressure - prediction_null)^2)
+# Calculating SSE of the null model
+sse_null <- sum(pressure$error_null)
+# Calculate Mean SE of the null model
+mse_null <- 1/n_total * sse_null
+# Calculate the BIC of the null model
+bic_null <- n_total * log(mse_null) + 1 * log(n_total)
+```
+]
+
+.pull-right[
+<br>
+<br>
+<br>
+```{r, echo = FALSE, fig.align='center',  fig.width=8}
+pred_null <- pressure %>% 
+  summarise("mean" = mean(blood_pressure))
+
+col_line <- "#003f5c"
+
+ggplot(data = pressure) + 
+  aes(x = blood_pressure) + 
+  geom_histogram(fill = color_sex[1], col = "white", binwidth = 5) + 
+  geom_vline(data = pred_null, aes(xintercept = mean), colour = col_line, 
+             size = 2) + 
+  theme_classic() + 
+  xlab("Blood pressure") + 
+  ylab("") + 
+  theme(axis.title.x = element_text(size = 30),
+        axis.title.y = element_text(size = 30))
+```
+]
+
+- The estimate of the intercept was $\hat{\beta}_0$ = `r round(null, 2)`
+---
+
+## Age model
+
+.pull-left[
+```{r age-pred}
+# Get estimators for beta0 and beta1
+betas_age <- lm(formula = blood_pressure ~ age, data = pressure)$coef
+# Adding prediction and error for the age lm to the data
+pressure <- pressure %>% 
+  mutate("prediction_age" = betas_age[1] + betas_age[2] * age,
+         "error_age" = (blood_pressure - prediction_age)^2)
+# Calculating SSE for the age lm
+sse_age <- sum(pressure$error_age)
+# Calculate Mean SE for the age lm
+mse_age <- 1/n_total * sse_age
+# Calculate the value of R^2 for the age lm
+r2_age <- (sse_null - sse_age) / sse_null
+# Calculate the BIC for the age lm
+bic_age <- n_total * log(mse_age) + 2 * log(n_total)
+```
+]
+
+.pull-right[
+<br>
+<br>
+<br>
+```{r, fig.align='center', echo=FALSE, fig.width=8}
+ggplot(data = pressure) + 
+  aes(x = age) + 
+  aes(y = blood_pressure) + 
+  geom_point(size = 5, pch = 21, fill = color_sex[1], col = "white") + 
+  theme_classic() + 
+  xlab("Participant age") + 
+  ylab("Blood pressure") + 
+  theme(axis.title.x = element_text(size = 30),
+        axis.title.y = element_text(size = 30)) + 
+  geom_smooth(method = "lm", formula = y ~ x, color = col_line, size = 2, 
+              se = FALSE)
+```
+]
+
+- The estimate of the intercept was $\hat{\beta}_0$ = `r round(betas_age[1], 2)`,
+the estimate of the slope associated to age was $\hat{\beta}_1$ = `r round(betas_age[2], 2)`.
+
+---
+
+## Height model
+
+
+
 
 
 
