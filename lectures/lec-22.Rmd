@@ -192,7 +192,7 @@ ggplot(data = pressure) +
 
 - From the first graph there are two things that we can notice, first is that 
 blood pressure levels seem to be different between the two groups, however, 
-the relation between height and age inside each group is not clear.
+the relation between height and blood pressure inside each group is not clear.
 
 --
 
@@ -222,7 +222,7 @@ $$z_i =
 - According to this definition of the variable, the Male group would 
 be the reference group. The parameter ( $\beta$ ) associated to the variable 
 $z_i$ can now be interpreted as the difference in the expected blood pressure 
-for members of the Female" group compared to males.
+for members of the Female group compared to males.
 
 --
 
@@ -247,28 +247,28 @@ categorical variable as a predictor of blood pressure.
 
   1. **Sex model**: *Only the sex at birth* has an effect on blood pressure. 
   
-  $$y_i \sim \text{Normal}(\beta_0 + \beta_3 \text{sex}_i,\sigma_5^2)$$
+  $$y_i \sim \text{Normal}(\beta_0 + \beta_3 z_i,\sigma_5^2)$$
   
 --
 
   1. **Sex + Age model**: The expected blood pressure of participants is *a 
   linear function of their current age and sex at birth*. 
   
-  $$y_i \sim \text{Normal}(\beta_0 + \beta_1\text{age}_i + \beta_3 \text{sex}_i,\sigma_6^2)$$
+  $$y_i \sim \text{Normal}(\beta_0 + \beta_1\text{age}_i + \beta_3 z_i,\sigma_6^2)$$
   
 --
 
   1. **Sex + Height model**: the expected blood pressure of participants is *a
   linear function of their current height and sex at birth*. 
   
-  $$y_i \sim \text{Normal}(\beta_0 + \beta_2\text{height}_i + \beta_3 \text{sex}_i,\sigma_7^2)$$
+  $$y_i \sim \text{Normal}(\beta_0 + \beta_2\text{height}_i + \beta_3 z_i,\sigma_7^2)$$
 
 --
 
   1. **Sex + Age + Height model**: the expected blood pressure of 
   participants is a linear function of their age, height and sex at birth. 
   
-  $$y_i \sim \text{Normal}(\beta_0 + \beta_1\text{age}_i + \beta_2\text{height}_i + \beta_3 \text{sex}_i,\sigma_8^2)$$
+  $$y_i \sim \text{Normal}(\beta_0 + \beta_1\text{age}_i + \beta_2\text{height}_i + \beta_3 z_i,\sigma_8^2)$$
 
 ---
 
@@ -595,4 +595,14 @@ of the slope associated with sex at birth was `r round(betas_as[3],2)`, this
 indicates that the blood pressure of **female** participants in the study was 
 approximately `r round(betas_as[2],2)` lower than the males regardless of 
 their age.
+
+---
+
+- Homework link:
+
+```{r hw-link}
+
+link <- "https://raw.githubusercontent.com/ManuelVU/psych-10c-data/main/homework5.csv"
+```
+
 
