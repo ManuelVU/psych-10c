@@ -289,7 +289,8 @@ interaction effect between **age group** and time elapsed from study.
 ```{r idage}
 memory <- memory %>% 
   mutate("age_group" = case_when(age <= 40 ~ 0,
-                                 age > 40 ~ 1))
+                                 age > 40 ~ 1),
+         "age_group" = as.logical(age_group))
 ```
 
 --
@@ -299,14 +300,428 @@ can now use in our models.
 
 ---
 
-## Interaction models in MLR
+## Null model
 
-- The first model that we need as always is the null model, which assumes that 
-the expected number of words correctly recognized by a participant is constant
+- The first model that we need is the null, which assumes that the expected 
+number of words correctly recognized by a participant is constant,
 regardless of time elapsed since study or the age group that a participant 
 belongs to.
 
 --
 
-- The second model is the simple linear regression that only includes the 
-age group of a participant as a predictor of the expected number of words.
+$$\text{Correct}_i \sim \text{Normal}(\beta_0, \sigma_1^2)$$
+
+--
+
+.pull-left[
+```{r null}
+n_total <- nrow(memory)
+
+null <- memory %>% 
+  summarise("mean" = mean(correct)) %>% 
+  pull(mean)
+
+memory <- memory %>% 
+  mutate("prediction_null" = null,
+         "error_null" = (correct - prediction_null)^2)
+
+sse_null <- sum(memory$error_null)
+mse_null <- 1/n_total * sse_null
+bic_null <- n_total * log(mse_null) + 1 * log(n_total)
+```
+]
+
+.pull-right[
+```{r plot-null, fig.align='center',echo=FALSE,fig.height=5.5}
+ggplot(data = memory) +
+  aes(x = as.numeric(rownames(memory))) +
+  aes(y = correct) +
+  aes(fill = age_group) +
+  geom_hline(yintercept = null, show.legend = FALSE, 
+             color = col_age[1], size = 2) +
+  geom_point(size = 3, pch = 21, color = "white") + 
+  scale_fill_manual(values = col_age[2:3], labels = c("Young", "Elderly")) +
+  theme_classic() + 
+  xlab("Participant number") + 
+  ylab("Correct responses") + 
+  theme(axis.title.x = element_text(size = 25),
+        axis.title.y = element_text(size = 25),
+        legend.text = element_text(size = 15),
+        legend.title=element_text(size = 15)) +
+  labs(fill = "Group")
+```
+]
+
+---
+
+## Simple linear regression: age group
+
+- The second model we will look at is a simple linear regression that assumes
+that only the group that a participant belongs to affects the expected number
+of correct responses in the task.
+
+--
+
+$$\text{Correct}_i \sim \text{Normal}(\beta_0+\beta_1\text{age-group}_i, \sigma_2^2)$$
+
+--
+
+.pull-left[
+```{r age}
+# Parameter values
+betas_ageg <- lm(formula = correct ~ age_group, 
+                 data = memory)$coef
+
+memory <- memory %>% 
+  mutate("prediction_ageg" = betas_ageg[1] + betas_ageg[2] * age_group,
+         "error_ageg" = (correct - prediction_ageg)^2)
+
+sse_ageg <- sum(memory$error_ageg)
+mse_ageg <- 1/n_total * sse_ageg
+r2_ageg <- (sse_null - sse_ageg) / sse_null
+bic_ageg <- n_total * log(mse_ageg) + 2 * log(n_total)
+```
+]
+
+.pull-right[
+```{r plot-age, fig.align='center',echo=FALSE,fig.height=5.5}
+ggplot(data = memory) +
+  aes(x = as.numeric(rownames(memory))) +
+  aes(y = correct) +
+  aes(fill = age_group) +
+  geom_smooth(method = lm, formula = y~1, se = FALSE, size = 2, 
+              color = col_age[1]) +
+  geom_point(size = 3, pch = 21, color = "white") + 
+  scale_fill_manual(values = col_age[2:3], labels = c("Young", "Elderly")) +
+  theme_classic() + 
+  xlab("Participant number") + 
+  ylab("Correct responses") + 
+  theme(axis.title.x = element_text(size = 25),
+        axis.title.y = element_text(size = 25),
+        legend.text = element_text(size = 15),
+        legend.title=element_text(size = 15)) +
+  labs(fill = "Group")
+```
+]
+
+---
+
+## Simple linear regression: time elapsed
+
+- The next model assumes that only the time elapsed since the study of the list
+has an effect on the expected number of correct responses. This is a continuous
+variable, which means that now we can use it to plot the data.
+
+--
+
+$$\text{Correct}_i \sim \text{Normal}(\beta_0+\beta_2\text{time}_i, \sigma_3^2)$$
+
+--
+
+.pull-left[
+```{r time}
+# Parameter values
+betas_time <- lm(formula = correct ~ time_min, 
+                 data = memory)$coef
+
+memory <- memory %>% 
+  mutate("prediction_time" = betas_time[1] + betas_time[2] * time_min,
+         "error_time" = (correct - prediction_time)^2)
+
+sse_time <- sum(memory$error_time)
+mse_time <- 1/n_total * sse_time
+r2_time <- (sse_null - sse_time) / sse_null
+bic_time <- n_total * log(mse_time) + 2 * log(n_total)
+```
+]
+
+.pull-right[
+```{r plot-time, fig.align='center',echo=FALSE,fig.height=5.5}
+ggplot(data = memory) +
+  aes(x = time_min) +
+  aes(y = correct) +
+  aes(fill = age_group) +
+  geom_segment(aes(x = min(time_min), xend = max(time_min), 
+                   y = betas_time[1] + betas_time[2] * min(time_min), 
+                   yend = betas_time[1] + betas_time[2] * max(time_min)),
+               size = 2, col = col_age[1]) +
+  geom_point(size = 3, pch = 21, color = "white") + 
+  scale_fill_manual(values = col_age[2:3], labels = c("Young", "Elderly")) +
+  theme_classic() + 
+  xlab("Time elapsed (min)") + 
+  ylab("Correct responses") + 
+  theme(axis.title.x = element_text(size = 25),
+        axis.title.y = element_text(size = 25),
+        legend.text = element_text(size = 15),
+        legend.title=element_text(size = 15)) +
+  labs(fill = "Group")
+```
+]
+
+---
+
+## Multiple linear regression: additive model
+
+- Next we have a multiple linear regression where the effect of both age group
+and time elapsed since the study of the list have an independent effect on the
+expected number of correct responses.
+
+--
+
+$$\text{Correct}_i \sim \text{Normal}(\beta_0+\beta_1 \text{age-group}+\beta_2\text{time}_i, \sigma_4^2)$$
+--
+
+.pull-left[
+```{r time-age}
+# Parameter values
+betas_at <- lm(formula = correct ~ age_group + time_min, 
+                 data = memory)$coef
+
+memory <- memory %>% 
+  mutate("prediction_at" = betas_at[1] + betas_at[2] * age_group + betas_at[3] * time_min,
+         "error_at" = (correct - prediction_at)^2)
+
+sse_at <- sum(memory$error_at)
+mse_at <- 1/n_total * sse_at
+r2_at <- (sse_null - sse_at) / sse_null
+bic_at <- n_total * log(mse_at) + 3 * log(n_total)
+```
+]
+
+.pull-right[
+```{r plot-time-age, fig.align='center',echo=FALSE,fig.height=5.5}
+ggplot(data = memory) +
+  aes(x = time_min) +
+  aes(y = correct) +
+  aes(fill = age_group) +
+  geom_segment(aes(x = min(time_min), xend = max(time_min), 
+                   y = betas_at[1] + betas_at[3] * min(time_min), 
+                   yend = betas_at[1] + betas_at[3] * max(time_min)),
+               size = 2, col = col_age[1]) +
+  geom_segment(aes(x = min(time_min), xend = max(time_min), 
+                   y = betas_at[1] + betas_at[2] + betas_at[3] * min(time_min), 
+                   yend = betas_at[1] + betas_at[2] + betas_at[3] * max(time_min)),
+               size = 2, col = col_age[1]) +
+  geom_point(size = 3, pch = 21, color = "white") + 
+  scale_fill_manual(values = col_age[2:3], labels = c("Young", "Elderly")) +
+  theme_classic() + 
+  xlab("Time elapsed (min)") + 
+  ylab("Correct responses") + 
+  theme(axis.title.x = element_text(size = 25),
+        axis.title.y = element_text(size = 25),
+        legend.text = element_text(size = 15),
+        legend.title=element_text(size = 15)) +
+  labs(fill = "Group")
+```
+]
+
+---
+
+## Multiple linear regression: interaction
+
+- The last model that we want to look at is the interaction between the group
+a participant belongs to and our continuous variable.
+
+--
+
+- Therefore, we need a way to express interactions in the "language" of a linear
+function.
+
+--
+
+- We do this by multiplying our independent variables. Let's think about what 
+the result of the multiplication means by looking at the equation.
+
+--
+
+- The multiple linear regression that includes an interaction term between 
+a discrete and a continuous independent variable can be written as:
+$$\mathbb{E}(y_i) = \beta_0 + \beta_1 z_i + \beta_2 x_i + \beta_3 z_i x_i$$
+
+- Were $z_i$ represents the value of our categorical variable (in the case 
+of two groups this will be either 0 or 1), $x_i$ represents the value of 
+the continuous variable.
+
+---
+
+## Multiple linear regression: interaction
+
+- Now with this equation we can evaluate the predictions by group.
+$$\mathbb{E}(y_i) = \beta_0 + \beta_1 z_i + \beta_2 x_i + \beta_3 z_i x_i$$
+
+--
+
+- Remember that we call the group that was assigned a value of 0 the base-line 
+group. For the base-line group the model predicts that the expected value
+of our dependent variable will be equal to:
+
+$$\mathbb{E}(y_i) = \beta_0 + \beta_1 (0) + \beta_2 x_i + \beta_3 (0) x_i\\ 
+\mathbb{E}(y_i) = \beta_0 + \beta_2 x_i$$
+
+--
+
+- This is the same prediction as a simple linear regression that assumes 
+only the continuous variable has an effect on the expected value of the 
+independent variable.
+
+--
+
+- For the baseline group we can interpret the parameters $\beta_0$ and 
+$\beta_2$ as:
+
+--
+
+  - $\beta_0$ is the expected value of the dependent variable when the 
+  independent variable is equal to 0 for the base-line group.
+  
+--
+
+  - $\beta_2$ is the change in the expected value of the dependent variable for 
+  a unit increase in the continuous independent variable.
+
+---
+
+## Multiple linear regression: interaction
+
+- Now, for the second group we will have that:
+
+--
+
+$$\mathbb{E}(y_i) = \beta_0 + \beta_1 (1) + \beta_2 x_i + \beta_3 (1) x_i\\ 
+\mathbb{E}(y_i) = \beta_0 + \beta_1 + (\beta_2 + \beta_3)x_i$$
+
+--
+
+- Now we will have two ways to interpret the values of the parameters in the 
+model.
+
+--
+
+- First, we can interpret $(\beta_0 + \beta_1)$ and $(\beta_2 + \beta_3)$ as:
+
+--
+
+  - $(\beta_0 + \beta_1)$ is the expected value of the dependent variable when 
+  $x_i$ takes the value of 0 for the second group.
+  
+--
+
+  - $(\beta_2 + \beta_3)$ is the expected change in the dependent variable for
+  a unit increase in the value of $x_i$ for the second group.
+
+---
+
+## Multiple linear regression: interaction
+
+- The second way to interpret the values of the parameters is by looking at the
+difference in the prediction between the two groups:
+
+--
+
+$$\beta_0 + \beta_1 + (\beta_2 + \beta_3)x_i - (\beta_0 + \beta_2 x_i) = \\ 
+\beta_1 + \beta_3 x_i$$
+
+--
+
+- From this perspective, we can interpret the values of the parameters $\beta_1$
+and $\beta_3$ as:
+
+--
+
+  - $\beta_1$: change in the expected value of the dependent variable for 
+  participants that belong to the group that was assigned the value 1 when the 
+  continuous variable $x_i$ takes the value 0.
+  
+--
+
+  - $\beta_3$: change in the effect of the continuous variable $x_i$ on the 
+  expected value of the response for participants that belong to the group
+  that was labeled with a 1.
+  
+--
+
+- Now let's look at the model in the context of our example.
+
+---
+
+### Multiple linear regression: interaction age $\times$ time elapsed
+
+- This model assumes that both the age group that a participant belongs to 
+and the time elapsed since the study of the list affect the expected number of
+correct responses.
+
+--
+
+- Furthermore, the model assumes that the change associated with time elapsed 
+is different for each group.
+
+--
+
+- The parameters $\beta_1$ and $\beta_3$ can be interpreted as:
+
+--
+
+  - $\beta_1$: difference between young and elder individuals on the expected 
+  number of correct responses when time elapsed is equal to 0.
+  
+--
+
+  - $\beta_3$: difference in the effect of time elapsed on the expected number of 
+  correct responses between young and elderly individuals.
+  
+--
+
+- The model can be formalized as:
+
+$$\text{Correct}_i \sim \text{Normal}(\beta_0 + \beta_1 \text{age-group}_i + \beta_2 \text{time}_i + \beta_3\text{age-group}_i\text{time}_i, \sigma_5^2)$$
+
+---
+
+## Multiple linear regression: interaction
+
+- We can estimate the values of each parameter using the **`lm`** function in R.
+
+--
+
+```{r line-int}
+# Values of betas
+betas_int <- lm(formula = correct ~ age_group + time_min + 
+                  age_group * time_min, 
+                data = memory)$coef
+
+memory <- memory %>% 
+  mutate("prediction_int" = betas_int[1] + betas_int[2] * age_group +
+              betas_int[3] * time_min + betas_int[4] * age_group * time_min,
+         "error_int" = (correct - prediction_int)^2)
+
+sse_int <- sum(memory$error_int)
+mse_int <- 1/n_total * sse_int
+r2_int <- (sse_null - sse_int) / sse_null
+bic_int <- n_total * log(mse_int) + 4 * log(n_total)
+```
+
+---
+
+## Predictions of the interaction model
+
+```{r plot-int, fig.align='center',echo=FALSE, fig.width=10}
+ggplot(data = memory) +
+  aes(x = time_min) +
+  aes(y = correct) +
+  aes(fill = age_group) +
+  geom_smooth(color = col_age[1], size = 2, se = FALSE, method = lm, 
+              formula = y~x) +
+  geom_point(size = 4, pch = 21, color = "white") + 
+  scale_fill_manual(values = col_age[2:3], labels = c("Young", "Elderly")) +
+  theme_classic() + 
+  xlab("Time elapsed (min)") + 
+  ylab("Correct responses") + 
+  theme(axis.title.x = element_text(size = 25),
+        axis.title.y = element_text(size = 25),
+        legend.text = element_text(size = 15),
+        legend.title=element_text(size = 15)) +
+  labs(fill = "Group")
+```
+
+
+
