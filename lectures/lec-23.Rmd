@@ -1,0 +1,312 @@
+---
+title: "Lecture 23"
+subtitle: "MLR with Categorical Variables: Interactions"
+author: "Psych 10 C"
+institute: "University of California, Irvine"
+date: "05/25/2022"
+output:
+  xaringan::moon_reader:
+    self_contained: true
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+```
+
+```{r xaringan-extra, echo = FALSE}
+xaringanExtra::use_tile_view()
+
+xaringanExtra::use_fit_screen()
+
+xaringanExtra::use_editable(expires = 1)
+
+xaringanExtra::use_extra_styles(
+  hover_code_line = TRUE,         #<<
+  mute_unhighlighted_code = TRUE  #<<
+)
+
+htmltools::tagList(
+  xaringanExtra::use_clipboard(
+    button_text = "<i class=\"fa fa-clipboard\"></i>",
+    success_text = "<i class=\"fa fa-check\" style=\"color: #90BE6D\"></i>",
+    error_text = "<i class=\"fa fa-times-circle\" style=\"color: #F94144\"></i>"
+  ),
+  rmarkdown::html_dependency_font_awesome()
+)
+```
+
+```{r load-tidy, echo = FALSE, message = FALSE, warning = FALSE}
+library(tidyverse)
+library(flipbookr)
+
+knitr::opts_chunk$set(fig.width = 6, message = FALSE, 
+                      warning = FALSE, comment = "", 
+                      cache = F)
+
+memory <- read_csv(file = here::here("data/week-9/memory-example.csv"))
+```
+
+## Review 
+
+- Last class we talked about how to include discrete variables into a multiple 
+linear regression model.
+
+--
+
+- The models that we tested assumed that there was no interaction between our
+continuous random variable and a discrete random variable.
+
+--
+
+- In other words, the effect of age on blood pressure was the same regardless of 
+the group that a participant belonged to (male or female).
+
+--
+
+- However, we could also consider interactions between discrete (categorical) 
+variables and continuous variables.
+
+--
+
+- Today we will work with an example that we talked about at the start of 
+the quarter. A recognition memory experiment.
+
+---
+
+## Study
+
+- We are interested in the effect of the time elapsed since the study of a list 
+of words and the age of a participant on recognition memory.
+
+--
+
+- We have data from an experiment where participants first studied a list of 100
+words.
+
+--
+
+- After the study session each participant had to respond to a recognition 
+memory task.
+
+--
+
+- The time between study and test was random for each participant.
+
+--
+
+- The dependent variable in this study was the number of correctly recognized 
+words during the test phase.
+
+--
+
+- We have two independent variables in the study. The time elapsed between study
+and test phase, and the age of the participant in years.
+
+---
+
+## Summary of variables in the study.
+
+- The average number of correctly recognized words was equal to 
+`r round(mean(memory$correct),1)`, with a range between `r min(memory$correct)` 
+and `r max(memory$correct)` words.
+
+--
+
+- The time elapsed between study and test in minutes was 
+`r round(mean(memory$time_min),2)` on average with a range between 
+`r min(memory$time_min)` and `r max(memory$time_min)` minutes.
+
+--
+
+- Finally, participants had a mean age of `r round(mean(memory$age),1)` with a 
+range between `r min(memory$age)` and `r max(memory$age)` years.
+
+--
+
+- Now before we move forward with the models let's look at the distributions of 
+each variable.
+
+---
+
+## Number of correctly recognized words
+
+```{r, echo = FALSE, fig.align='center',  fig.width=8}
+pred_null <- memory %>% 
+  summarise("mean" = mean(correct))
+
+col_age <- c("#637373", "#679B9B","#FF9A76")
+
+ggplot(data = memory) + 
+  aes(x = correct) + 
+  geom_histogram(fill = col_age[2], col = "white", binwidth = 5) + 
+  geom_vline(data = pred_null, aes(xintercept = mean), colour = col_age[1], 
+             size = 2) + 
+  theme_classic() + 
+  xlab("Correct") + 
+  ylab("") + 
+  theme(axis.title.x = element_text(size = 30),
+        axis.title.y = element_text(size = 30))
+```
+ 
+---
+
+## Time between study and test
+
+```{r, echo = FALSE, fig.align='center',  fig.width=8}
+average_time <- memory %>% 
+  summarise("mean" = mean(time_min))
+
+ggplot(data = memory) + 
+  aes(x = time_min) + 
+  geom_histogram(fill = col_age[3], col = "white", binwidth = 2) + 
+  geom_vline(data = average_time, aes(xintercept = mean), colour = col_age[1], 
+             size = 2) + 
+  theme_classic() + 
+  xlab("Time elapsed (min)") + 
+  ylab("") + 
+  theme(axis.title.x = element_text(size = 30),
+        axis.title.y = element_text(size = 30))
+```
+
+---
+
+## Participant's age
+
+.pull-left[
+```{r, echo = FALSE, fig.align='center',  fig.width=8}
+average_age <- memory %>% 
+  summarise("mean" = mean(age))
+
+ggplot(data = memory) + 
+  aes(x = age) + 
+  geom_histogram(fill = col_age[2], col = "white", binwidth = 2) + 
+  geom_vline(data = average_age, aes(xintercept = mean), colour = col_age[1], 
+             size = 2) + 
+  theme_classic() + 
+  xlab("Participant age (years)") + 
+  ylab("") + 
+  theme(axis.title.x = element_text(size = 30),
+        axis.title.y = element_text(size = 30))
+```
+]
+
+--
+
+.pull-right[
+```{r, echo = FALSE, fig.align='center', fig.width=8}
+ggplot(data = memory) + 
+  aes(x = age) +
+  aes(fill = age > 35) +
+  geom_histogram(col = "white", binwidth = 2) + 
+  theme_classic() +
+  scale_fill_manual(values = col_age[2:3], labels = c("Young", "Elderly")) +
+  xlab("Participant age (years)") + 
+  ylab("") + 
+  theme(axis.title.x = element_text(size = 30),
+        axis.title.y = element_text(size = 30),
+        legend.text = element_text(size = 15),
+        legend.title=element_text(size = 20)) +
+  labs(fill = "Group by age")
+```
+]
+
+--
+
+- We should always try to graph our data before doing any data analysis. 
+
+--
+
+- As we can see in the graph, the average participant age makes no sense, as it 
+is just a value that we never even observed in our sample. 
+
+--
+
+- In such cases is always better to see if our variables are grouped before 
+reporting summary statistics.
+
+---
+
+## Reporting summary statistics by group.
+
+- In this case, we know that there are two groups of ages in the experiment, 
+that means that we can report a separate summary statistic for each.
+
+--
+
+- We could report something like this:
+
+--
+
+  - We consider two populations in the study, young and elderly participants. 
+
+--
+
+  - The average age of young participants was `r round(mean(memory$age[memory$age<35]),1)`
+  and the range was between `r min(memory$age[memory$age<35])` and 
+  `r max(memory$age[memory$age<35])` years.
+  
+--
+
+  - On the other hand, the average age of participants that belong to the elder
+  population was  `r round(mean(memory$age[memory$age>35]),1)`
+  and the range was between `r min(memory$age[memory$age>35])` and 
+  `r max(memory$age[memory$age>35])` years.
+  
+--
+
+- Now that we know that we have two different groups of participants we need 
+to decide how we are going to include the variable "age" in our models.
+
+--
+
+- There is no perfect way to deal with this problem, each method (using age as
+a continuous or discrete variable) will have it's advantages and disadvantages.
+
+---
+
+## From continuous to discrete variables
+
+- As we did last week, we will choose to transform our continuous measure of 
+age into a categorical variable that takes the value 0 for young participants
+and takes the value 1 for elders.
+
+--
+
+- This will make us loose some information but will allow us to test for an 
+interaction effect between **age group** and time elapsed from study.
+
+--
+
+- To create our new categorical variable we can use the following code:
+
+--
+
+```{r idage}
+memory <- memory %>% 
+  mutate("age_group" = case_when(age <= 40 ~ 0,
+                                 age > 40 ~ 1))
+```
+
+--
+
+- This code will add a new column to our data with the name "age_group" that we 
+can now use in our models.
+
+---
+
+## Interaction models in MLR
+
+- The first model that we need as always is the null model, which assumes that 
+the expected number of words correctly recognized by a participant is constant
+regardless of time elapsed since study or the age group that a participant 
+belongs to.
+
+--
+
+- The second model is the simple linear regression that only includes the 
+age group of a participant as a predictor of the expected number of words.
