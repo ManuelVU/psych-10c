@@ -57,7 +57,7 @@ pressure <- read_csv(file = here::here("data/week-8/sys-pressure.csv"))
 
 --
 
-- We wanted to know if the age and height were good predictors of the blood 
+- We wanted to know if *age* and *height* are good predictors of the blood
 pressure of a participant.
 
 --
@@ -66,22 +66,22 @@ pressure of a participant.
 
 --
 
-  1. Null model: blood pressure is constant regardless of age and height.
+  1. **Null model:** Blood pressure is constant *regardless* of age and height.
   
 --
 
-  1. Age model: the expected blood pressure of participants changes as a linear
-  function of their age.
+  1. **Age model:** The expected blood pressure of participants changes *as a 
+  linear function of their age*.
   
 --
 
-  1. Height model: the expected blood pressure of participants changes as a linear
-  function of their height.
+  1. **Height model:** The expected blood pressure of participants changes *as a 
+  linear function of their height*.
   
 --
 
-  1. Age + Height model: the expected blood pressure of participants changes as 
-  a linear function of their age and height.
+  1. **Age + Height model:** The expected blood pressure of participants changes 
+  *as a linear function of their age and height*.
   
 ---
 
@@ -136,14 +136,14 @@ bic_ah <- n_total * log(mse_ah) + 3 * log(n_total)
 
 --
 
-- The results indicate that, using only the continuous variables in our data 
-the best model is the one that assumes that both age and height have an effect
-on the blood pressure of participants.
+- The results indicate that, considering only the continuous variables in our 
+data, the best model is the one that assumes that *both age and height have an 
+effect on the blood pressure of participants*.
 
 --
 
-- However, when we did the analysis we ignored one of our variables which was 
-the sec of participants at birth.
+- However, in our analysis we ignored one of our variables included in the 
+complete dataset: the *sex of participants at birth*.
 
 ---
 
@@ -192,7 +192,7 @@ ggplot(data = pressure) +
 
 - From the first graph there are two things that we can notice, first is that 
 blood pressure levels seem to be different between the two groups, however, 
-the relation between height and age inside each group is not clear.
+the relation between height and blood pressure inside each group is not clear.
 
 --
 
@@ -203,13 +203,13 @@ groups, however, the effect of age seems to be approximately the same in both.
 
 ## Adding categorical variables
 
-- Given that there seems to be a difference between the two groups, we now want
-to add our categorical variable to the linear regression model.
+- Since there seems to be a difference between the two groups, we decide
+to add this new categorical variable into our linear regression model.
 
 --
 
-- In order to do this, first we need to assign numeric values to each of the 
-labels. To do this we use the indicator function:
+- In order to do this, first, we'll assign "arbitrary" numeric values to each 
+of the labels. We do this by using the indicator function:
 
 $$z_i =
   \begin{cases}
@@ -219,51 +219,65 @@ $$z_i =
     
 --
 
-- According to this definition of the variable we say that the group "male"
-is the reference group, so the parameter associated to the variable $z_i$ 
-can be interpreted as the change in blood pressure for members of the 
-"female" group compared to males.
+- According to this definition of the variable, the Male group would 
+be the reference group. The parameter ( $\beta$ ) associated to the variable 
+$z_i$ can now be interpreted as the difference in the expected blood pressure 
+for members of the Female group compared to males.
 
 --
 
-- Now we want to add linear models that consider the categorical variable "sex at
-birth" as a predictor of blood pressure.
+$$y_i \sim Normal(\beta_0 + \dots + \beta_kz_i,\sigma^2)$$
+
+--
+
+So, for people on the Male vs Female group, we would have:
+
+$$y_i \sim Normal(\beta_0 + \dots + \beta_k(0),\sigma^2)$$
+$$y_i \sim Normal(\beta_0 + \dots + \beta_k(1),\sigma^2)$$
+
 
 ---
 
 ## Linear models with categorical variables
 
-- For now we will only consider the additive models that consider our 
+- For now we will only consider the additive models that take into account our 
 categorical variable as a predictor of blood pressure.
 
 --
 
-  1. Sex model: **only** the sex at birth of a participant has an
-  effect on blood pressure. $$y_i \sim \text{Normal}(\beta_0 + \beta_3 \text{sex}_i,\sigma_5^2)$$
+  1. **Sex model**: *Only the sex at birth* has an effect on blood pressure. 
+  
+  $$y_i \sim \text{Normal}(\beta_0 + \beta_3 z_i,\sigma_5^2)$$
   
 --
 
-  1. Sex + Age model: the expected blood pressure of participants 
-  is a linear function of their age and sex at birth. $$y_i \sim \text{Normal}(\beta_0 + \beta_1\text{age}_i + \beta_3 \text{sex}_i,\sigma_6^2)$$
+  1. **Sex + Age model**: The expected blood pressure of participants is *a 
+  linear function of their current age and sex at birth*. 
+  
+  $$y_i \sim \text{Normal}(\beta_0 + \beta_1\text{age}_i + \beta_3 z_i,\sigma_6^2)$$
   
 --
 
-  1. Sex + Height model: the expected blood pressure of 
-  participants is a linear function of their height and sex at birth. $$y_i \sim \text{Normal}(\beta_0 + \beta_2\text{height}_i + \beta_3 \text{sex}_i,\sigma_7^2)$$
+  1. **Sex + Height model**: the expected blood pressure of participants is *a
+  linear function of their current height and sex at birth*. 
+  
+  $$y_i \sim \text{Normal}(\beta_0 + \beta_2\text{height}_i + \beta_3 z_i,\sigma_7^2)$$
 
 --
 
-  1. Sex + Age + Height model: the expected blood pressure of 
-  participants is a linear function of their age, height and sex at birth. $$y_i \sim \text{Normal}(\beta_0 + \beta_1\text{age}_i + \beta_2\text{height}_i + \beta_3 \text{sex}_i,\sigma_8^2)$$
+  1. **Sex + Age + Height model**: the expected blood pressure of 
+  participants is a linear function of their age, height and sex at birth. 
+  
+  $$y_i \sim \text{Normal}(\beta_0 + \beta_1\text{age}_i + \beta_2\text{height}_i + \beta_3 z_i,\sigma_8^2)$$
 
 ---
 
-## Adding indicator variable to our data
+## Adding an indicator variable to our data
 
-- The steps that we need to take to add the predictions and errors of each of 
-these new models to our data in order to perform a model comparison are 
-the same as before, the only change is that now we first need to add a new 
-variable. 
+- The steps that we need to take to add the predictions and errors for each of 
+these new models to our data in order to perform the usual model comparison are 
+the same as before. The only change is that now, we need to start by adding this
+new variable. 
 
 --
 
@@ -278,9 +292,9 @@ pressure <- pressure %>%
 
 --
 
-- This adds a new variable to our data file that takes the value 1 when the 
-row has the label "female" and takes the value 0 when the row has the label 
-"male".
+- This adds a new variable "sex_id" to our dataset that takes a value of 1 when 
+the "sex_at_birth" column has a "female" label, and a value of 0 when the label
+is "male".
 
 ---
 
@@ -332,16 +346,16 @@ ggplot(data = pressure) +
 
 --
 
-- As you can see, the predictions of the model are just the averages of each 
-group.
+- As we can see, the predictions of this model are just the averages observed 
+across each of the sex groups (Males/Females).
 
 ---
 
 ## Age + Sex model
 
-- The age + sex model is a multiple linear regression, however, this time we 
-will be able to visualize the predictions of the model because one of the 
-independent variables is not continuous.
+- The Age + Sex model is a multiple linear regression model. However, this time 
+we will be able to visualize the predictions of the model because we're using a
+categorical variable as one of its independent variables.
 
 ```{r}
 # Estimate the parameters of the model via lm
@@ -361,7 +375,7 @@ bic_as <- n_total * log(mse_as) + 3 * log(n_total)
 
 ---
 
-## Predictions Age + Sex model
+## Predictions for the Age + Sex model
 
 ```{r, fig.align='center', echo=FALSE, fig.width=8, fig.height=5.5}
 ggplot(data = pressure) + 
@@ -389,16 +403,16 @@ ggplot(data = pressure) +
 ```
 
 
-- The predictions now are different for each group (we have two lines), however,
-notice that those lines are parallel, this is because we are not allowing for
-an interaction between the variables. 
+- The predictions are different for each group, as indicated by the two lines. 
+However, **the lines are parallel**. This is because this model does not assume
+an interaction between the variables Age and Sex at birth. 
 
 ---
 
 ## Height + Sex model
 
-- This is another multiple linear regression whose predictions we will be able 
-to visualize using a graph.
+- The Height + Sex model is another multiple linear regression model, whose 
+predictions we will be able to visualize in a graph.
 
 ```{r}
 # Estimate the parameters of the model via lm
@@ -447,16 +461,16 @@ ggplot(data = pressure) +
 
 --
 
-- This new model suggests that as the height of the participant increases blood
-pressure decreases, this different from the result from the model that only has
-height as a predictor. $(\hat{\beta}_2 =$ `r round(betas_hs[2],2)`)
+- This model suggests that as the height of the participant increases, blood
+pressure decreases. This prediction is different from that made by the model 
+that only consiedred height as a predictor. $(\hat{\beta}_2 =$ `r round(betas_hs[2],2)`)
 
 ---
 
 ## Age + Height + Sex model
 
-- With this fourth model we will not be able to visualize its predictions, this 
-is due to the fact that we now have two continuous variables.
+- For this fourth model we will not be able to visualize its predictions. This 
+is due to the fact that it contains two continuous variables.
 
 ```{r}
 
@@ -478,9 +492,9 @@ bic_ahs <- n_total * log(mse_ahs) + 4 * log(n_total)
 
 ## Comparing all 8 models
 
-- To compare all 8 models we can add them to the table we had before, we start 
-with the models that have only 1 predictor, then the ones that have 2, and 
-finally the model with all 3 predictors.
+- We can add the results for these four new models to the table we had before. 
+We first present the models that have only 1 predictor, then the ones that have 
+2, and finally, the one model with all 3 predictors.
 
 | Model | Parameters | MSE | $R^2$ | BIC |
 |-------|:----------:|:---:|:-----:|:---:|
@@ -497,43 +511,44 @@ finally the model with all 3 predictors.
 
 ## Model comparison
 
-- When we only took into account the continuous variables in the study the best
-model was the one that assumed that the age and height of participants affected 
-the average blood pressure of participants.
+- Previously, when we only took into account the continuous variables in the 
+study, we found that the best model was the one that assumed that both the age 
+and height of participants affected their expected blood pressure.
 
 --
 
-- Once we take into account the sex at birth of participants now we have two 
-models that are better.
+- Now, when we take into account the sex at birth of participants, we end up
+with two models that are better:
 
 --
 
-- First, the model that includes all 3 predictors was better than a model that 
-only includes height and age.
+- First, the model including all 3 predictors was better than the model with 
+only height and age.
 
 --
 
-- However, the best model is the one that assumes that only the age and sex at 
-birth of the participants have an effect on the expected blood pressure.
+- However, the best model seems to be the one that only assumes that age and sex
+at birth have an effect on the expected blood pressure.
 
 --
 
-- As we saw from in the graph, once we take into account sex at birth, the 
-parameter associated with height was very close to 0.
+- As we saw in the graph, once we take into account sex at birth, the parameter 
+associated with height was found to be very close to 0.
 
 --
 
 - This is because when we used only the height as a predictor, the effect of the
-sex of the participant at birth was being confounded. In other words, 
-we could not tell whether it was an effect of height or if it was associated 
-with the fact that sex at birth and height are highly correlated.
+sex of the participant at birth was being **confounded**. This means that we 
+could not differentiate between an effect of only height versus an effect of a
+hidden variable (sex at birth) that was highly correlated with height.
 
 ---
 
-## Condounders
+## Confounders
 
-- This is not an uncommon case, many times there are variables that can seem 
-relevant, however, their effect can be due to their association to other variables.
+- This is not an uncommon case. Many times there are variables that seem to be
+relevant, but their effect is actually due to their association to other 
+unexplored variables.
 
 --
 
@@ -543,27 +558,27 @@ it carried some information about the sex at birth of the participants.
 --
 
 - When we include the information about the sex at birth of a participant into 
-the model then the association between height and blood pressure almost
+the model, then the association between height and blood pressure almost
 disappears, this is because the information is now redundant.
 
 --
 
 - Now that we know that the best model is one that assumes that blood pressure 
-is a linear model of age and sex at birth we can interpret the values of the 
+is a linear model of age and sex at birth, we can interpret the values of the 
 parameters that we found.
 
 ---
 
 ## Interpretation of the parameters
 
-- The model that we selected (age + sex) has 3 parameters, the intercept 
+- The model that we selected (age + sex) has 3 parameters: the intercept 
 $\beta_0$, the slope associated with age $\beta_1$ and the slope associated with 
 sex at birth $\beta_3$.
 
 --
 
 - For the parameter $\beta_0$ we can say: The estimated value of the 
-intercept was equal to `r round(betas_as[1],2)`. In other words, the average 
+intercept was `r round(betas_as[1],2)`. This means that the average 
 blood pressure of a **male** that is 0 years old (new born) is approximately 
 `r round(betas_as[1],2)`.
 
@@ -571,8 +586,7 @@ blood pressure of a **male** that is 0 years old (new born) is approximately
 
 - For the slope associated with age: The estimated value of the slope associated
 with age was `r round(betas_as[2],2)`. This means that on average, the 
-blood pressure of participants increases `r round(betas_as[2],2)` approximately
-each year.
+blood pressure of participants increases `r round(betas_as[2],2)` per year.
 
 --
 
@@ -581,4 +595,14 @@ of the slope associated with sex at birth was `r round(betas_as[3],2)`, this
 indicates that the blood pressure of **female** participants in the study was 
 approximately `r round(betas_as[2],2)` lower than the males regardless of 
 their age.
+
+---
+
+- Homework link:
+
+```{r hw-link}
+
+link <- "https://raw.githubusercontent.com/ManuelVU/psych-10c-data/main/homework5.csv"
+```
+
 
