@@ -1,0 +1,82 @@
+---
+title: "Lecture 24"
+subtitle: "MLR with Categorical Variables: Interactions"
+author: "Psych 10 C"
+institute: "University of California, Irvine"
+date: "05/25/2022"
+output:
+  xaringan::moon_reader:
+    self_contained: true
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+```
+
+```{r xaringan-extra, echo = FALSE}
+xaringanExtra::use_tile_view()
+
+xaringanExtra::use_fit_screen()
+
+xaringanExtra::use_editable(expires = 1)
+
+xaringanExtra::use_extra_styles(
+  hover_code_line = TRUE,         #<<
+  mute_unhighlighted_code = TRUE  #<<
+)
+
+htmltools::tagList(
+  xaringanExtra::use_clipboard(
+    button_text = "<i class=\"fa fa-clipboard\"></i>",
+    success_text = "<i class=\"fa fa-check\" style=\"color: #90BE6D\"></i>",
+    error_text = "<i class=\"fa fa-times-circle\" style=\"color: #F94144\"></i>"
+  ),
+  rmarkdown::html_dependency_font_awesome()
+)
+```
+
+```{r load-tidy, echo = FALSE, message = FALSE, warning = FALSE}
+library(tidyverse)
+library(flipbookr)
+
+knitr::opts_chunk$set(fig.width = 6, message = FALSE, 
+                      warning = FALSE, comment = "", 
+                      cache = F)
+
+memory <- read_csv(file = here::here("data/week-9/memory-example.csv"))
+```
+
+## Model comparison: Simple linear regression models
+
+- Last class we looked at the predictions of each of the following models:
+
+--
+
+- Null: $$\text{Correct}_i \sim \text{Normal}(\beta_0, \sigma_1^2)$$
+
+--
+
+- Age: $$\text{Correct}_i \sim \text{Normal}(\beta_0+\beta_1\text{age-group}_i, \sigma_2^2)$$
+
+--
+
+- Time: $$\text{Correct}_i \sim \text{Normal}(\beta_0+\beta_2\text{time}_i, \sigma_3^2)$$
+
+---
+
+## Model Comparison: Multiple linear regression models
+
+- Age and Time additive: $$\text{Correct}_i \sim \text{Normal}(\beta_0+\beta_1\text{age-group}_i+\beta_2\text{time}_i, \sigma_4^2)$$
+
+- Age and Time interaction: 
+
+$$\text{Correct}_i \sim \text{Normal}(\beta_0+\beta_1\text{age-group}_i+\beta_2\text{time}_i+\beta_3\text{age-group}_i\text{time}_i, \sigma_5^2)$$
+
+
+
+
