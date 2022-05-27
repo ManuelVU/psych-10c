@@ -3,7 +3,7 @@ title: "Lecture 24"
 subtitle: "MLR with Categorical Variables: Interactions"
 author: "Psych 10 C"
 institute: "University of California, Irvine"
-date: "05/25/2022"
+date: "05/27/2022"
 output:
   xaringan::moon_reader:
     self_contained: true
@@ -49,6 +49,69 @@ knitr::opts_chunk$set(fig.width = 6, message = FALSE,
                       cache = F)
 
 memory <- read_csv(file = here::here("data/week-9/memory-example.csv"))
+memory <- memory %>% 
+  mutate("age_group" = case_when(age <= 40 ~ 0,
+                                 age > 40 ~ 1),
+         "age_group" = as.logical(age_group))
+n_total <- nrow(memory)
+
+null <- memory %>% 
+  summarise("mean" = mean(correct)) %>% 
+  pull(mean)
+
+memory <- memory %>% 
+  mutate("prediction_null" = null,
+         "error_null" = (correct - prediction_null)^2)
+
+sse_null <- sum(memory$error_null)
+mse_null <- 1/n_total * sse_null
+bic_null <- n_total * log(mse_null) + 1 * log(n_total)
+betas_ageg <- lm(formula = correct ~ age_group, 
+                 data = memory)$coef
+
+memory <- memory %>% 
+  mutate("prediction_ageg" = betas_ageg[1] + betas_ageg[2] * age_group,
+         "error_ageg" = (correct - prediction_ageg)^2)
+
+sse_age <- sum(memory$error_ageg)
+mse_age <- 1/n_total * sse_age
+r2_age <- (sse_null - sse_age) / sse_null
+bic_age <- n_total * log(mse_age) + 2 * log(n_total)
+betas_time <- lm(formula = correct ~ time_min, 
+                 data = memory)$coef
+
+memory <- memory %>% 
+  mutate("prediction_time" = betas_time[1] + betas_time[2] * time_min,
+         "error_time" = (correct - prediction_time)^2)
+
+sse_time <- sum(memory$error_time)
+mse_time <- 1/n_total * sse_time
+r2_time <- (sse_null - sse_time) / sse_null
+bic_time <- n_total * log(mse_time) + 2 * log(n_total)
+betas_at <- lm(formula = correct ~ age_group + time_min, 
+                 data = memory)$coef
+
+memory <- memory %>% 
+  mutate("prediction_at" = betas_at[1] + betas_at[2] * age_group + betas_at[3] * time_min,
+         "error_at" = (correct - prediction_at)^2)
+
+sse_at <- sum(memory$error_at)
+mse_at <- 1/n_total * sse_at
+r2_at <- (sse_null - sse_at) / sse_null
+bic_at <- n_total * log(mse_at) + 3 * log(n_total)
+betas_int <- lm(formula = correct ~ age_group + time_min + 
+                  age_group * time_min, 
+                data = memory)$coef
+
+memory <- memory %>% 
+  mutate("prediction_int" = betas_int[1] + betas_int[2] * age_group +
+              betas_int[3] * time_min + betas_int[4] * age_group * time_min,
+         "error_int" = (correct - prediction_int)^2)
+
+sse_int <- sum(memory$error_int)
+mse_int <- 1/n_total * sse_int
+r2_int <- (sse_null - sse_int) / sse_null
+bic_int <- n_total * log(mse_int) + 4 * log(n_total)
 ```
 
 ## Model comparison: Simple linear regression models
@@ -73,10 +136,135 @@ memory <- read_csv(file = here::here("data/week-9/memory-example.csv"))
 
 - Age and Time additive: $$\text{Correct}_i \sim \text{Normal}(\beta_0+\beta_1\text{age-group}_i+\beta_2\text{time}_i, \sigma_4^2)$$
 
+--
+
 - Age and Time interaction: 
 
 $$\text{Correct}_i \sim \text{Normal}(\beta_0+\beta_1\text{age-group}_i+\beta_2\text{time}_i+\beta_3\text{age-group}_i\text{time}_i, \sigma_5^2)$$
 
+--
 
+<br>
 
+- We calculated the Sum of Squared Error of each model and with that the Mean 
+squared error and BIC of each model so that now we can select the one that 
+better accounts for our data.
 
+---
+
+## Model comparison
+
+| Model             | Parameters | Mean SE               | $R^2$                | BIC                   |
+|-------------------|:----------:|:---------------------:|:--------------------:|:---------------------:|
+| Null              | 1          | `r round(mse_null,1)` | NA                   | `r round(bic_null,1)` |
+| Time              | 2          | `r round(mse_time,1)` | `r round(r2_time,1)` | `r round(bic_time,1)` |
+| Age               | 2          | `r round(mse_age,1)`  | `r round(r2_age,1)`  | `r round(bic_age,1)`  |
+| Age $+$ Time      | 3          | `r round(mse_at,1)`   | `r round(r2_at,1)`   | `r round(bic_at,1)`   |
+| Age $\times$ Time | 4          | `r round(mse_int,1)`  | `r round(r2_int,1)`  | `r round(bic_int,1)`  |
+
+--
+
+- Comparing the models using BIC, the one that accounts for the data better is
+the interaction model.
+
+--
+
+- We can use this result and interpret the parameters of the model.
+
+---
+
+## Parameter interpretation
+
+- We will start with $\beta_0$: According to the model, the average number of 
+correctly recognized words is approximately `r round(betas_int[1], 1)`, for 
+participants that belong to the **young** group.
+
+--
+
+- For the parameter associated with the age group we can write:
+
+  - According to the interaction model, the expected number of correctly 
+  recognized words for participants in the **elderly** group in comparison 
+  to the **young** group, when the time between study and test is set to 0 
+  minutes, was `r round(betas_int[2], 1)`.
+  
+--
+
+- Notice that we interpret the value in terms of the difference between groups.
+
+--
+
+- Another important thing to realize is that the estimated value doesn't make 
+sense, because it means that we would expect elderly participants to 
+correctly recognize 104 out of 100 words (where do the other 4 words come from?).
+
+--
+
+- Like we said at the end of last class this is because the assumption that we 
+made at the start (responses follow a Normal distribution) is wrong.
+
+---
+
+## Parameter interpretation
+
+- The interpretation for the parameter associated with the elapsed time between
+study and test $\beta_2$ can be interpreted as:
+
+--
+
+  - The change associated with the elapsed time between study and test phase was
+  equal to `r round(betas_int[3], 2)`, this means that the average number of 
+  correctly recognized words decreases by approximately 
+  `r abs(round(betas_int[3], 2))` words by minute in the young population.
+  
+--
+
+- The interpretation of the interaction parameter (the one associated with the 
+product between age group and time elapsed) is:
+
+--
+
+  - The difference in the effect of time elapsed between study and test phase 
+  between the young and elderly population was `r round(betas_int[4], 2)`, this 
+  indicates that the average number of words decreases by 
+  `r abs(round(betas_int[4], 2))` more words on average in the elderly population 
+  in comparison to the young population.
+  
+--
+
+- In other words, participants in the elderly population are expected to 
+forget `r abs(round(betas_int[3]+betas_int[4], 2))` words a minute on average, 
+in comparison to `r abs(round(betas_int[3], 2))` in the young population
+
+---
+
+## Conclusion
+
+- With the results from our model comparison now we are able to reach a 
+conclusion about our original research question. 
+
+--
+
+- The model that best accounts for our observations in the experiment was the 
+interaction model between the age group that a participant belongs to and the 
+time elapsed between the study and test phase of the experiment.
+
+--
+
+- According to our results, the estimated value of the intercept for each group,
+suggests that elderly participants are expected to correctly recognize more 
+words when there is no time interval between the end of the study phase and test, 
+in comparison to participants in the young population.
+
+--
+
+- However, there is a difference in the average number of words that each group
+will forget for each additional minute between study and test. The results 
+indicate that elderly participants will forget, on average, 
+`r abs(round(betas_int[3]+betas_int[4], 2))` words per minute, in comparison
+to only `r abs(round(betas_int[3], 2))` on average for the young population.
+
+--
+
+- In summary, elderly participants seem to lose the ability to recognize 
+previously studied words at a faster rate than young participants.

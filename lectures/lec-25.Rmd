@@ -1,0 +1,378 @@
+---
+title: "Lecture 24"
+subtitle: "Generalized Linear Models: Introduction"
+author: "Psych 10 C"
+institute: "University of California, Irvine"
+date: "05/27/2022"
+output:
+  xaringan::moon_reader:
+    self_contained: true
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+```
+
+```{r xaringan-extra, echo = FALSE}
+xaringanExtra::use_tile_view()
+
+xaringanExtra::use_fit_screen()
+
+xaringanExtra::use_editable(expires = 1)
+
+xaringanExtra::use_extra_styles(
+  hover_code_line = TRUE,         #<<
+  mute_unhighlighted_code = TRUE  #<<
+)
+
+htmltools::tagList(
+  xaringanExtra::use_clipboard(
+    button_text = "<i class=\"fa fa-clipboard\"></i>",
+    success_text = "<i class=\"fa fa-check\" style=\"color: #90BE6D\"></i>",
+    error_text = "<i class=\"fa fa-times-circle\" style=\"color: #F94144\"></i>"
+  ),
+  rmarkdown::html_dependency_font_awesome()
+)
+```
+
+```{r load-tidy, echo = FALSE, message = FALSE, warning = FALSE}
+library(tidyverse)
+library(flipbookr)
+
+knitr::opts_chunk$set(fig.width = 6, message = FALSE, 
+                      warning = FALSE, comment = "", 
+                      cache = F)
+test <- rbinom(n = 60, size = 1, prob = rep(c(0.25,0.125),each=30))
+covid <- tibble("test_pcr" = test,
+                "status" = rep(c("not_vacinated", "vaccinated"),each = 30))
+```
+
+## Bounds
+
+- One of the problems with linear models is that they can predict values that 
+are not always bounded. 
+
+--
+
+- For example, the interaction model that we used in the previous example 
+predicted that elderly participants could correctly recognize 104 words 
+out of only 100 when there was no time between study and test in a recognition
+memory task.
+
+--
+
+- This problem is associated with the Normality assumption:
+
+$$ y_i \sim \text{Normal}(\mu, \sigma^2)$$
+
+--
+
+- This distribution has its support on all the real numbers, this means that the
+model is not restricted to the values that our dependent variable can take.
+
+--
+
+- There is nothing in the model that states that the values of our dependent 
+variable have to be between 0 and 100. The model assumes that it could be 
+any value between $-\infty$ to $\infty$.
+
+---
+
+## Solution
+
+- In order to solve this problem first we need to assume that our data follows 
+a different distribution that is not a Normal.
+
+--
+
+- The problem is which distribution should we use?
+
+--
+
+- As with other problems that we have talked about before, there is no perfect 
+answer to this question, however, we have to keep in mind that whichever 
+distribution we choose, it will come with some assumptions about
+how our data behaves.
+
+--
+
+- The key idea will be that, regardless of the distribution that we choose, 
+we would like to keep using a linear function, so the challenge is: 
+How do we get rid of the boundaries in our data?
+
+---
+
+## Binomial model: Logistic regression
+
+- One common model in the literature is the logistic regression model.
+
+--
+
+- This distribution is used when we have one or more binary outcomes.
+
+--
+
+- A binary outcome just means that there are only two possibilities. In other 
+words something happens or it doesn't.
+
+--
+
+- The common example would be a coin toss. Every time we toss a coin the outcome
+will either be "Heads" or "Tails" but it can't be both, and those are the 
+only results we would expect.
+
+---
+
+## Example
+
+- One current example would be testing positive for covid.
+
+--
+
+- If we get tested then the result of the test will be positive (patient is 
+diagnosed with covid) or negative (patient is not diagnosed with covid).
+
+--
+
+- If we don't know anything about the person who is getting a test then there 
+will be some probability that the test is positive and some other probability 
+that the test will return negative.
+
+--
+
+- Let's assume that the test is perfect and if the person tests positive that 
+means that the person is infected with covid and if it is negative then that 
+means that the person does not have covid.
+
+--
+
+- This is not how tests work but we can think like this for convenience for now.
+
+--
+
+- Now imagine that we have two populations one group of people who are 
+vaccinated and another group who are not. 
+
+--
+
+- As researchers we are interested in whether the vaccine works or not so we 
+start taking samples of both groups.
+
+---
+
+## Example
+
+- We know that the vaccine does not offer 100% of protection, however, if it 
+works then we should be able to tell the difference in the proportion of cases
+in both populations.
+
+--
+
+- We test 30 participants of each population and get the following results:
+
+--
+
+```{r, echo=FALSE}
+cov_prop <- covid %>% 
+  group_by(status) %>% 
+  summarise("positive_test" = sum(test_pcr))
+```
+
+| Vaccination status | Sample size | Positive tests |
+|--------------------|:-----------:|:--------------:|
+| Not vaccinated     | 30          | `r cov_prop$positive_test[1]` |
+| Vaccinated         | 30          | `r cov_prop$positive_test[2]` |
+
+--
+
+- We can see that the number of positive cases in each population is different, 
+however, this is not enough to for us to say that the vaccines work.
+
+--
+
+- First of all what does it mean for a vaccine to work?
+
+--
+
+- Well, we can define it as reducing the probability of testing positive.
+
+---
+
+## Example
+
+- Now we have a question that we can formalize.
+
+--
+
+- We want to know if being vaccinated changes the probability of testing 
+positive for covid. Remember that we are using a perfect test in this experiment.
+
+--
+
+- Now we have a similar problem as before, we want to compare the probability
+of testing positive for covid, but probabilities can only take values between 
+0 and 1. 
+
+--
+
+- So we need a way to get rid of those boundaries.
+
+--
+
+- We will need some new notation.
+
+---
+
+## Bernoulli Distirbution
+
+- First we need a new model, in this case, we will consider that each observation
+(whether a participant tests positive or not) is independent from the rest.
+
+--
+
+- Additionally, we will assume that each observation (positive or negative test)
+follows a Bernoulli distribution.
+
+--
+
+- The Bernoulli distribution has one parameter known as $\theta$ and it 
+indicates the probability of a $1$. 
+
+--
+
+- In other words, this assumption means that our observations will take the 
+value $0$ (negative test) with probability $1-\theta$ and the value $1$ 
+positive test with probability $\theta$.
+
+--
+
+- Given that $\theta$ is a probability we know that it has to take a value 
+between $0$ and $1$.
+
+---
+
+## Transformation of $\theta$
+
+- Now that we have our probability parameter $\theta$ we can work on removing 
+the bounds.
+
+--
+
+- We call this process a "transformation", which means that we will 
+use functions (rules) that take one value between $0$ and $1$ and take it 
+to a value between $-\infty$ to $\infty$.
+
+--
+
+- First we will get rid of the upper bound, to do this we simply need to divide
+the probability of a positive test $\theta$ by its complement $1-\theta$ or 
+the probability of a negative test: 
+
+$$\frac{\theta}{(1-\theta)}$$
+
+--
+
+- This new value is known as the "**odds**".
+
+---
+
+## Odds
+
+```{r, echo=FALSE, fig.align='center'}
+curve(x/(1-x), from = 0.01, to=0.8,axes = F, ann = F, lwd = 4, col = "#b84c7d")
+segments(x0 = 0, y0 = 1, x1 = 0.5,y1 = 1, col = "#6881d8", lwd = 3, lty = 2)
+segments(x0 = 0.5, y0 = 0, x1 = 0.5,y1 = 1, col = "#6881d8", lwd = 3, lty = 2)
+axis(1, at = c(0.5,seq(0,0.8,0.2)), labels = c(0.5,"0",seq(0.2,0.8,0.2)))
+axis(2, las = 2)
+box(bty="l")
+mtext(text = expression(theta), cex = 2, side = 1, line = 2.7)
+mtext(text = expression(theta/(1-theta)), cex = 2, side = 2, line =1.8)
+```
+
+---
+
+## Logarithm of the odds
+
+- The odds can take any value between $0$ and $\infty$ so now the only thing
+left to do is to get rid of the lower bound. If we do that then we will be 
+able to use a straight line as our prediction again.
+
+--
+
+- In order to remove the lower bound from the odds we can use the natural 
+logarithm.
+
+--
+
+- This particular function will take any value grater than one and make it 
+larger and at the same time will take values below one and make them negative, 
+the value of 1 is transformed into a $0$.
+
+$$log\left(\frac{\theta}{(1-\theta)}\right)$$
+
+--
+
+- This is known as the "**log-odds**" and is used in almost all models for 
+binary data.
+
+---
+
+## Log odds
+
+```{r, echo=FALSE, fig.align='center'}
+curve(log(x/(1-x)), from = 0.01, to=0.99,axes = F, ann = F, lwd = 4, col = "#b84c7d")
+abline(h=0,col = "#6881d8",lwd=1.8,lty=2)
+abline(v=0.5,col = "#6881d8",lwd=1.8,lty=2)
+axis(1, at = c(0.5,seq(0,1,0.2)), labels = c(0.5,"0",seq(0.2,1,0.2)))
+axis(2, las = 2)
+box(bty="l")
+mtext(text = expression(theta), cex = 2, side = 1, line = 2.7)
+mtext(text = expression(ln(theta/(1-theta))), cex = 2, side = 2, line =1.8)
+```
+
+---
+
+## A model for the expected value
+
+- When we were working with the Normal distribution we used the linear function
+as a model for the expected value $\mu$. 
+
+--
+
+- In the case of the Bernoulli  distribution we want to use a linear model for 
+our transformation, the log-odds.
+
+--
+
+- This is because the expected value of the Bernoulli distribution is actually 
+its probability $\theta$.
+
+--
+
+- The key part is that, given that we know all the steps we took to get from 
+a value of $\theta$ to a value of the log odds, we can now revert that process.
+
+--
+
+- This means that we can have models that look like this:
+
+$$log\left(\frac{\theta_i}{(1-\theta_i)}\right) = \beta_0 + \beta_1x_{i1} + \beta_2x_{i2}+\cdots+\beta_kx_{ik}$$
+
+--
+
+- The with "some" algebra, we will be able to recover a value for the mean
+of the binomial distribution $\theta$, in other words, we will have a model
+for the expected value which we can interpret.
+
+
+
+
+
+
+
+
