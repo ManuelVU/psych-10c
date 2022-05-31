@@ -47,11 +47,8 @@ library(flipbookr)
 knitr::opts_chunk$set(fig.width = 6, message = FALSE, 
                       warning = FALSE, comment = "", 
                       cache = F)
-test <- rbinom(n = 60, size = 1, prob = rep(c(0.25,0.1),each=30))
-covid <- tibble("test_pcr" = ifelse(test = test == 0, yes = "negative", 
-                                    no = "positive"),
-                "test" = test,
-                "status" = rep(c("not_vacinated", "vaccinated"),each = 30))
+
+covid <- read_csv(file = here::here("data/week-10/covid-example.csv"))
 ```
 
 ## Generalized linear models
@@ -113,7 +110,7 @@ test negative then they don't have it.
 
 --
 
-- We take a sample of 30 participants from two different populations, one that 
+- We take a sample of 40 participants from two different populations, one that 
 is not vaccinates and one population where all participants are vaccinated.
 
 --
@@ -131,8 +128,8 @@ cov_prop <- covid %>%
 
 | Vaccination status | Sample size | Positive tests | Proportion Pt |
 |--------------------|:-----------:|:--------------:|:-------------:|
-| Not vaccinated     | 30          | `r cov_prop$positive_test[1]` | `r round(cov_prop$positive_test[1]/30,2)` |
-| Vaccinated         | 30          | `r cov_prop$positive_test[2]` | `r round(cov_prop$positive_test[2]/30,2)` |
+| Not vaccinated     | 40          | `r cov_prop$positive_test[1]` | `r round(cov_prop$positive_test[1]/30,2)` |
+| Vaccinated         | 40          | `r cov_prop$positive_test[2]` | `r round(cov_prop$positive_test[2]/30,2)` |
 
 ---
 
