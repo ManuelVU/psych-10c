@@ -463,7 +463,7 @@ ggplot(data = pressure) +
 
 - This model suggests that as the height of the participant increases, blood
 pressure decreases. This prediction is different from that made by the model 
-that only consiedred height as a predictor. $(\hat{\beta}_2 =$ `r round(betas_hs[2],2)`)
+that only considered height as a predictor. $(\hat{\beta}_2 =$ `r round(betas_hs[2],2)`)
 
 ---
 

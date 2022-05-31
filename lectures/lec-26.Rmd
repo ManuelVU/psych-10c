@@ -1,0 +1,588 @@
+---
+title: "Lecture 26"
+subtitle: "Generalized Linear Models"
+author: "Psych 10 C"
+institute: "University of California, Irvine"
+date: "06/01/2022"
+output:
+  xaringan::moon_reader:
+    self_contained: true
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+```
+
+```{r xaringan-extra, echo = FALSE}
+xaringanExtra::use_tile_view()
+
+xaringanExtra::use_fit_screen()
+
+xaringanExtra::use_editable(expires = 1)
+
+xaringanExtra::use_extra_styles(
+  hover_code_line = TRUE,         #<<
+  mute_unhighlighted_code = TRUE  #<<
+)
+
+htmltools::tagList(
+  xaringanExtra::use_clipboard(
+    button_text = "<i class=\"fa fa-clipboard\"></i>",
+    success_text = "<i class=\"fa fa-check\" style=\"color: #90BE6D\"></i>",
+    error_text = "<i class=\"fa fa-times-circle\" style=\"color: #F94144\"></i>"
+  ),
+  rmarkdown::html_dependency_font_awesome()
+)
+```
+
+```{r load-tidy, echo = FALSE, message = FALSE, warning = FALSE}
+library(tidyverse)
+library(flipbookr)
+
+knitr::opts_chunk$set(fig.width = 6, message = FALSE, 
+                      warning = FALSE, comment = "", 
+                      cache = F)
+test <- rbinom(n = 60, size = 1, prob = rep(c(0.25,0.1),each=30))
+covid <- tibble("test_pcr" = ifelse(test = test == 0, yes = "negative", 
+                                    no = "positive"),
+                "test" = test,
+                "status" = rep(c("not_vacinated", "vaccinated"),each = 30))
+```
+
+## Generalized linear models
+
+- Last class we introduced the topic of generalized linear models.
+
+--
+
+- The main objective was to stop using the Normal distribution for our models 
+due to the fact that its assumptions (a random variable can take any value 
+between $-\infty$ and $\infty$) where not met by our data.
+
+--
+
+- However, we still want to use a linear function because we know how to 
+interpret its parameters $(\beta_k)$.
+
+--
+
+- The first distribution that we used was the Binomial, which is a probability 
+distribution for the sum of independent $0$, $1$ outcomes when we take $n$ 
+samples.
+
+---
+
+## Logisticc regression
+
+- In the logistic regression model, we assume that observations follow a 
+Binomial distribution with parameter $\theta$ and $n$ independent samples.
+
+$$y_i \sim \text{Binomial}(\theta_i,n)$$
+
+--
+
+- This means that eahc of our $n$ observations has a probability $\theta$ of 
+taking the value $1$ and a probability $1-\theta$ of taking the value $0$.
+
+--
+
+- If we can add all of our observations then we will have a number of $1$'s
+in or sample that has to be between $0$ and $n$.
+
+--
+
+- For now we will consider that all participants are independent and identically
+distributed so we will add their results in order to compare our models.
+
+---
+
+## Covid test and vaccination status
+
+- We will continue with our covid test and vaccination status example.
+
+--
+
+- For this problem we will assume that we have access to a perfect test where, 
+if a person tests positive then that means that they have covid, and if they 
+test negative then they don't have it. 
+
+--
+
+- We take a sample of 30 participants from two different populations, one that 
+is not vaccinates and one population where all participants are vaccinated.
+
+--
+
+- We ask them to take the test and then we count the total number of infections
+in each population and summarize those values on a table.
+
+--
+
+```{r, echo=FALSE}
+cov_prop <- covid %>% 
+  group_by(status) %>% 
+  summarise("positive_test" = sum(test_pcr == "positive"))
+```
+
+| Vaccination status | Sample size | Positive tests | Proportion Pt |
+|--------------------|:-----------:|:--------------:|:-------------:|
+| Not vaccinated     | 30          | `r cov_prop$positive_test[1]` | `r round(cov_prop$positive_test[1]/30,2)` |
+| Vaccinated         | 30          | `r cov_prop$positive_test[2]` | `r round(cov_prop$positive_test[2]/30,2)` |
+
+---
+
+## Data visualization
+
+- We can visualize our data using a bar graph:
+
+--
+
+.pull-left[
+```{r bar, eval=FALSE}
+covid %>%
+  count(test_pcr,status) %>%
+  group_by(status) %>%
+  mutate(n = n/sum(n) * 100) %>%
+  ggplot() + 
+  aes(x = status, n, fill = test_pcr, 
+      label = paste0(round(n, 2), "%")) + 
+  geom_col() +
+  theme_classic() +
+  xlab("Vaccination status") + 
+  ylab("Proportion of (+) cases") + 
+    theme(axis.title.x = element_text(size = 30),
+        axis.title.y = element_text(size = 30),
+        legend.text = element_text(size = 15),
+        legend.title=element_text(size = 20)) +
+  labs(fill = "Test result") +
+  geom_text(position=position_stack(0.5))
+```
+]
+
+.pull-right[
+<br>
+```{r bar-out, ref.label = "bar", fig.align = 'center', echo = FALSE, fig.width = 7}
+
+```
+]
+
+---
+
+## Logistic regression
+
+- Before going back to the transformations that we talked about last week 
+lets introduce the two models that we can compare in this case.
+
+--
+
+- As before, we have a "**Null**" model and a "**vaccination status model**", 
+so we can start with the null model.
+
+--
+
+- The null model can be formalized as follows:
+
+$$y_{i} \sim \text{Bernoulli}(\theta)$$
+
+- Where $y_i$ represents the test of the *i-th* participant (positive or 
+negative test result), and $\theta$ represents the probability that the *i-th*
+participant will tests positive.
+
+--
+
+- Given that we are assuming that our observations follow a Bernoulli 
+distribution with probability $\theta$, the expected value any observation $y_i$
+is $\mathbb{E}(y_i) = \theta$.
+
+--
+
+- Remember that in order to use a linear regression we need to get rid of the 
+bounds in $\theta$ and in order to do that, we need to use the logarithm of
+the odds.
+
+---
+
+## Null model
+
+- So for the Null model we have that:
+
+$$ln\left(\frac{\theta}{1-\theta}\right) = \beta_0$$
+
+--
+
+- Now that we have a linear model for the logarithm of the odds we need to go 
+back to the probability $\theta$ in order to get the predictions of the null 
+model.
+
+--
+
+- We can do this using algebra, to start, we can get rid of the natural 
+logarithm by exponentiating both sides of the equation using the value $e$:
+
+$$exp\left\{ln\left(\frac{\theta}{1-\theta}\right) \right\} = exp\left(\beta_0\right)$$
+
+--
+
+$$\frac{\theta}{1-\theta} = exp\left(\beta_0\right)$$
+
+---
+
+## Null model
+
+- Now we can solve the equation for $\theta$:
+
+$$\theta = (1-\theta)e^{\beta_0}$$
+
+--
+
+$$\theta = e^{\beta_0}-\theta e^{\beta_0}$$
+
+--
+
+$$\theta + \theta e^{\beta_0} = e^{\beta_0}$$
+
+--
+
+$$\theta \left(1+ e^{\beta_0}\right) = e^{\beta_0}$$
+
+--
+
+$$\theta  = \frac{e^{\beta_0}}{\left(1+ e^{\beta_0}\right)}$$
+
+--
+
+- Thus, according to the null model, the probability that any participant 
+will test positive on a test will be equal to $\frac{e^{\beta_0}}{\left(1+ e^{\beta_0}\right)}$
+
+--
+
+- As in previous cases, the null model assumes that vaccination status does not 
+have an effect on the probability of testing positive on a "perfect" covid test.
+
+---
+
+## Null model
+
+- The parameter $\beta_0$ in the Null model is not as easy to interpret as with 
+other linear models, however, we can interpret a transformation of that 
+parameter.
+
+--
+
+- From the previous equations we know that:
+
+$$\frac{\theta}{1-\theta} = exp\left(\beta_0\right)$$
+
+--
+
+- This means that we can interpret the value of $e^{\hat{\beta}_0}$ as how much 
+probable it is to test positive for covid in the population in comparison 
+to testing negative
+
+---
+
+## Interpretation
+
+- For example: 
+
+--
+
+  - If $0<e^{\hat{\beta}_0}<1$ then we know that the probability of testing 
+  positive for covid in the population (because the null assumes that 
+  vaccination status makes no difference) is less than the probability of 
+  testing negative
+  
+--
+
+  - If $e^{\hat{\beta}_0}=1$ then the probability of testing positive is equal
+  to the probability of testing negative.
+  
+--
+
+  - If $1<e^{\hat{\beta}_0}$ then the probability of testing positive is greater 
+  than the probability of testing negative.
+  
+--
+
+- In comparison to linear models, the value of $\beta$ in a Generalized linear
+model is not easy to find, so we will always need to use a computer.
+
+---
+
+## Estimating $\beta_0$ 
+
+- To estimate the parameter $\beta_0$ in the logistic regression model we need
+to use a new function in R, the function is **`glm()`**.
+
+--
+
+- Similar to the **`lm()`** function before, the **`glm()`** function takes 
+3 arguments, the **`formula`** ins the form $y \sim x$ and **`data`**. 
+
+--
+
+- However, this time we also need to specify the "family" or the distribution of
+our data, which in this case is the Binomial.
+
+--
+
+- We can get our estimate of $\beta_0$ using the following code:
+
+```{r}
+betas_null <- glm(formula = test ~ 1, 
+                  data = covid, 
+                  family = binomial)$coef
+```
+
+.pull-left[
+$\hat{\beta}_0 =$ `r round(betas_null,2)`
+
+$e^{\hat{\beta}_0} =$ `r round(exp(betas_null),2)`
+]
+
+.pull-right[
+$\hat{\theta} = \frac{e^{\hat{\beta}_0}}{1+e^{\hat{\beta}_0}} =$ `r round(exp(betas_null)/(1+exp(betas_null)),2)`
+]
+
+---
+
+## Visualizing the predictions of the Null
+
+- We can add the predictions of the Null model to our bar graph in order
+to compare our results with the predictions visually.
+
+```{r bar2, eval=FALSE, echo = FALSE}
+col_age <- c("#637373", "#679B9B","#FF9A76")
+covid %>%
+  count(test_pcr,status) %>%
+  group_by(status) %>%
+  mutate(n = n/sum(n) * 100) %>%
+  ggplot() + 
+  aes(x = status, n, fill = test_pcr, 
+      label = paste0(round(n, 2), "%")) + 
+  geom_col() +
+  geom_hline(yintercept = 100 * exp(betas_null)/(1+exp(betas_null)), 
+             show.legend = FALSE, 
+             color = col_age[1], size = 2) +
+  theme_classic() +
+  xlab("Vaccination status") + 
+  ylab("Proportion of (+) cases") + 
+    theme(axis.title.x = element_text(size = 30),
+        axis.title.y = element_text(size = 30),
+        legend.text = element_text(size = 15),
+        legend.title=element_text(size = 20)) +
+  labs(fill = "Test result") +
+  geom_text(position=position_stack(0.5))
+```
+
+```{r bar2-out, ref.label = "bar2", fig.align = 'center', echo = FALSE, fig.width = 7, fig.height=6}
+
+```
+
+---
+
+## How good is the model?
+
+- One disadvantage that we have now is that we don't have a simple way to 
+evaluate the adequacy of our models.
+
+--
+
+- In linear models we always computed the error, however, the notion of error 
+does not make much sense in this new setting because our observations can
+only take 2 values.
+
+--
+
+- So we need a new way to measure the *fit* of the model in order to be able to 
+make model comparisons.
+
+--
+
+- They question that we want to ask is:
+
+  - If I have a value of $\hat{\theta}$ that represents the best prediction my 
+  model (in this case the null) can make, then how likely is it to have seen the 
+  data that I saw?
+  
+---
+
+## Model predictions and model fit
+
+- Remember that in order to compare two models we need two pieces of information.
+
+--
+
+- First is the model fit, or how good is our model, the second one is the 
+"complexity of the model" or how many estimates do I need to make a prediction.
+
+--
+
+- As we just said, the model fit in a generalized linear model is a number that 
+indicates how likely are our observations (the positive and negative tests) given
+our model.
+
+--
+
+- In some sense, this means that we assume that the model is correct, and then 
+we look at how likely our data is using the prediction of the model (the 
+estimated value of $\theta$). 
+
+--
+
+- The predictions of the Null model are equal to:
+
+$\hat{\theta} = \frac{e^{\hat{\beta}_0}}{1+e^{\hat{\beta}_0}} =`r round(exp(betas_null)/(1+exp(betas_null)),2)`$
+
+---
+
+## Predictions and fit
+
+- First we can add the predictions of the Null model to the data:
+
+```{r}
+covid <- covid %>% 
+  mutate("prediction_null" = exp(betas_null) / (1 + exp(betas_null)))
+```
+
+--
+
+- With the predictions added now we can calculate the model fit, for this, we 
+need to use the density of a Binomial distribution. In R we can get this density
+with the function **`dbinom()`**.
+
+--
+
+- The function **`dbinom()`** takes 3 arguments, **`x`** which represents the 
+value of the observation. In our case, this is whether the test was positive 
+or negative.
+
+--
+
+- The second argument is the **`size`** or the number of independent observations
+used. In this case, given that we are looking at our observations independently
+(without adding them), the size is equal to 1.
+
+--
+
+- The third argument that the function takes is **`prob`** or the probability 
+that the variable takes the value 1. In our case, this probability is equal to 
+the prediction of the model $\hat{\theta}$.
+
+---
+
+## Log-likelihood
+
+- Remember that when we have independent observations, the probability of a 
+sequence of $0$'s and $1$'s is equal to the product of the probabilities.
+
+--
+
+- Given that those numbers would be too small and could cause problems in a 
+computer we can transform them using the natural logarithm. The advantage here
+is that the natural logarithm transforms multiplications into sums!
+
+--
+
+- We can get the logarithm of the density of the binomial distribution by 
+adding **`log = TRUE`** to the **`dbinom()`** function in R.
+
+--
+
+- The values that we get are known as the log-likelihood of each observation 
+and are central to a large branch of statistics.
+
+--
+
+- We can add the log likelihood by observation to our data using the following
+code:
+
+--
+
+```{r}
+covid <- covid %>% 
+  mutate("loglikelihood_null" = dbinom(x = test, size = 1,
+                                       prob = prediction_null,
+                                       log = TRUE))
+```
+
+---
+
+## BIC
+
+- Using the log-likelihood values that we just calculated we can now obtain the 
+BIC for the model. 
+
+--
+
+- Remember that the BIC takes two components:
+
+$$BIC = \text{fit} + \text{complexity}$$
+
+--
+
+- The complexity part has not changes so it will be equal to:
+
+$$\text{complexity} = k ln(N)$$
+
+- Where $k$ represents the number of parameters in the model and $N$ represents
+the total sample size in the experiment (how many observations we have).
+
+--
+
+- However, the model fit is now defined as:
+
+$$\text{fit} = - 2 \sum_{i=1}^{N} ll(y_i)$$
+
+- where $ll(y_i)$ represents the log likelihood associated to the *i-th* 
+observation in the experiment.
+
+---
+
+## BIC
+
+- For our null model then we can compute the BIC as:
+
+```{r}
+n_total <- nrow(covid)
+complexity <- 1 * log(n_total)
+fit <- -2 * sum(covid$loglikelihood_null)
+bic_null <- fit + complexity
+```
+
+--
+
+- The BIC associated with the Null model is equal to `r round(bic_null,2)`.
+
+--
+
+- As with other problems, we have no use for the BIC in isolation.
+
+--
+
+- Remember that we only use the BIC to make comparisons between our models 
+and not to make any statements about the data or the model itself.
+
+--
+
+- This means that we first need to do the same computations for a second model, 
+the one that assumes that the probability of testing positive depends on the 
+group that you belong to. 
+
+--
+
+- Once we get the BIC value for that second model we will be able to make the 
+comparisons that we need in order to answer our scientific question.
+
+
+
+
+
+
+
+
