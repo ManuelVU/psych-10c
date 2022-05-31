@@ -1,6 +1,6 @@
 ---
 title: "Lecture 26"
-subtitle: "Generalized Linear Models"
+subtitle: "Generalized Linear Models: Null model"
 author: "Psych 10 C"
 institute: "University of California, Irvine"
 date: "06/01/2022"
