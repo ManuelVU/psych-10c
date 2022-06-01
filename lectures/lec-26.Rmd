@@ -57,66 +57,68 @@ covid <- read_csv(file = here::here("data/week-10/covid-example.csv"))
 
 --
 
-- The main objective was to stop using the Normal distribution for our models 
-due to the fact that its assumptions (a random variable can take any value 
-between $-\infty$ and $\infty$) where not met by our data.
+- The main motivation was to stop using the Normal distribution for our models 
+due to the fact that its assumptions (e.g. that the random variable can take 
+any value between $-\infty$ and $\infty$) were not met by our data.
 
 --
 
-- However, we still want to use a linear function because we know how to 
+- However, we still want to use a linear model because we know how to 
 interpret its parameters $(\beta_k)$.
 
 --
 
 - The first distribution that we used was the Binomial, which is a probability 
-distribution for the sum of independent $0$, $1$ outcomes when we take $n$ 
-samples.
+distribution for the sum of independent $0$, $1$ outcomes obtained throughout
+$n$ observations.
 
 ---
 
 ## Logisticc regression
 
 - In the logistic regression model, we assume that observations follow a 
-Binomial distribution with parameter $\theta$ and $n$ independent samples.
+Binomial distribution with probability $\theta$ and $n$ independent samples.
 
 $$y_i \sim \text{Binomial}(\theta_i,n)$$
 
 --
 
-- This means that eahc of our $n$ observations has a probability $\theta$ of 
+- This means that each of our $n$ observations has a probability $\theta$ of 
 taking the value $1$ and a probability $1-\theta$ of taking the value $0$.
 
 --
 
-- If we can add all of our observations then we will have a number of $1$'s
-in or sample that has to be between $0$ and $n$.
+- If we can add all of our observations then we get a single number representing
+the number of $1$'s observed in our sample. Therefore, this number can only 
+take values between $0$ and $n$.
 
 --
 
-- For now we will consider that all participants are independent and identically
-distributed so we will add their results in order to compare our models.
+-For now, we will assume that all participants are independent and identically
+distributed, and so, we will compare our models by adding the results obtained
+across them.
 
 ---
 
 ## Covid test and vaccination status
 
-- We will continue with our covid test and vaccination status example.
+- We will continue with our COVID test and vaccination status example.
 
 --
 
-- For this problem we will assume that we have access to a perfect test where, 
-if a person tests positive then that means that they have covid, and if they 
-test negative then they don't have it. 
+- For this problem, we will assume that we have access to a perfect test where, 
+if a person tests positive then that means that they definitely have COVID, and 
+if they test negative then they don't. 
 
 --
 
 - We take a sample of 40 participants from two different populations, one that 
-is not vaccinates and one population where all participants are vaccinated.
+is not vaccinated and one where everyone is vaccinated.
 
 --
 
-- We ask them to take the test and then we count the total number of infections
-in each population and summarize those values on a table.
+- We ask participants to take the COVID test, then we count the total number of 
+COVID cases detected in each population and summarize those values in a table.
 
 --
 
@@ -135,7 +137,7 @@ cov_prop <- covid %>%
 
 ## Data visualization
 
-- We can visualize our data using a bar graph:
+- We can also use a bar graph to visualize our data:
 
 --
 
@@ -172,54 +174,53 @@ covid %>%
 
 ## Logistic regression
 
-- Before going back to the transformations that we talked about last week 
-lets introduce the two models that we can compare in this case.
+- Before applying the transformations that we talked about last week (Lec 25), 
+let's introduce the two models that we will use and compare.
 
 --
 
-- As before, we have a "**Null**" model and a "**vaccination status model**", 
-so we can start with the null model.
+- As before, we have a "**Null**" model and a "**vaccination status**" model. 
+Let us start with the Null model.
 
 --
 
-- The null model can be formalized as follows:
+- The Null model can be formalized as follows:
 
 $$y_{i} \sim \text{Bernoulli}(\theta)$$
 
-- Where $y_i$ represents the test of the *i-th* participant (positive or 
-negative test result), and $\theta$ represents the probability that the *i-th*
-participant will tests positive.
+- Where $y_i$ represents the test result of the *i-th* participant (negative or 
+positive), and $\theta$ represents the probability that the *i-th* participant 
+gets a positive result.
 
 --
 
-- Given that we are assuming that our observations follow a Bernoulli 
-distribution with probability $\theta$, the expected value any observation $y_i$
+- Given that we assume that our observations follow a Bernoulli distribution 
+with probability $\theta$, the expected value for any observation $y_i$
 is $\mathbb{E}(y_i) = \theta$.
 
 --
 
-- Remember that in order to use a linear regression we need to get rid of the 
-bounds in $\theta$ and in order to do that, we need to use the logarithm of
-the odds.
+- Remember that in order to use a linear regression, we need to get rid of the 
+bounds in $\theta$ and to do so, we need to refer to the logarithm of the odds.
 
 ---
 
 ## Null model
 
-- So for the Null model we have that:
+- So, for the Null model:
 
 $$ln\left(\frac{\theta}{1-\theta}\right) = \beta_0$$
 
 --
 
-- Now that we have a linear model for the logarithm of the odds we need to go 
-back to the probability $\theta$ in order to get the predictions of the null 
-model.
+- Now that we have a linear model for the logarithm of the odds we need to be 
+able to go back to the probability $\theta$ in order to produce the predictions 
+made under the Null model.
 
 --
 
-- We can do this using algebra, to start, we can get rid of the natural 
-logarithm by exponentiating both sides of the equation using the value $e$:
+- We can do this using algebra. We start by getting rid of the natural logarithm 
+by exponentiating both sides of the equation using the value $e$:
 
 $$exp\left\{ln\left(\frac{\theta}{1-\theta}\right) \right\} = exp\left(\beta_0\right)$$
 
@@ -231,7 +232,7 @@ $$\frac{\theta}{1-\theta} = exp\left(\beta_0\right)$$
 
 ## Null model
 
-- Now we can solve the equation for $\theta$:
+- Now, we solve the equation for $\theta$:
 
 $$\theta = (1-\theta)e^{\beta_0}$$
 
@@ -253,20 +254,21 @@ $$\theta  = \frac{e^{\beta_0}}{\left(1+ e^{\beta_0}\right)}$$
 
 --
 
-- Thus, according to the null model, the probability that any participant 
-will test positive on a test will be equal to $\frac{e^{\beta_0}}{\left(1+ e^{\beta_0}\right)}$
+- Thus, according to the Null model, the probability that any participant 
+will test positive on a test is equal to $\frac{e^{\beta_0}}{\left(1+ e^{\beta_0}\right)}$
 
 --
 
-- As in previous cases, the null model assumes that vaccination status does not 
-have an effect on the probability of testing positive on a "perfect" covid test.
+- As in previous cases, the Null model assumes that vaccination status does not 
+have an effect on the probability of testing positive on the results obtained
+from our "perfect" covid test.
 
 ---
 
 ## Null model
 
-- The parameter $\beta_0$ in the Null model is not as easy to interpret as with 
-other linear models, however, we can interpret a transformation of that 
+- The parameter $\beta_0$ in the Null model is not as easy to interpret as in 
+other linear models. However, we can interpret a transformation of this 
 parameter.
 
 --
@@ -277,9 +279,9 @@ $$\frac{\theta}{1-\theta} = exp\left(\beta_0\right)$$
 
 --
 
-- This means that we can interpret the value of $e^{\hat{\beta}_0}$ as how much 
-probable it is to test positive for covid in the population in comparison 
-to testing negative
+- This means that we can interpret the value of $e^{\hat{\beta}_0}$ as *how much 
+probable is it to get a Positive result for Covid than it is to get a negative
+result*.
 
 ---
 
@@ -289,14 +291,14 @@ to testing negative
 
 --
 
-  - If $0<e^{\hat{\beta}_0}<1$ then we know that the probability of testing 
-  positive for covid in the population (because the null assumes that 
-  vaccination status makes no difference) is less than the probability of 
-  testing negative
+  - If $0<e^{\hat{\beta}_0}<1$, then we know that the probability of testing 
+  positive for Covid regardless of their vaccination status (because the Null 
+  assumes that vaccination status makes no difference) is less than the 
+  probability of getting a negative result.
   
 --
 
-  - If $e^{\hat{\beta}_0}=1$ then the probability of testing positive is equal
+  - If $e^{\hat{\beta}_0}=1$, then the probability of testing positive is equal
   to the probability of testing negative.
   
 --
@@ -306,8 +308,8 @@ to testing negative
   
 --
 
-- In comparison to linear models, the value of $\beta$ in a Generalized linear
-model is not easy to find, so we will always need to use a computer.
+- In comparison to other linear models, the value of $\beta$ in a Generalized 
+linear model is not as easy to find, so we will always need to use a computer.
 
 ---
 
@@ -318,17 +320,18 @@ to use a new function in R, the function is **`glm()`**.
 
 --
 
-- Similar to the **`lm()`** function before, the **`glm()`** function takes 
-3 arguments, the **`formula`** ins the form $y \sim x$ and **`data`**. 
+- Similar to the **`lm()`** function we saw before, the **`glm()`** function
+takes 3 arguments. First, just as before, we need to specify the **`formula`** 
+in the form $y \sim x$ and the **`data`**. 
 
 --
 
-- However, this time we also need to specify the "family" or the distribution of
-our data, which in this case is the Binomial.
+- However, this time we also need to specify the **`family`** of the 
+distribution of our data, which in this case corresponds to the Binomial.
 
 --
 
-- We can get our estimate of $\beta_0$ using the following code:
+- For example, we can get our estimate of $\beta_0$ using the following code:
 
 ```{r}
 betas_null <- glm(formula = test ~ 1, 
@@ -350,8 +353,8 @@ $\hat{\theta} = \frac{e^{\hat{\beta}_0}}{1+e^{\hat{\beta}_0}} =$ `r round(exp(be
 
 ## Visualizing the predictions of the Null
 
-- We can add the predictions of the Null model to our bar graph in order
-to compare our results with the predictions visually.
+- We can add the predictions of the Null model to our bar graph to compare our 
+results against these predictions visually.
 
 ```{r bar2, eval=FALSE, echo = FALSE}
 col_age <- c("#637373", "#679B9B","#FF9A76")
@@ -385,54 +388,56 @@ covid %>%
 
 ## How good is the model?
 
-- One disadvantage that we have now is that we don't have a simple way to 
-evaluate the adequacy of our models.
+- One disadvantage that we face now is that now we no longer have a simple way 
+to evaluate the adequacy of our models.
 
 --
 
-- In linear models we always computed the error, however, the notion of error 
-does not make much sense in this new setting because our observations can
-only take 2 values.
+- Before, we used to be able to compute the error. But the notion of error 
+does not make much sense in this new setting because now our observations can
+only take one of two possible values.
 
 --
 
-- So we need a new way to measure the *fit* of the model in order to be able to 
-make model comparisons.
+- In order to perform model comparisons, we need a new way to measure the *fit*
+of each model.
 
 --
 
-- They question that we want to ask is:
+- They question that we should be interested in is:
 
-  - If I have a value of $\hat{\theta}$ that represents the best prediction my 
-  model (in this case the null) can make, then how likely is it to have seen the 
-  data that I saw?
+  - If I have a value of $\hat{\theta}$ that represents the prediction my model 
+  (in this case the Null model) would make, how likely would it be that we 
+  observe the data that we actually have just observed?
   
 ---
 
 ## Model predictions and model fit
 
-- Remember that in order to compare two models we need two pieces of information.
+- Remember that in order to compare any set of models, we need at least two 
+pieces of information.
 
 --
 
-- First is the model fit, or how good is our model, the second one is the 
-"complexity of the model" or how many estimates do I need to make a prediction.
+- First is the **model fit**, ("how good is this model?"). Second, 
+is the **model complexity**, ("how many parameters do I need to estimate under
+this model to make a prediction?").
 
 --
 
-- As we just said, the model fit in a generalized linear model is a number that 
-indicates how likely are our observations (the positive and negative tests) given
-our model.
+- As previously described, the model fit in generalized linear models is 
+captured by a number that indicates how likely our observations are (i.e. the 
+total number of positive and negative tests registered) according to our model.
 
 --
 
-- In some sense, this means that we assume that the model is correct, and then 
-we look at how likely our data is using the prediction of the model (the 
-estimated value of $\theta$). 
+- In some sense, we start by assuming that our model is correct, and then we 
+evaluate how likely our data is according to its predictions (as defined
+by the estimated value of $\theta$). 
 
 --
 
-- The predictions of the Null model are equal to:
+- In the case of the Null model, we can formalize its predictions as:
 
 $\hat{\theta} = \frac{e^{\hat{\beta}_0}}{1+e^{\hat{\beta}_0}} =`r round(exp(betas_null)/(1+exp(betas_null)),2)`$
 
@@ -440,7 +445,7 @@ $\hat{\theta} = \frac{e^{\hat{\beta}_0}}{1+e^{\hat{\beta}_0}} =`r round(exp(beta
 
 ## Predictions and fit
 
-- First we can add the predictions of the Null model to the data:
+- First, we add the predictions of the Null model to the data:
 
 ```{r}
 covid <- covid %>% 
@@ -449,25 +454,25 @@ covid <- covid %>%
 
 --
 
-- With the predictions added now we can calculate the model fit, for this, we 
-need to use the density of a Binomial distribution. In R we can get this density
-with the function **`dbinom()`**.
+- With the predictions added, now we can calculate the model fit. For this, we 
+need to use the density of the Binomial distribution. In R we can calculate this 
+density with the function **`dbinom()`**.
 
 --
 
-- The function **`dbinom()`** takes 3 arguments, **`x`** which represents the 
-value of the observation. In our case, this is whether the test was positive 
-or negative.
+- The function **`dbinom()`** takes 3 arguments: **`x`** which represents the 
+value of the observation. In our case, `x` would correspond to whether the test
+came back as negative or positive.
 
 --
 
-- The second argument is the **`size`** or the number of independent observations
-used. In this case, given that we are looking at our observations independently
-(without adding them), the size is equal to 1.
+- The second argument is the **`size`**, which corresponds to the number of 
+independent observations included. In this case, given that we are considering
+a single observation (without adding them), the size would be equal to 1.
 
 --
 
-- The third argument that the function takes is **`prob`** or the probability 
+- The third argument that the function takes is **`prob`**, or the probability 
 that the variable takes the value 1. In our case, this probability is equal to 
 the prediction of the model $\hat{\theta}$.
 
@@ -480,9 +485,10 @@ sequence of $0$'s and $1$'s is equal to the product of the probabilities.
 
 --
 
-- Given that those numbers would be too small and could cause problems in a 
-computer we can transform them using the natural logarithm. The advantage here
-is that the natural logarithm transforms multiplications into sums!
+- Given that these numbers would be too small and cause problems for any 
+computer to process, we can work with the natural logarithmic transformation
+instead. The advantage here will be that the natural logarithm transforms 
+multiplications into sums!
 
 --
 
@@ -496,8 +502,8 @@ and are central to a large branch of statistics.
 
 --
 
-- We can add the log likelihood by observation to our data using the following
-code:
+- We can add the log-likelihood of each individual observation to our data 
+using the following code:
 
 --
 
@@ -512,8 +518,8 @@ covid <- covid %>%
 
 ## BIC
 
-- Using the log-likelihood values that we just calculated we can now obtain the 
-BIC for the model. 
+- Using the log-likelihood values that we just calculated, we can now compute
+the BIC for this model. 
 
 --
 
@@ -523,7 +529,7 @@ $$BIC = \text{fit} + \text{complexity}$$
 
 --
 
-- The complexity part has not changes so it will be equal to:
+- The complexity part has not changed, and so it will be equal to:
 
 $$\text{complexity} = k ln(N)$$
 
@@ -536,14 +542,14 @@ the total sample size in the experiment (how many observations we have).
 
 $$\text{fit} = - 2 \sum_{i=1}^{N} ll(y_i)$$
 
-- where $ll(y_i)$ represents the log likelihood associated to the *i-th* 
+- where $ll(y_i)$ represents the log-likelihood associated to the *i-th* 
 observation in the experiment.
 
 ---
 
 ## BIC
 
-- For our null model then we can compute the BIC as:
+- For our Null model then we can compute the BIC as:
 
 ```{r}
 n_total <- nrow(covid)
@@ -562,8 +568,8 @@ bic_null <- fit + complexity
 
 --
 
-- Remember that we only use the BIC to make comparisons between our models 
-and not to make any statements about the data or the model itself.
+- Remember that we only use the BIC to establish comparisons between our models 
+and not to make any statements about the data or any of the models themselves.
 
 --
 
@@ -575,11 +581,4 @@ group that you belong to.
 
 - Once we get the BIC value for that second model we will be able to make the 
 comparisons that we need in order to answer our scientific question.
-
-
-
-
-
-
-
 
