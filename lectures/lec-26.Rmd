@@ -94,9 +94,9 @@ take values between $0$ and $n$.
 
 --
 
--For now, we will assume that all participants are independent and identically
-distributed, and so, we will compare our models by adding the results obtained
-across them.
+- For now, we will assume that all participants are independent and identically
+distributed, however, we will compare our models by using the independent 0, 1
+responses. 
 
 ---
 
@@ -130,8 +130,8 @@ cov_prop <- covid %>%
 
 | Vaccination status | Sample size | Positive tests | Proportion Pt |
 |--------------------|:-----------:|:--------------:|:-------------:|
-| Not vaccinated     | 40          | `r cov_prop$positive_test[1]` | `r round(cov_prop$positive_test[1]/30,2)` |
-| Vaccinated         | 40          | `r cov_prop$positive_test[2]` | `r round(cov_prop$positive_test[2]/30,2)` |
+| Not vaccinated     | 40          | `r cov_prop$positive_test[1]` | `r round(cov_prop$positive_test[1]/40,2)` |
+| Vaccinated         | 40          | `r cov_prop$positive_test[2]` | `r round(cov_prop$positive_test[2]/40,2)` |
 
 ---
 
@@ -209,7 +209,7 @@ bounds in $\theta$ and to do so, we need to refer to the logarithm of the odds.
 
 - So, for the Null model:
 
-$$ln\left(\frac{\theta}{1-\theta}\right) = \beta_0$$
+$$\ln\left(\frac{\theta}{1-\theta}\right) = \beta_0$$
 
 --
 
@@ -222,7 +222,7 @@ made under the Null model.
 - We can do this using algebra. We start by getting rid of the natural logarithm 
 by exponentiating both sides of the equation using the value $e$:
 
-$$exp\left\{ln\left(\frac{\theta}{1-\theta}\right) \right\} = exp\left(\beta_0\right)$$
+$$\exp\left\{ln\left(\frac{\theta}{1-\theta}\right) \right\} = \exp\left(\beta_0\right)$$
 
 --
 
@@ -250,18 +250,18 @@ $$\theta \left(1+ e^{\beta_0}\right) = e^{\beta_0}$$
 
 --
 
-$$\theta  = \frac{e^{\beta_0}}{\left(1+ e^{\beta_0}\right)}$$
+$$\theta  = \frac{e^{\beta_0}}{1+ e^{\beta_0}}$$
 
 --
 
 - Thus, according to the Null model, the probability that any participant 
-will test positive on a test is equal to $\frac{e^{\beta_0}}{\left(1+ e^{\beta_0}\right)}$
+will test positive on a test is equal to $\frac{e^{\beta_0}}{1+ e^{\beta_0}}$
 
 --
 
 - As in previous cases, the Null model assumes that vaccination status does not 
 have an effect on the probability of testing positive on the results obtained
-from our "perfect" covid test.
+from our "perfect" COVID test.
 
 ---
 
@@ -275,12 +275,12 @@ parameter.
 
 - From the previous equations we know that:
 
-$$\frac{\theta}{1-\theta} = exp\left(\beta_0\right)$$
+$$\frac{\theta}{1-\theta} = \exp\left(\beta_0\right)$$
 
 --
 
 - This means that we can interpret the value of $e^{\hat{\beta}_0}$ as *how much 
-probable is it to get a Positive result for Covid than it is to get a negative
+probable is it to get a Positive result for COVID than it is to get a negative
 result*.
 
 ---
@@ -292,7 +292,7 @@ result*.
 --
 
   - If $0<e^{\hat{\beta}_0}<1$, then we know that the probability of testing 
-  positive for Covid regardless of their vaccination status (because the Null 
+  positive for COVID regardless of vaccination status (because the Null 
   assumes that vaccination status makes no difference) is less than the 
   probability of getting a negative result.
   
@@ -388,7 +388,7 @@ covid %>%
 
 ## How good is the model?
 
-- One disadvantage that we face now is that now we no longer have a simple way 
+- One disadvantage that we face now is that we no longer have a simple way 
 to evaluate the adequacy of our models.
 
 --
@@ -404,7 +404,7 @@ of each model.
 
 --
 
-- They question that we should be interested in is:
+- The question that we should be interested in is:
 
   - If I have a value of $\hat{\theta}$ that represents the prediction my model 
   (in this case the Null model) would make, how likely would it be that we 
@@ -486,9 +486,9 @@ sequence of $0$'s and $1$'s is equal to the product of the probabilities.
 --
 
 - Given that these numbers would be too small and cause problems for any 
-computer to process, we can work with the natural logarithmic transformation
-instead. The advantage here will be that the natural logarithm transforms 
-multiplications into sums!
+computer to process, we can work with the natural logarithm instead. The 
+advantage here will be that the natural logarithm transforms multiplications 
+into sums!
 
 --
 
@@ -549,16 +549,41 @@ observation in the experiment.
 
 ## BIC
 
+- For the binomial model, the value of the sum of the log-likelihoods $\sum_{i=1}^{N} ll(y_i)$ will always be between $-\infty$ and $0$.
+
+--
+
+- The closet it is to $0$ the better the model is (more negative values in a 
+GLM indicate worse model predictions).
+
+--
+
+- When we multiply that value by a negative number that means that the larger 
+the value of *fit* the worse the model will be, and so we should prefer models 
+that have smaller BIC values.
+
+--
+
 - For our Null model then we can compute the BIC as:
 
 ```{r}
+# Total sample size
 n_total <- nrow(covid)
+
+# Complexity, the number of parameters of the Null is equal to 1
 complexity <- 1 * log(n_total)
+
+# Model fit, we can add all the values of the log-likelihood
 fit <- -2 * sum(covid$loglikelihood_null)
+
+# The BIC is the sum of model fit and model complexity
 bic_null <- fit + complexity
 ```
 
---
+---
+
+## BIC
+
 
 - The BIC associated with the Null model is equal to `r round(bic_null,2)`.
 

@@ -410,6 +410,8 @@ $$\theta_{\text{not vaccinated}} = \frac{e^{\hat{\beta}_0}}{1+e^{\hat{\beta}_0}}
 
 $$\theta_{\text{vaccinated}} = \frac{e^{\hat{\beta}_0+\hat{\beta}_1}}{1+e^{\hat{\beta}_0+\hat{\beta}_1}} = \frac{e^{`r round(betas_lr[1]+betas_lr[2],2)`}}{1+e^{`r round(betas_lr[1]+betas_lr[2],2)`}} = \frac{`r round(exp(betas_lr[1]+betas_lr[2]),2)`}{1+`r round(exp(betas_lr[1]+betas_lr[2]),2)`} = `r round(exp(betas_lr[1]+betas_lr[2])/(1+exp(betas_lr[1]+betas_lr[2])),3)`$$
 
+--
+
 - With those values we can also obtain the Relative Risk:
 
 $$RR = \frac{\theta_{\text{vaccinated}}}{\theta_{\text{not vaccinated}}} = \frac{`r round(exp(betas_lr[1]+betas_lr[2])/(1+exp(betas_lr[1]+betas_lr[2])),2)`}{`r round(exp(betas_lr[1])/(1+exp(betas_lr[1])),2)`} = `r round((exp(betas_lr[1]+betas_lr[2])/(1+exp(betas_lr[1]+betas_lr[2])))/exp(betas_lr[1])/(1+exp(betas_lr[1])),2)`$$
@@ -446,20 +448,101 @@ than the current estimates (2.5 in people 18 or older).
 - This highlights the importance of large samples in this kind of context. The 
 more observations we have the more confident we can be in our results.
 
+---
+
+## Model predictions
+
+- Now we can compare our two models, the Null which assumes that the probability
+of testing positive on our "perfect" test is independent from vaccination status, 
+and the simple logistic regression model, which assumes that the probability of
+testing positive is different in each group.
+
 --
 
+- To add the prediction of our model $\hat{\theta}_i$ to the data we can use
+the following code:
 
+```{r}
+covid <- covid %>% 
+  mutate("prediction_lr" = 
+           exp(betas_lr[1] + betas_lr[2] * vaccinated_id) /
+           (1 + exp(betas_lr[1] + betas_lr[2] * vaccinated_id)))
+```
 
+--
 
+- The code will just add the value `r round(exp(betas_lr[1])/(1+exp(betas_lr[1])),2)` to participants who are not vaccinated and the value `r round(exp(betas_lr[1]+betas_lr[2])/(1+exp(betas_lr[1]+betas_lr[2])),3)` to 
+participants who are.
 
+---
 
+## Log-likelihood
 
+- With the predictions of the model we can calculate the log-likelihood of 
+each of our observations $ll(y_i)$$ using the following code:
 
+```{r}
+covid <- covid %>% 
+  mutate("loglikelihood_lr" = dbinom(x = test,
+                                     size = 1, 
+                                     prob = prediction_lr,
+                                     log = TRUE))
+```
 
+--
 
+- Then we can get the model "fit" by adding all those numbers and multiplying 
+the sum by $-2$:
 
+```{r}
+fit_lr <- -2 * sum(covid$loglikelihood_lr)
+```
 
+--
 
+- Finally, we can get the BIC by adding the fit and the model complexity. 
+Remember that this new model has 2 parameters $\beta_0$ and $\beta_1$.
 
+```{r}
+bic_lr <- fit_lr + 2 * log(n_total)
+```
 
+---
 
+## Model comparison
+
+- As we have done before we can use a table to compare our models:
+
+--
+
+| Model | Parameters | BIC |
+|-------|:----------:|:---:|
+| Null | 1 | `r round(bic_null,2)` |
+| Vaccination Status | 2 | `r round(bic_lr,2)` | 
+
+--
+
+- The model that assumes that there is a different probability of a positive 
+test depending of vaccination status is the one that better accounts for our 
+observations according to the BIC. 
+
+--
+
+- We can also report the value of the Relative Risk of a positive test to our
+results:
+
+--
+
+  - According to this model, the probability of testing positive is approximately
+  4 times higher in the not vaccinated population in comparison to the vaccinated
+  one.
+  
+---
+
+class: inverse, center, middle
+
+# That's all for this quarter
+
+--
+
+### *you still have to turn in your final project!*

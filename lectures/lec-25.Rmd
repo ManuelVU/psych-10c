@@ -1,5 +1,5 @@
 ---
-title: "Lecture 24"
+title: "Lecture 25"
 subtitle: "Generalized Linear Models: Introduction"
 author: "Psych 10 C"
 institute: "University of California, Irvine"
