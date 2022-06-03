@@ -1,0 +1,228 @@
+---
+title: "Homework 5 - Key"
+author: "Manuel Villarreal"
+date: "6/3/2022"
+output: pdf_document
+---
+
+```{r load-library, echo = FALSE, message = FALSE, warning = FALSE}
+library(tidyverse)
+```
+```{r load_data, echo = TRUE, message=FALSE,warning=FALSE}
+link <- "https://raw.githubusercontent.com/ManuelVU/psych-10c-data/main/homework5.csv"
+grades <- read_csv(file = link)
+```
+
+1. **0.4 points**
+
+```{r null, echo = TRUE}
+betas_null <- lm(formula = grade ~ 1, data = grades)$coef
+grades <- grades %>% 
+  mutate("prediction_null" = betas_null,
+         "error_null" = (grade - prediction_null)^2)
+```
+
+**ANS:** The prediction of the null model is equal to the estimate of $\beta_0$
+
+| Model | Prediction | 
+|-------|:----------:|
+| Null  | `r round(betas_null,2)` |
+
+2. **0.8 points**
+
+```{r study-hours, echo = TRUE}
+betas_sw <- lm(formula = grade ~ study_week, data = grades)$coef
+
+grades <- grades %>% 
+  mutate("prediction_sw" = betas_sw[1] + betas_sw[2] * study_week,
+         "error_sw" = (grade - prediction_sw)^2)
+```
+
+**ANS:** The values of the parameters in the model are:
+
+| Parameter | Estimate   |
+|-----------|:----------:|
+| $\beta_0$  | `r round(betas_sw[1],2)` |
+| $\beta_1$  | `r round(betas_sw[2],2)` |
+
+
+3. **0.8 points**
+
+```{r classes-missed, echo = TRUE}
+betas_cm <- lm(formula = grade ~ classes_missed, data = grades)$coef
+
+grades <- grades %>% 
+  mutate("prediction_cm" = betas_cm[1] + betas_cm[2] * classes_missed,
+         "error_cm" = (grade - prediction_cm)^2)
+```
+
+**ANS:**  The estimated values of the parameters in the model are:
+
+| Parameter | Estimate   |
+|-----------|:----------:|
+| $\beta_0$  | `r round(betas_cm[1],2)` |
+| $\beta_1$  | `r round(betas_cm[2],2)` |
+
+4. **0.8 points**
+
+```{r grand-mean, echo = TRUE}
+betas_swcm <- lm(formula = grade ~ study_week + classes_missed, data = grades)$coef
+
+grades <- grades %>% 
+  mutate("prediction_swcm" = betas_swcm[1] + betas_swcm[2] * study_week + 
+           betas_swcm[3] * classes_missed,
+         "error_swcm" = (grade - prediction_swcm)^2)
+```
+
+**ANS:** The estimated value of the parameters of this model are:
+
+| Parameter | Estimate   | 
+|-----------|:----------:|
+| $\beta_0$  | `r round(betas_swcm[1],2)` |
+| $\beta_1$  | `r round(betas_swcm[2],2)` |
+| $\beta_2$  | `r round(betas_swcm[3],2)` |
+
+
+5. **0.8 points**
+
+```{r me-task, echo = TRUE}
+grades <- grades %>% 
+  mutate("classes_id" = case_when(classes_missed == 0 ~ 0,
+                                  classes_missed > 0 ~ 1))
+```
+
+**ANS:** The proportion of students that missed at least one class was 
+**`r round(mean(grades$classes_id),2)`**.
+
+6. **0.8 points**
+ 
+```{r me-wordfreq, echo = TRUE}
+betas_swcid <- lm(formula = grade ~ study_week + classes_id, data = grades)$coef
+
+grades <- grades %>% 
+  mutate("prediction_swcid" = betas_swcid[1] + betas_swcid[2] * study_week + 
+           betas_swcid[3] * classes_id,
+         "error_swcid" = (grade - prediction_swcid)^2)
+```
+
+**ANS:** The estimated values of the parameters of the model are:
+
+| Parameter | Estimate   | 
+|-----------|:----------:|
+| $\beta_0$  | `r round(betas_swcid[1],2)` |
+| $\beta_1$  | `r round(betas_swcid[2],2)` |
+| $\beta_2$  | `r round(betas_swcid[3],2)` |
+
+7. **0.8 points**
+
+```{r pred-null, echo = TRUE}
+betas_int <- lm(formula = grade ~ study_week + classes_id + study_week * classes_id, data = grades)$coef
+
+grades <- grades %>% 
+  mutate("prediction_int" = betas_int[1] + betas_int[2] * study_week + 
+           betas_int[3] * classes_id + 
+           betas_int[4] * classes_id * study_week,
+         "error_int" = (grade - prediction_int)^2)
+```
+
+**ANS:** The estimated values of the parameters of the model are:
+
+| Parameter | Estimate   | 
+|-----------|:----------:|
+| $\beta_0$  | `r round(betas_int[1],2)` |
+| $\beta_1$  | `r round(betas_int[2],2)` |
+| $\beta_2$  | `r round(betas_int[3],2)` |
+| $\beta_3$  | `r round(betas_int[4],2)` |
+
+8. **0.8 points (code is the answer)**
+
+```{r pred-me-task, echo = TRUE}
+sse_null <- sum(grades$error_null)
+sse_sw <- sum(grades$error_sw)
+sse_cm <- sum(grades$error_cm)
+sse_swcm <- sum(grades$error_swcm)
+sse_swcid <- sum(grades$error_swcid)
+sse_int <- sum(grades$error_int)
+```
+
+9. **0.8 points (code is the answer)**
+
+```{r pred-me-wordfreq, echo = TRUE}
+n_total <- nrow(grades)
+
+mse_null <- n_total * sse_null 
+mse_sw <- n_total * sse_sw 
+mse_cm <- n_total * sse_cm 
+mse_swcm <- n_total * sse_swcm 
+mse_swcid <- n_total * sse_swcid 
+mse_int <- n_total * sse_int 
+```
+
+10. **0.8 points**
+
+```{r pred-additive, echo = TRUE}
+bic_null <- n_total * log(mse_null) + 1 * log(n_total)
+bic_sw <- n_total * log(mse_sw) + 2 * log(n_total) 
+bic_cm <- n_total * log(mse_cm) + 2 * log(n_total)
+bic_swcm <- n_total * log(mse_swcm) + 3 * log(n_total) 
+bic_swcid <- n_total * log(mse_swcid) + 3 * log(n_total)
+bic_int <- n_total * log(mse_int) + 4 * log(n_total)
+```
+
+**ANS:** The values of the BIC are the following (take 0.2 points if they 
+miss the labels for at least one BIC value).
+
+| Parameter | Estimate   | 
+|-----------|:----------:|
+| Null  | `r round(bic_null[1],2)` |
+| Hours | `r round(bic_sw,2)` |
+| Classes  | `r round(bic_cm,2)` |
+| Hours + Classes  | `r round(bic_swcm,2)` |
+| Hours + ID | `r round(bic_swcid,2)` |
+| Interaction  | `r round(bic_int,2)` |
+
+
+11. **0.8 points**
+
+**ANS:** According to the BIC the best model is the interaction model, its
+parameters can be interpreted as (order of the values depends on the order they 
+assign in the lm function):
+
+- $\beta_0$: expected grade of students that missed no classes and studied for 
+0 hours each week.
+
+- $\beta_1$: impact of an additional hour of study on the expected grade of 
+students that missed 0 classes.
+
+- $\beta_2$: difference on the expected grade of students who missed at least 
+one class when they study for 0 hours a week in comparison to students that 
+missed no classes.
+
+- $\beta_3$ difference in the impact of an additional hour of study on the 
+expected grade of students that missed at least one class in comparison to 
+students that missed no classes.
+
+12. **0.8 points**
+
+```{r sse-5models, echo = TRUE}
+r2_int <- (sse_null - sse_int) / sse_null
+```
+
+**ANS:** The proportion of variance accounted for by the model was **`r round(r2_int,2)`**.
+
+13. **0.8 points**
+
+**ANS:** Something along the lines of more hours of study are associated with 
+better grades, however, the impact of each additional hour depends on whether 
+students missed at least one class. Students that missed at least one class have 
+a lower grade on average in comparison to students that missed no classes when 
+they spend 0 hours a week studying.
+
+
+
+
+
+
+
+
+
