@@ -150,12 +150,12 @@ sse_int <- sum(grades$error_int)
 ```{r pred-me-wordfreq, echo = TRUE}
 n_total <- nrow(grades)
 
-mse_null <- n_total * sse_null 
-mse_sw <- n_total * sse_sw 
-mse_cm <- n_total * sse_cm 
-mse_swcm <- n_total * sse_swcm 
-mse_swcid <- n_total * sse_swcid 
-mse_int <- n_total * sse_int 
+mse_null <- 1/n_total * sse_null 
+mse_sw <- 1/n_total * sse_sw 
+mse_cm <- 1/n_total * sse_cm 
+mse_swcm <- 1/n_total * sse_swcm 
+mse_swcid <- 1/n_total * sse_swcid 
+mse_int <- 1/n_total * sse_int 
 ```
 
 10. **0.8 points**
